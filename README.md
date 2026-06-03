@@ -1,1 +1,39 @@
-java 21
+Team SDK
+
+- This repository is configured to build with Java 21 by default. To avoid SDK mismatches in a group project, please standardize on Java 21.
+
+- Recommended setup for team members:
+  - Use the Gradle toolchain (already configured) so Gradle requests a JDK 21 automatically when needed.
+  - Alternatively install a local JDK 21 (Temurin/Adoptium is recommended) and ensure `java -version` shows a Java 21 runtime.
+
+- Quick install examples:
+
+  macOS (Homebrew + Temurin 21):
+
+  ```bash
+  brew install --cask temurin
+  java -version # verify shows 21
+  ```
+
+  Windows (Adoptium installer):
+  - Download and install Temurin JDK 21 from https://adoptium.net
+  - Verify `java -version` in PowerShell or cmd.
+
+- (Optional) Use `jenv` or `sdkman` and the included `.java-version` hint to help team members pick the right JDK.
+
+- Local check: run the provided helper to verify you have Java 21 before building:
+
+Make the script executable if needed:
+
+```bash
+chmod +x ./scripts/check-java.sh
+```
+In the terminal, run:
+
+```bash
+./scripts/check-java.sh
+```
+
+
+
+If you want, I can add an automatic Gradle check task that fails the build when the wrong JDK is used, or include CI configuration to enforce Java 21.
