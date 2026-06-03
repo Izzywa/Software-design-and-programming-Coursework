@@ -1,6 +1,6 @@
 Team SDK
 
-- This repository is configured to build with Java 21 by default. To avoid SDK mismatches in a group project, please standardize on Java 21.
+- This repository is configured to build with Java 21 by default. To avoid SDK mismatches in a group project, please standardize on minimum Java 21.
 
 - Recommended setup for team members:
   - Use the Gradle toolchain (already configured) so Gradle requests a JDK 21 automatically when needed.
@@ -34,3 +34,13 @@ In the terminal, run:
 ./scripts/check-java.sh
 ```
 
+## Verify build success
+Run in terminal:
+```bash
+./gradlew clean build
+```
+note: _there will be some warnings from problems in the code base but the terminal should show output like_
+```bash
+BUILD SUCCESSFUL in 5s
+9 actionable tasks: 9 executed
+```
