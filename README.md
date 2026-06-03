@@ -34,6 +34,3 @@ In the terminal, run:
 ./scripts/check-java.sh
 ```
 
-
-
-If you want, I can add an automatic Gradle check task that fails the build when the wrong JDK is used, or include CI configuration to enforce Java 21.
