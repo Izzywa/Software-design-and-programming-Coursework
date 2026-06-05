@@ -1,5 +1,5 @@
 ## Changes from the original CODIO code base
-View the wiki [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/04062026_InitialSetup)
+View the [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/04062026_InitialSetup)
 
 ## Team SDK
 
