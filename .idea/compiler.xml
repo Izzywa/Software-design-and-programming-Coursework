@@ -6,7 +6,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_core/2.49.0/c75e9f17da85debb7ee1d40c589f67c535c2b9db/error_prone_core-2.49.0.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_check_api/2.49.0/552b2e5ab3f314b3e6bce07cb9acf51c9b684825/error_prone_check_api-2.49.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotation/2.49.0/29848c09345b23612b5a68f71c7ba64880e367f0/error_prone_annotation-2.49.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.googlejavaformat/google-java-format/1.35.0/eda07d4a6a67783de179b7fded4506a61cea3171/google-java-format-1.35.0.jar" />
@@ -32,7 +32,7 @@
         <module name="gloom.temple.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="20" />
+    <bytecodeTargetLevel target="21" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

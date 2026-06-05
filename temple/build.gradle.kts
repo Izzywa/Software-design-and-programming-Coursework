@@ -10,7 +10,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
-    id("io.freefair.lombok") version "8.6"
+    id("io.freefair.lombok") version "9.5.0"
     id("net.ltgt.errorprone") version "latest.release"
 }
 
@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:32.0.1-android")
     errorprone("com.google.errorprone:error_prone_core:latest.release")
 }
 

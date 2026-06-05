@@ -1,4 +1,7 @@
-Team SDK
+## Changes from the original CODIO code base
+
+
+## Team SDK
 
 - This repository is configured to build with Java 21 by default. To avoid SDK mismatches in a group project, please standardize on minimum Java 21.
 
@@ -19,9 +22,8 @@ Team SDK
   - Download and install Temurin JDK 21 from https://adoptium.net
   - Verify `java -version` in PowerShell or cmd.
 
-- (Optional) Use `jenv` or `sdkman` and the included `.java-version` hint to help team members pick the right JDK.
 
-- Local check: run the provided helper to verify you have Java 21 before building:
+### Local check: run the provided helper to verify you have Java 21 before building:
 
 Make the script executable if needed:
 
