@@ -6,8 +6,7 @@ View the [Wiki](https://github.com/Izzywa/Software-design-and-programming-Course
 - This repository is configured to build with Java 21 by default. To avoid SDK mismatches in a group project, please standardize on minimum Java 21.
 
 - Recommended setup for team members:
-  - Use the Gradle toolchain (already configured) so Gradle requests a JDK 21 automatically when needed.
-  - Alternatively install a local JDK 21 (Temurin/Adoptium is recommended) and ensure `java -version` shows a Java 21 runtime.
+  - Install a local JDK 21 (Temurin/Adoptium is recommended) and ensure `java -version` shows a Java 21 runtime.
 
 - Quick install examples:
 
