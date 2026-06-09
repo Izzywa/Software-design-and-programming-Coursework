@@ -15,8 +15,7 @@ major=$(echo "$ver" | cut -d. -f1)
    echo "ERROR: Java 21 or newer required but found: $ver"
   echo "Options:"
   echo " - Install Temurin/Adoptium JDK 21 and ensure java -version shows 21"
-  echo " - Or build with a local JDK 21 override:"
-  echo "   ./gradlew -Dorg.gradle.java.home=\"/path/to/jdk-21\" clean build"
+  echo "   sdk install java 21.0.4-tem"
   exit 1
 fi
 
