@@ -22,6 +22,14 @@ View the [Wiki](https://github.com/Izzywa/Software-design-and-programming-Course
   - Download and install Temurin JDK 21 from https://adoptium.net
   - Verify `java -version` in PowerShell or cmd.
 
+  Codio:
+ ```bash
+  sdk install java 21.0.4-tem 
+  ```
+  - When prompted, select to use Java 21 as the default.
+  ```baash
+  Do you want java 21.0.4-tem to be set as default? (Y/n): 
+  ```
 
 ### Local check: run the provided helper to verify you have Java 21 before building:
 
