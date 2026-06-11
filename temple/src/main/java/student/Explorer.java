@@ -3,7 +3,15 @@ package student;
 import game.EscapeState;
 import game.ExplorationState;
 
+import java.util.*;
+
 public class Explorer {
+
+    private Set<Long> discovered;
+
+    public Explorer() {
+        discovered = new HashSet<>();
+    }
 
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
@@ -36,7 +44,44 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        //TODO : Explore the cavern and find the orb
+        depthFirstSearch(state);
+    }
+
+    /**
+     * Depth-first search algorithm
+     * Reference: <a href="https://en.wikipedia.org/wiki/Depth-first_search">Wikipedia DFS</a>
+     *
+     * <pre>
+     * procedure DFS(G, v) is
+     *     label v as discovered
+     *     for all directed edges from v to w that are in G.adjacentEdges(v) do
+     *         if vertex w is not labeled as discovered then
+     *             recursively call DFS(G, w)
+     * </pre>
+     *
+     * @param state the exploration state
+     * @return true if the orb is found, false otherwise
+     */
+    private boolean depthFirstSearch(ExplorationState state) {
+        long current = state.getCurrentLocation();
+        discovered.add(current);
+
+        if (state.getDistanceToTarget() == 0) {
+            return true;
+        }
+
+        for (var neighbour : state.getNeighbours()) {
+            long neighbourId = neighbour.nodeID();
+            if (!discovered.contains(neighbourId)) {
+                state.moveTo(neighbourId);
+                if (depthFirstSearch(state)) {
+                    return true;
+                }
+                state.moveTo(current);
+            }
+        }
+
+        return false;
     }
 
     /**
