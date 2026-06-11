@@ -45,3 +45,18 @@ testing {
         }
     }
 }
+
+tasks.register<JavaExec>("txt") {
+    group = "application"
+    description = "Run the text interface"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("main.TXTmain")
+    standardInput = System.`in`
+}
+
+tasks.register<JavaExec>("gui") {
+    group = "application"
+    description = "Run the GUI interface"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("main.GUImain")
+}
