@@ -43,6 +43,16 @@ In the terminal, run:
 ./scripts/check-java.sh
 ```
 
+## Handy repo-wide shortcuts
+
+These Gradle tasks are committed to the repository, so everyone who clones it can use the same short commands from the repo root:
+
+```bash
+./gradlew txt   # run the text interface
+./gradlew gui   # run the GUI interface
+./gradlew clean build
+```
+
 ## Verify build success
 Run in terminal:
 ```bash
