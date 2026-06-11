@@ -37,3 +37,11 @@ application {
     // Define the main class for the application.
     mainClass.set(project.findProperty("chooseMain").toString())
 }
+
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+    }
+}
