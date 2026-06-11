@@ -70,4 +70,4 @@ git push origin your-branch-name
 2. Go to the repository on GitHub and you should see a prompt to create a pull request for your recently pushed branch. Click on "Compare & pull request".
 3. Provide a descriptive title and description for your pull request, explaining the changes you made and why they are necessary.
 4. Click on "Create pull request" to submit your changes for review. Once your pull request is created, team members can review your changes, provide feedback, and approve the merge into the main branch. 
-6. After approval, you can merge your pull request to integrate your changes into the main branch.
+6. After approval, you can merge your pull request to integrate your changes into the main branch. 
