@@ -1,12 +1,20 @@
 package student;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
-
-import java.util.*;
-
-import org.w3c.dom.traversal.NodeIterator;
+import game.NodeStatus;
 
 public class Explorer {
 
@@ -73,7 +81,9 @@ public class Explorer {
             return true;
         }
 
-        for (var neighbour : state.getNeighbours()) {
+        List<NodeStatus> neighbours = new ArrayList<>(state.getNeighbours());
+        Collections.sort(neighbours);
+        for (var neighbour : neighbours) {
             long neighbourId = neighbour.nodeID();
             if (!discovered.contains(neighbourId)) {
                 state.moveTo(neighbourId);
