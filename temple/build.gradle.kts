@@ -60,3 +60,10 @@ tasks.register<JavaExec>("gui") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("main.GUImain")
 }
+
+tasks.register<JavaExec>("benchmark") {
+    group = "application"
+    description = "Run the for loop interface"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("main.BENCHMARKmain")
+}
