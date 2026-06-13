@@ -26,7 +26,7 @@ public class TestGameCanRun {
         return constructor.newInstance(seed, false);
     }
 
-    private static Method exploreSucceededMethod() {
+    private static Method getExploreSucceededMethod() {
         try {
             Method method = GameState.class.getDeclaredMethod("getExploreSucceeded");
             method.setAccessible(true);
@@ -52,7 +52,7 @@ public class TestGameCanRun {
         try {
             Method exploreMethod = getExploreMethod();
             exploreMethod.invoke(state);
-            Method exploreSucceeded = exploreSucceededMethod();
+            Method exploreSucceeded = getExploreSucceededMethod();
             return (boolean) exploreSucceeded.invoke(state);
         }
         catch (Exception e) {
