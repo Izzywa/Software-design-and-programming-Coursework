@@ -55,7 +55,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-
+        depthFirstSearch(state);
     }
 
     /**
