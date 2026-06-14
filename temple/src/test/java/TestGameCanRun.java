@@ -15,9 +15,9 @@ public class TestGameCanRun {
         long seed = new Random().nextLong();
         GameState state = newGameState(seed);
 
-        assertTrue(canExplore(state),"explore phase should end on the orb");
+        assertTrue(canExplore(state),"Explore phase failed on seed: " + seed);
 
-        assertTrue(canEscape(state), "escape phase should end on the stairs");
+        assertTrue(canEscape(state), "Escape phase failed on seed: " + seed);
     }
 
     private static GameState newGameState(long seed) throws Exception {
