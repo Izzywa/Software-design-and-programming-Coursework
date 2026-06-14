@@ -81,3 +81,11 @@ git push origin your-branch-name
 3. Provide a descriptive title and description for your pull request, explaining the changes you made and why they are necessary.
 4. Click on "Create pull request" to submit your changes for review. Once your pull request is created, team members can review your changes, provide feedback, and approve the merge into the main branch. 
 6. After approval, you can merge your pull request to integrate your changes into the main branch.
+
+# Generating JavaDoc
+Run the following command in terminal
+```bash
+./gradlew javadoc
+```
+
+You can view the documentation in the following file `temple/build/docs/javadoc/index.html`
