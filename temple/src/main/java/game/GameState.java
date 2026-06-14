@@ -310,11 +310,11 @@ public class GameState implements ExplorationState, EscapeState {
 
     /**
      * Attempts to move the explorer from the current position to
-     * the <code>Node</code>> <code>n</code>>. Throws an <code>IllegalArgumentException</code>>
-     * if <code>n</code>> is not neighbouring. Increments the steps taken
+     * the <code>Node</code> <code>n</code>. Throws an <code>IllegalArgumentException</code>
+     * if <code>n</code> is not neighbouring. Increments the steps taken
      * if successful.
      *
-     * @param n A neighbouring <code>Node</code>>
+     * @param n A neighbouring <code>Node</code>
      */
     @Override
     public void moveTo(Node n) {
