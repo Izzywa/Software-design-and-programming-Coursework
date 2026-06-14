@@ -60,3 +60,7 @@ tasks.register<JavaExec>("gui") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("main.GUImain")
 }
+
+tasks.withType<Javadoc> {
+    exclude("**/*.png")
+}
