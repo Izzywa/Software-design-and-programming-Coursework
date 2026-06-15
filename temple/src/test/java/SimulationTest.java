@@ -119,7 +119,7 @@ public class SimulationTest {
         if (errLogs.contains("Your solution to explore returned at the wrong location")) {
             return "EXPLORE_FAILED (Wrong Location)";
         }
-        if (errLogs.contains("Your code caused an error during the explore phase")) {
+        if (errLogs.contains("Your code caused an error  during the explore phase")) {
             return "EXPLORE_FAILED (Exception Caught)";
         }
         
