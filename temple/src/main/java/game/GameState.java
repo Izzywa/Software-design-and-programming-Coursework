@@ -1,15 +1,25 @@
 package game;
 
-import gui.GUI;
-import student.Explorer;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Random;
 
-import static game.Constants.*;
+import static game.Constants.EXTRA_TIME_FACTOR;
+import static game.Constants.MAX_BONUS;
+import static game.Constants.MAX_COLS;
+import static game.Constants.MAX_ROWS;
+import static game.Constants.MIN_BONUS;
+import static game.Constants.MIN_COLS;
+import static game.Constants.MIN_ROWS;
+import static game.Constants.NO_BONUS_LENGTH;
+import gui.GUI;
+import student.Explorer;
 
 public class GameState implements ExplorationState, EscapeState {
 
@@ -300,11 +310,11 @@ public class GameState implements ExplorationState, EscapeState {
 
     /**
      * Attempts to move the explorer from the current position to
-     * the <tt>Node</tt> <tt>n</tt>. Throws an <tt>IllegalArgumentException</tt>
-     * if <tt>n</tt> is not neighbouring. Increments the steps taken
+     * the <code>Node</code> <code>n</code>. Throws an <code>IllegalArgumentException</code>
+     * if <code>n</code> is not neighbouring. Increments the steps taken
      * if successful.
      *
-     * @param n A neighbouring <tt>Node</tt>
+     * @param n A neighbouring <code>Node</code>
      */
     @Override
     public void moveTo(Node n) {

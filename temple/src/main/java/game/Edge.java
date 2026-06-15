@@ -39,8 +39,8 @@ public class Edge {
     }
 
     /**
-     * Return the <tt>Node</tt> on this <tt>Edge</tt> that is not equal to n.
-     * Throw an <tt>IllegalArgumentException</tt> if <tt>n</tt> is not in this <tt>Edge</tt>.
+     * Return the <code>Node</code> on this <code>Edge</code> that is not equal to n.
+     * Throw an <code>IllegalArgumentException</code> if <code>n</code> is not in this <code>Edge</code>.
      */
     public Node getOther(Node n) {
         if (src.equals(n)) {
@@ -53,7 +53,7 @@ public class Edge {
     }
 
     /**
-     * Return the length of this <tt>Edge</tt>
+     * Return the length of this <code>Edge</code>
      */
     public int length() {
         return length;

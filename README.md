@@ -70,3 +70,12 @@ note: _there will be some warnings from problems in the code base but the termin
 BUILD SUCCESSFUL in 5s
 9 actionable tasks: 9 executed
 ```
+
+# Generating JavaDoc
+Run the following command in terminal
+```bash
+./gradlew javadoc
+```
+
+You can view the documentation in the following file `temple/build/docs/javadoc/index.html`
+
