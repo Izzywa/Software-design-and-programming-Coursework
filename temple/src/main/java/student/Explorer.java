@@ -126,16 +126,16 @@ public class Explorer {
         //TODO: Escape from the cavern before time runs out
         EscapeGraph graph = new EscapeGraph(state);
 
-        List<Node> path = shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit());
+        EscapePath path = new EscapePath(shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit()));
          
         // Pick up gold on the starting node if it exists
-        if(state.getCurrentNode().getTile().getGold() > 0) {
+        if(path.getPath().get(0).getTile().getGold() > 0) {
                 state.pickUpGold();
         }
 
         // Follow the path to the exit, picking up gold along the way
-        for (int i = 1; i < path.size(); i++) {
-            state.moveTo(path.get(i));
+        for (int i = 1; i < path.getPath().size(); i++) {
+            state.moveTo(path.getPath().get(i));
             if(state.getCurrentNode().getTile().getGold() > 0) {
                 state.pickUpGold();
             }
