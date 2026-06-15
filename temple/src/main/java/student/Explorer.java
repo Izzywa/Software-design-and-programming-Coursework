@@ -124,16 +124,9 @@ public class Explorer {
      */
     public void escape(EscapeState state) {
         //TODO: Escape from the cavern before time runs out
-        Map<Node, Collection<Edge>> graph = new HashMap<>();
-        for (var node : state.getVertices()) {
-            List<Edge> edges = new ArrayList<>();
-            for (var anotherNode : node.getNeighbours()) {
-                edges.add(node.getEdge(anotherNode));
-            }
-            graph.put(node, edges);
-        }
+        EscapeGraph graph = new EscapeGraph(state);
 
-        List<Node> path = shortestPathDijkstra(graph, state.getCurrentNode(), state.getExit());
+        List<Node> path = shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit());
          
         // Pick up gold on the starting node if it exists
         if(state.getCurrentNode().getTile().getGold() > 0) {
