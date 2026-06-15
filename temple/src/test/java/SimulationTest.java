@@ -124,14 +124,14 @@ public class SimulationTest {
         }
         
         // Escape phase failures
+        if (errLogs.contains("Your code caused an error during the escape phase")) {
+            return "ESCAPE_FAILED (Exception Caught)";
+        }
         if (errLogs.contains("Your solution to escape ran out of steps before returning")) {
             return "ESCAPE_FAILED (Time Out)";
         }
         if (errLogs.contains("Your solution to escape failed to end at the stairs")) {
             return "ESCAPE_FAILED (Wrong Location)";
-        }
-        if (errLogs.contains("Your code caused an error during the escape phase")) {
-            return "ESCAPE_FAILED (Exception Caught)";
         }
 
         // Catch-all for any unknown errors printed to System.err
