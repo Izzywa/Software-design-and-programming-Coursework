@@ -64,3 +64,10 @@ tasks.register<JavaExec>("gui") {
 tasks.withType<Javadoc> {
     exclude("**/*.png")
 }
+
+tasks.register<JavaExec>("log") {
+    group = "application"
+    description = "Run the for loop interface"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("main.LOGmain")
+}
