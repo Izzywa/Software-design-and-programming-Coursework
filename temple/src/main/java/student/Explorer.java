@@ -124,12 +124,10 @@ public class Explorer {
      */
     public void escape(EscapeState state) {
         //TODO: Escape from the cavern before time runs out
-        EscapeGraph graph = new EscapeGraph(state);
 
-        //EscapePath path = new EscapePath(shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit()));
-        //EscapePath path = new EscapePath(shortestPathBFS(graph.getUnweighted(), state.getCurrentNode(), state.getExit()));
-        EscapeStrategy bfsStrategy = new EscapeBreadthFirstSearch(state, state.getCurrentNode(), state.getExit());
-        EscapePath path = bfsStrategy.findEscapePath();
+        // Create an escape strategy with the corresponding algorithm and get the escape path
+        EscapeStrategy strategy = new EscapeDijkstra(state, state.getCurrentNode(), state.getExit());
+        EscapePath path = strategy.findEscapePath();
          
         // Pick up gold on the starting node if it exists
         if(path.getPath().get(0).getTile().getGold() > 0) {
