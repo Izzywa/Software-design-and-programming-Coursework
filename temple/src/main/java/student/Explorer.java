@@ -126,7 +126,10 @@ public class Explorer {
         //TODO: Escape from the cavern before time runs out
         EscapeGraph graph = new EscapeGraph(state);
 
-        EscapePath path = new EscapePath(shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit()));
+        //EscapePath path = new EscapePath(shortestPathDijkstra(graph.getWeighted(), state.getCurrentNode(), state.getExit()));
+        //EscapePath path = new EscapePath(shortestPathBFS(graph.getUnweighted(), state.getCurrentNode(), state.getExit()));
+        EscapeStrategy bfsStrategy = new EscapeBreadthFirstSearch(state, state.getCurrentNode(), state.getExit());
+        EscapePath path = bfsStrategy.findEscapePath();
          
         // Pick up gold on the starting node if it exists
         if(path.getPath().get(0).getTile().getGold() > 0) {
@@ -144,83 +147,6 @@ public class Explorer {
                 throw new RuntimeException("Time ran out before escaping!");
             }
         }
-    }
-
-    /**
-     * Breadth-first search algorithm to find the shortest path from start to end in an unweighted graph.
-     * Reference: <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Wikipedia BFS</a>
-     *
-     * <pre>
-     * procedure BFS(G, start) is
-     *     create a queue Q
-     *     create a set V
-     *     add start to Q
-     *     add start to V
-     *     while Q is not empty do
-     *         current = Q.dequeue()
-     *         if current is the target then
-     *             return true
-     *         for each neighbor of current do
-     *             if neighbor is not in V then
-     *                 add neighbor to V
-     *                 add neighbor to Q
-     *     return false
-     * </pre>
-     *
-     * @param graph the unweighted graph to search
-     * @param start the starting node
-     * @param end   the target node
-     * @return the shortest path from start to end, or an empty list if no path exists
-     */
-    private List<Node> shortestPathBFS(Map<Node, Collection<Node>> graph, Node start, Node end) {
-        // Check if graph is empty or null
-        if (graph == null || graph.isEmpty()) {
-            throw new IllegalArgumentException("Graph cannot be null or empty");
-        }
-        // Check if start and end nodes are in the graph
-        if(!graph.containsKey(start) || !graph.containsKey(end)) {
-            throw new IllegalArgumentException("Start or end node does not exist in the graph");
-        }
-
-        // BFS initialization
-        // Queue for BFS and map to track their parents and a set to track visited nodes
-        Queue<Node> queue = new LinkedList<>();
-        Map<Node, Node> parentMap = new HashMap<>();
-        Set<Node> visited = new HashSet<>();
-
-        queue.add(start);
-        visited.add(start);
-
-        boolean found = false;
-
-        while (!queue.isEmpty()) {
-            Node current = queue.poll();
-            // If we have reached the end node, stop the search
-            if (current.equals(end)) {
-                found = true;
-                break;
-            }
-
-            // Traverse neighbors of the current node, adding unvisited ones to the queue
-            for (Node neighbour : graph.getOrDefault(current, Collections.emptyList())) {
-                if (!visited.contains(neighbour)) {
-                    visited.add(neighbour);
-                    parentMap.put(neighbour, current);
-                    queue.add(neighbour);
-                }
-            }
-        }
-        if(!found) {
-            return Collections.emptyList(); // No path found
-        }
-
-        // Reconstruct the path from end to start using the parent map
-        List<Node> path = new LinkedList<>();
-        for (Node node = end; node != null; node = parentMap.get(node)) {
-            path.addFirst(node); // Add to the front of the list
-        }
-
-        return path;
     }
 
     /**
