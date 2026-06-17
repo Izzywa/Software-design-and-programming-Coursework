@@ -12,6 +12,8 @@ import game.Node;
 
 /**
  * Class that implements the Depth-first search algorithm to find all paths from start to end in an unweighted graph then filters them based on the remaining time, then selects the best path based on gold collected.
+ * Time complexity: O(V^E) in the worst case, where V is the number of vertices and E is the number of edges. This will occur when the graph is a complete graph and all paths are explored. 
+ * Space complexity: O(V) for the visited set and current path, and O(P) for storing all valid paths, where P is the number of valid paths found. 
  * Reference: <a href="https://en.wikipedia.org/wiki/Depth-first_search">Wikipedia DFS</a>
  *
  * <pre>
