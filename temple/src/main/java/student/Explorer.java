@@ -1,22 +1,14 @@
 package student;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.PriorityQueue;
 import java.util.Set;
 
 import game.EscapeState;
 import game.ExplorationState;
-import game.Node;
 import game.NodeStatus;
-import game.Edge;
 
 public class Explorer {
 
@@ -126,7 +118,7 @@ public class Explorer {
         //TODO: Escape from the cavern before time runs out
 
         // Create an escape strategy with the corresponding algorithm and get the escape path
-        EscapeStrategy strategy = new EscapeDijkstra(state, state.getCurrentNode(), state.getExit());
+        EscapeStrategy strategy = new EscapeDFSAllPaths(state, state.getCurrentNode(), state.getExit());
         EscapePath path = strategy.findEscapePath();
          
         // Pick up gold on the starting node if it exists
