@@ -59,11 +59,11 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
      */
     private void checkGraphValidity() {
         // Check if the graph is null or empty
-        if (graph.getWeighted() == null || graph.getWeighted().isEmpty()) {
+        if (graph.getUnweighted() == null || graph.getUnweighted().isEmpty()) {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
         // Check if start and end nodes are in the graph
-        if(!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
+        if(!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
     }
