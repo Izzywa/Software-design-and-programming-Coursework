@@ -9,7 +9,7 @@ import java.util.List;
  * Implements the Comparable interface to allow for comparison based on the total amount of gold found, which can be used for prioritizing paths in search algorithms.
  * The total cost is calculated as the sum of the lengths of the edges along the path, while the total gold is calculated as the sum of the original gold amounts on the tiles of the nodes along the path.
  */
-public class EscapePath implements Comparable<EscapePath> {
+public class EscapePath {
     private final List<Node> path;
     private final int totalCost;
     private final int totalGold;
@@ -78,15 +78,4 @@ public class EscapePath implements Comparable<EscapePath> {
     public int getTotalGold() {
         return totalGold;
     }
-
-    /**
-     * Compares this escape path with another based on the total amount of gold found.
-     * @param other the other escape path to compare with
-     * @return a negative integer, zero, or a positive integer as this path has less than, equal to, or more gold than the specified path
-     */
-    @Override
-    public int compareTo(EscapePath other) {
-        return Integer.compare(this.totalGold, other.totalGold);
-    }
-    
 }

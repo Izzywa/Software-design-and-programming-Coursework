@@ -71,9 +71,11 @@ public class EscapeDijkstra implements EscapeStrategy {
     }
 
     /**
-     * Checks the validity of the graph before performing BFS
+     * Checks the validity of the graph before performing Dijkstra's algorithm
+     * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
      */
     private void checkGraphValidity() {
+        // Check if the graph is null or empty
         if (graph.getWeighted() == null || graph.getWeighted().isEmpty()) {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }

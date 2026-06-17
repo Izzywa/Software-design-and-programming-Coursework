@@ -61,11 +61,14 @@ public class EscapeBreadthFirstSearch implements EscapeStrategy {
     
     /**
      * Checks the validity of the graph before performing BFS
+     * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
      */
     private void checkGraphValidity() {
+        // Check if the graph is null or empty
         if (graph.getUnweighted() == null || graph.getUnweighted().isEmpty()) {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
+        // Check if start and end nodes are in the graph
         if(!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
