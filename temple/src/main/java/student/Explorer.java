@@ -118,7 +118,7 @@ public class Explorer {
         //TODO: Escape from the cavern before time runs out
 
         // Create an escape strategy with the corresponding algorithm and get the escape path
-        EscapeStrategy strategy = new EscapeDijkstra(state, state.getCurrentNode(), state.getExit());
+        EscapeStrategy strategy = new EscapeDFSPruning(state, state.getCurrentNode(), state.getExit());
         EscapePath path = strategy.findEscapePath();
          
         // Pick up gold on the starting node if it exists
