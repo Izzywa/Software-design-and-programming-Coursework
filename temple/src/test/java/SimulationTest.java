@@ -50,6 +50,9 @@ public class SimulationTest {
         // Save the original error stream so we can restore it later
         PrintStream originalErr = System.err;
 
+        // Track total duration
+        long totalDuration = 0;
+
         // Run the test according to the totalRuns.
         for (int i = 1; i <= totalRuns; i++) {
             long currentSeed = randomGenerator.nextLong(); 
@@ -58,6 +61,9 @@ public class SimulationTest {
             ByteArrayOutputStream errContent = new ByteArrayOutputStream();
             
             String status;
+
+            // Capture the start time for including time used in the log
+            long runStartTime = System.currentTimeMillis();
 
             try {
                 // Redirect error output to our temporary stream
@@ -87,14 +93,27 @@ public class SimulationTest {
                 System.setErr(originalErr);
             }
 
+            // Capture the end time for calculating the time used
+            long runEndTime = System.currentTimeMillis();
+            long duration = runEndTime - runStartTime;
+            
+            // Accumulate total duration
+            totalDuration += duration;
+
+            String timeFlag = (duration >8000) ? " [SLOW]" : "";
+
             // Write the formatted outcome to the log file
-            writer.println(String.format("Run %02d: %-35s (Seed: %d)", i, status, currentSeed));
+            writer.println(String.format("Run %02d: %-35s (Seed: %d) | Time: %d ms%s", i, status, currentSeed, duration, timeFlag));
         }
 
         // Print a clean summary at the bottom of the text file for easy reading.
         writer.println("\n--- SUMMARY ---");
         writer.println("Total Runs with Issues: " + failedSeeds.size());
         
+        // Add average time
+        double averageTime = (double) totalDuration / totalRuns;
+        writer.println(String.format("Average Execution Time: %.2f ms", averageTime));
+
         if (!failedSeeds.isEmpty()) {
             writer.println("Seeds to investigate: " + failedSeeds.toString());
         }
