@@ -18,6 +18,7 @@ import java.util.List;
 public class EscapeGraph {
     private Map<Node, Collection<Edge>> weighted;
     private Map<Node, Collection<Node>> unweighted;
+    private Map<Node, Integer> goldMap;
     
     /**
      * Constructor for the EscapeGraph class.
@@ -26,6 +27,7 @@ public class EscapeGraph {
     public EscapeGraph(EscapeState state) {
         weighted = new HashMap<>();
         unweighted = new HashMap<>();
+        goldMap = new HashMap<>();
         for (var node : state.getVertices()) {
             List<Edge> edges = new ArrayList<>();
             List<Node> neighbours = new ArrayList<>();
@@ -35,6 +37,7 @@ public class EscapeGraph {
             }
             weighted.put(node, edges);
             unweighted.put(node, neighbours);
+            goldMap.put(node, node.getTile().getOriginalGold());
         }
     }
 
@@ -52,5 +55,13 @@ public class EscapeGraph {
      */
     public Map<Node, Collection<Node>> getUnweighted() {
         return unweighted;
+    }
+
+    /**
+     * Returns the map of nodes to their gold values.
+     * @return a map of nodes to their gold values
+     */
+    public Map<Node, Integer> getGoldMap() {
+        return goldMap;
     }
 }
