@@ -110,8 +110,22 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             }
         }
 
+        // Memeoization efficiency can be improved if we discover paths with higher potantial gold values first
+        // We can use a greedy approach to sort the neighbours based on gold amount
+        // This is similar to sorting the neighbours by distance to orb that we did in the explore phase
+        List<Edge> neighbours = new ArrayList<>(graph.getWeighted().getOrDefault(currentNode, Collections.emptyList()));
+        neighbours.sort((a, b) -> {
+            int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
+            int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
+            if(goldA != goldB) {
+                return Integer.compare(goldA, goldB);
+            } else {
+                return Integer.compare(minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
+            }
+        });
+
         //Explore neighbours in for loop
-        for(Edge edge : graph.getWeighted().getOrDefault(currentNode, Collections.emptyList())) {
+        for(Edge edge : neighbours) {
             Node neighbour = edge.getDest();
             int newCost = currentCost + edge.length();
             // Check if neighbor is unvisited and we have enough time budget
