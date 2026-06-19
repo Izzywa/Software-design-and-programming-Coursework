@@ -40,6 +40,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     private int bestGold;
     private int totalGraphGold;
     private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome ach node
+    private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map to store nodes and a corresponding map with remainingTime to maxGoldFound mapping
 
     /**
      * Constructor for the EscapeKnapsackDFSBnB class.
@@ -92,6 +93,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             return;
         }
 
+        // Memoization can be used to store and check paths visited earlier without recomputing them all the time during recursion
+        // If we've seen this node before with more or equal time left AND more or equal gold collected, we prune the branch
+
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
         if(currentNode.equals(endNode)) {
@@ -125,6 +129,12 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             }
         }
 
+    }
+
+    // Checks the memoization table to see if the current search path is strictly 
+    // worse regarding the remaining time and gold collected than a sub-problem path we have already evaluated.
+    private boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {
+        return false;
     }
 
     // Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the end node to each node
