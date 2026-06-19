@@ -78,25 +78,59 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     
     private void searchGraph(Node currentNode, int currentCost, int currentGold) {
         // Check if current gold + the remaining gold available in the graph is less than or equal to bestGold, if yes we prune the branch
+        if(currentGold + totalGraphGold <= bestGold) {
+            return;
+        }
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
+        if(currentNode.equals(endNode)) {
+            if(currentGold > bestGold) {
+                bestGold = currentGold;
+                bestPath = new ArrayList<>(currentPath);
+            }
+        }
 
         //Explore neighbours in for loop
+        for(Edge edge : graph.getWeighted().getOrDefault(currentNode, Collections.emptyList())) {
+            Node neighbour = edge.getDest();
+            int newCost = currentCost + edge.length();
             // Check if neighbor is unvisited and we have enough time budget
+            if(!visited.contains(neighbour) && newCost <= state.getTimeRemaining()) {
                 // Visit and count gold on node
+                int goldOnNode = graph.getGoldMap().getOrDefault(neighbour, 0);
 
                 // Update visited, current path and gold available on map before recursive call
+                visited.add(neighbour);
+                currentPath.add(neighbour);
+                totalGraphGold -= goldOnNode;
+
                 // Recurse
+                searchGraph(neighbour, newCost, currentGold + goldOnNode);
 
                 //Track back state changes after return from recursive call
+                visited.remove(neighbour);
+                currentPath.remove(currentPath.size() - 1);
+                totalGraphGold += goldOnNode;
+            }
+        }
+
     }
 
     @Override
     public EscapePath findEscapePath() {
+        // Check validity of graph representations
         checkGraphValidity();
-        searchGraph(startNode, 0, bestGold);
-        return null;
+
+        // Initialize search with start node
+        int startGold = graph.getGoldMap().getOrDefault(startNode, 0);
+        visited.add(startNode);
+        currentPath.add(startNode);
+        totalGraphGold -= startGold;
+        // Run recursive search from start node
+        searchGraph(startNode, 0, startGold);
+        // Return best path
+        return new EscapePath(bestPath);
     }
 
 }
