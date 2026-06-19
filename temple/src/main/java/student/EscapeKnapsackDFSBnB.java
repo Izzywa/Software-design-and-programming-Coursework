@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 import game.Edge;
 import game.Node;
@@ -35,6 +37,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     private List<Node> bestPath;
     private int bestGold;
     private int totalGraphGold;
+    private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome ach node
 
     /**
      * Constructor for the EscapeKnapsackDFSBnB class.
@@ -82,6 +85,10 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             return;
         }
 
+        // At the moment, we traverse the branches and we only prune them once we reach a point where the total cost exceeds the escape time
+        // This can be improved by prediciting the shortest distance to exit from the current node and if current cost + shortest distance to exit exceeds the escape time, we prune early.
+        // So we need to know the shortest distance from the end node to each end node, we can have Dijkstra's algorithm calculate that and store it in a HashMap to create a quick lookup table.
+
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
         if(currentNode.equals(endNode)) {
@@ -114,6 +121,12 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
                 totalGraphGold += goldOnNode;
             }
         }
+
+    }
+
+    // Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the end node to each node
+    // Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
+    private void computeShortestDistancesToExit() {
 
     }
 
