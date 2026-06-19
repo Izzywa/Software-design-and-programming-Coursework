@@ -2,10 +2,12 @@ package student;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.HashMap;
 
 import game.Edge;
@@ -55,6 +57,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         this.bestPath = null; // Initialize best path as null
         this.bestGold = -1; // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
         this.totalGraphGold = graph.getGoldMap().values().stream().mapToInt(Integer::intValue).sum(); // Calculate total gold in the graph
+        this.minDistanceToExit = shortestDistancesToExit();
     }
 
     /**
@@ -80,14 +83,14 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
     
     private void searchGraph(Node currentNode, int currentCost, int currentGold) {
-        // Check if current gold + the remaining gold available in the graph is less than or equal to bestGold, if yes we prune the branch
-        if(currentGold + totalGraphGold <= bestGold) {
+        int minTimeToExit = minDistanceToExit.getOrDefault(currentNode, Integer.MAX_VALUE);
+        // Check if 
+        // 1. current total cost + minimum time (shortest path) from current node exceeds total escape time
+        // OR
+        // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold, if yes we prune the branch
+        if(currentCost + minTimeToExit >= state.getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
             return;
         }
-
-        // At the moment, we traverse the branches and we only prune them once we reach a point where the total cost exceeds the escape time
-        // This can be improved by prediciting the shortest distance to exit from the current node and if current cost + shortest distance to exit exceeds the escape time, we prune early.
-        // So we need to know the shortest distance from the end node to each end node, we can have Dijkstra's algorithm calculate that and store it in a HashMap to create a quick lookup table.
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
@@ -103,7 +106,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             Node neighbour = edge.getDest();
             int newCost = currentCost + edge.length();
             // Check if neighbor is unvisited and we have enough time budget
-            if(!visited.contains(neighbour) && newCost <= state.getTimeRemaining()) {
+            if(!visited.contains(neighbour) && newCost + minTimeToExit < state.getTimeRemaining()) {
                 // Visit and count gold on node
                 int goldOnNode = graph.getGoldMap().getOrDefault(neighbour, 0);
 
@@ -125,9 +128,44 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     }
 
     // Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the end node to each node
-    // Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
-    private void computeShortestDistancesToExit() {
+    private Map<Node,Integer> shortestDistancesToExit() {
+        Map<Node,Integer> shortestDistLookupMap = new HashMap<>();
+        PriorityQueue<NodeDistancePair> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.distance));
 
+        pq.add(new NodeDistancePair(endNode, 0));
+        shortestDistLookupMap.put(endNode, 0);
+
+        while(!pq.isEmpty()) {
+            NodeDistancePair current = pq.poll();
+
+            
+            if(current.distance > shortestDistLookupMap.getOrDefault(current.node, Integer.MAX_VALUE)) {
+                continue;
+            }
+
+            for(Edge edge : graph.getWeighted().getOrDefault(current.node, Collections.emptyList())) {
+                Node neighbour = edge.getDest();
+                int newDist = current.distance + edge.length();
+                if(newDist < shortestDistLookupMap.getOrDefault(neighbour, Integer.MAX_VALUE)) {
+                    shortestDistLookupMap.put(neighbour, newDist);
+                    pq.add(new NodeDistancePair(neighbour, newDist));
+                }
+            }
+            
+        }
+
+        return shortestDistLookupMap;
+    }
+
+    // Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
+    private static class NodeDistancePair {
+        Node node;
+        int distance;
+
+        NodeDistancePair(Node node, int distance) {
+            this.node = node;
+            this.distance = distance;
+        }
     }
 
     @Override
