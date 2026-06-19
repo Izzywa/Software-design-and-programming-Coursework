@@ -17,17 +17,10 @@ import game.EscapeState;
 /**
  * Class that implements a Knapsack-style Depth-first search algorithm with Branch and Bound to find the best path from start to end in a weighted graph that satisfies the remaining time constraint and maximizes gold collected.
  * Branch and Bound is a search algorithm that explores the solution space by creating branches for each decision and uses bounds to prune branches that cannot yield better solutions than the best one found so far.
- * Time complexity: O(V^E) in the worst case, where V is the number of vertices and E is the number of edges. However, with pruning based on remaining time and gold collected, the actual time complexity can be significantly reduced in practice.
- * Space complexity: O(V) for the visited set and current path, and O(P) for storing all valid paths, where P is the number of valid paths found.
- * Reference: <a href="https://en.wikipedia.org/wiki/Depth-first_search">Wikipedia DFS</a>
- *
- * <pre>
- * procedure DFS(G, v) is
- *     mark v as visited
- *     for each neighbor w of v do
- *         if w is not visited then
- *             DFS(G, w)
- * </pre>
+ * Pruning algorithms implemented in class:
+ *      1. Potential available gold less than already collected
+ *      2. Potential path is longer than time needed to exit based on Dijkstra's algorithm
+ *      3. Memoization-based pruning of inferior branches
  */
 public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     private final EscapeState state;
@@ -83,20 +76,30 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         }
     }
 
-    
+    /** 
+     * Recursively searches the graph for all possible paths from the current node to the end node.
+     * However, it stops exploring a branch if:
+     *    1. Potential available gold less than already collected
+     *    2. Potential path is longer than time needed to exit based on Dijkstra's algorithm
+     *    3. New branch is inferior in terms of time remaining and gold compared to already known branches
+     * the remaining time is exceeded a certain limit and the branch is pruned 
+     * @param currentNode the current node being explored
+     * @param currentCost the cost to reach the current node
+     */
     private void searchGraph(Node currentNode, int currentCost, int currentGold) {
         int minTimeToExit = minDistanceToExit.getOrDefault(currentNode, Integer.MAX_VALUE);
         int timeLeft = state.getTimeRemaining() - currentCost;
         // Check if 
         // 1. current total cost + minimum time (shortest path) from current node exceeds total escape time
         // OR
-        // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold, if yes we prune the branch
+        // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold
+        // If true, we prune the branch
         if(currentCost + minTimeToExit >= state.getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
             return;
         }
 
         // Memoization can be used to store and check paths visited earlier without recomputing them all the time during recursion
-        // If we've seen this node before with more or equal time left AND more or equal gold collected, we prune the branch
+        // If we've seen this branch before with more or equal time left AND more or equal gold collected, we prune the branch
         if (shouldPruneBranch(currentNode, timeLeft, currentGold)) {
             return;
         }
@@ -150,10 +153,19 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
     }
 
-    // Checks the memoization table to see if the current search path is strictly 
-    // worse regarding the remaining time and gold collected than a sub-problem path we have already evaluated.
+    /**
+     * Checks the memoization table to see if the current search path is strictly 
+     * worse regarding the remaining time and gold collected than a sub-problem path we have already evaluated.
+     * If yes, we decide to prune the branch.
+     * If no, then we record our new values of time left and collected 
+     * @param node the current node being explored
+     * @param timeLeft time left to escape from current node
+     * @param currentGold gold collected along path
+     * @return boolean value if branch should be pruned early or not
+     */
     private boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {
-        Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, n-> new HashMap<>());
+        // Creates new HashMap for node key if it doesn't exist already
+        Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, k-> new HashMap<>());
 
         //Check previous visits in the memoization map
         for(Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
@@ -167,12 +179,15 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             }
         }
 
-        // Otherwise, record our current performance metrics for this branch
+        // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
     }
 
-    // Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the end node to each node
+    /**
+     * Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the each node to the exit node
+     * @return Map<Node,Integer> that contains nodes and their shortest distances to the exit node
+     */
     private Map<Node,Integer> shortestDistancesToExit() {
         Map<Node,Integer> shortestDistLookupMap = new HashMap<>();
         PriorityQueue<NodeDistancePair> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.distance));
@@ -202,17 +217,30 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         return shortestDistLookupMap;
     }
 
-    // Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
+    
+    /**
+     * Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
+     */
     private static class NodeDistancePair {
         Node node;
         int distance;
-
+        /** 
+         * Constructor
+         * @param node current node
+         * @param distance distance from current node to a certain node
+         */
         NodeDistancePair(Node node, int distance) {
             this.node = node;
             this.distance = distance;
         }
     }
 
+    /**
+     * Implements EscapeStrategy interface to find the escape path using the DFS algorithm with pruning.
+     * 
+     * Finds the best path in the graph after searching is assisted by pruning unuseful or illegal branches during recursive DFS path discovery.
+     * @return the best possible path from start to end or the shortest path if no valid paths are found
+     */
     @Override
     public EscapePath findEscapePath() {
         // Check validity of graph representations
