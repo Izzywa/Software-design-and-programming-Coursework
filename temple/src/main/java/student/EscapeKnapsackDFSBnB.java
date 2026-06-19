@@ -59,6 +59,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         this.bestGold = -1; // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
         this.totalGraphGold = graph.getGoldMap().values().stream().mapToInt(Integer::intValue).sum(); // Calculate total gold in the graph
         this.minDistanceToExit = shortestDistancesToExit();
+        this.memoMap = new HashMap<>();
     }
 
     /**
@@ -85,6 +86,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     
     private void searchGraph(Node currentNode, int currentCost, int currentGold) {
         int minTimeToExit = minDistanceToExit.getOrDefault(currentNode, Integer.MAX_VALUE);
+        int timeLeft = state.getTimeRemaining() - currentCost;
         // Check if 
         // 1. current total cost + minimum time (shortest path) from current node exceeds total escape time
         // OR
@@ -95,6 +97,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
         // Memoization can be used to store and check paths visited earlier without recomputing them all the time during recursion
         // If we've seen this node before with more or equal time left AND more or equal gold collected, we prune the branch
+        if (shouldPruneBranch(currentNode, timeLeft, currentGold)) {
+            return;
+        }
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
@@ -134,6 +139,22 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     // Checks the memoization table to see if the current search path is strictly 
     // worse regarding the remaining time and gold collected than a sub-problem path we have already evaluated.
     private boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {
+        Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, n-> new HashMap<>());
+
+        //Check previous visits in the memoization map
+        for(Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
+            int memoizedTimeLeft = entry.getKey();
+            int memoizedGold = entry.getValue();
+
+            // If we previously had MORE (or equal) time left, AND collected MORE (or equal) gold,
+            // then our current branch is inferior in terms of cost and gold collected
+            if(memoizedTimeLeft >= timeLeft && memoizedGold >= currentGold) {
+                return true;
+            }
+        }
+
+        // Otherwise, record our current performance metrics for this branch
+        timeToGoldMap.put(timeLeft, currentGold);
         return false;
     }
 
