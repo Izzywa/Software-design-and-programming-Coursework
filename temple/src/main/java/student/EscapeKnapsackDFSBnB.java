@@ -32,7 +32,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     private List<Node> bestPath;
     private int bestGold;
     private int totalGraphGold;
-    private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome ach node
+    private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome each node
     private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map to store nodes and a corresponding map with remainingTime to maxGoldFound mapping
 
     /**
@@ -185,7 +185,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     }
 
     /**
-     * Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from the each node to the exit node
+     * Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from each node to the exit node
      * @return Map<Node,Integer> that contains nodes and their shortest distances to the exit node
      */
     private Map<Node,Integer> shortestDistancesToExit() {
