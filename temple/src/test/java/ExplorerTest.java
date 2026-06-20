@@ -59,7 +59,7 @@ public class ExplorerTest {
     };
 
     @Test
-    public void testExplore() {
+    public void testExplore50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
             long seed = seeds[i];
             MockGameState state = new MockGameState(seed, false);
@@ -76,7 +76,7 @@ public class ExplorerTest {
     }
 
     @Test
-    public void testEscape() {
+    public void testEscape50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
             long seed = seeds[i];
             MockGameState state = new MockGameState(seed, false);
