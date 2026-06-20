@@ -84,6 +84,28 @@ public class ExplorerTest {
     }
 
     @Test
+    public void testExploreBacktrack() {
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/backtrack_explore.txt"
+        );
+
+        // Note by JY: We'll not do any escaping here but we need a
+        // escapeCavern file to create the MockGameState
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/dummy_escape.txt"
+        );
+
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.explore();
+        assertEquals(true, state.getExploreSucceeded());
+        assertEquals(false, state.getExploreErrored());
+    }
+
+    @Test
     public void testExplore50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
             long seed = seeds[i];
