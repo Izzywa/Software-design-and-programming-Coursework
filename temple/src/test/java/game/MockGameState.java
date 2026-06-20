@@ -170,6 +170,38 @@ public class MockGameState implements ExplorationState, EscapeState {
         }
     }
 
+    public void escapeTimeLimited(int time) {
+        stage = Stage.ESCAPE;
+        Tile orbTile = exploreCavern.getTarget().getTile();
+        position = escapeCavern.getNodeAt(orbTile.getRow(), orbTile.getColumn());
+        timeRemaining = time;
+        escapeTimeAtStart = timeRemaining;
+
+        gui.ifPresent((g) -> g.setLighting(true));
+        gui.ifPresent((g) -> g.updateCavern(escapeCavern, timeRemaining));
+
+        try {
+            explorer.escape(this);
+            if (position.equals(escapeCavern.getTarget())) {
+                escapeSucceeded = true;
+            }
+        } catch (OutOfTimeException e) {
+            output(gui, "Your solution to escape ran out of steps before returning!");
+        } catch (Throwable t) {
+            output(gui, "Your code caused an error during the escape phase. Please see console output.");
+            t.printStackTrace();
+            escapeErrored = true;
+        }
+
+        if (!escapeSucceeded) {
+            output(gui, "Your solution to escape failed to end at the stairs. Your code is not correct!");
+        }
+        System.out.println("Gold collected   : " + getGoldCollected());
+        DecimalFormat df = new DecimalFormat("#.##");
+        System.out.println("Bonus multiplier : " + df.format(computeBonusFactor()));
+        System.out.println("Score            : " + getScore());
+    }
+
     public void escape() {
         stage = Stage.ESCAPE;
         Tile orbTile = exploreCavern.getTarget().getTile();
