@@ -1,4 +1,7 @@
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -57,6 +60,28 @@ public class ExplorerTest {
         2256348683308726896L,
         4466691524055595058L,
     };
+
+    @Test
+    public void testExploreOnePath() {
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/one_path_explore.txt"
+        );
+
+        // Note by JY: We'll not do any escaping here but we need a
+        // escapeCavern file to create the MockGameState
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/shortest_path_escape.txt"
+        );
+
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.explore();
+        assertEquals(true, state.getExploreSucceeded());
+        assertEquals(false, state.getExploreErrored());
+    }
 
     @Test
     public void testExplore50Seeds() {

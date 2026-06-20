@@ -45,7 +45,7 @@ public class MockGameState implements ExplorationState, EscapeState {
     private boolean exploreErrored = false;
     private boolean escapeErrored = false;
 
-    public MockGameState(Path exploreCavernPath, Path escapeCavernPath) {
+    public MockGameState(Path exploreCavernPath, Path escapeCavernPath, boolean useGui) {
         try {
             exploreCavern = Cavern.deserialize(Files.readAllLines(exploreCavernPath));
             escapeCavern = Cavern.deserialize(Files.readAllLines(escapeCavernPath));
@@ -68,7 +68,18 @@ public class MockGameState implements ExplorationState, EscapeState {
         seed = -1;
 
         stage = Stage.EXPLORE;
-        gui = Optional.of(new GUI(exploreCavern, position.getTile().getRow(), position.getTile().getColumn(), 0));
+        if (useGui) {
+            gui = Optional.of(
+                new GUI(
+                    exploreCavern,
+                    position.getTile().getRow(),
+                    position.getTile().getColumn(),
+                    0
+                )
+            );
+        } else {
+            gui = Optional.empty();
+        }
     }
 
     /**
