@@ -70,7 +70,7 @@ public class ExplorerTest {
         // Note by JY: We'll not do any escaping here but we need a
         // escapeCavern file to create the MockGameState
         Path escapeCavernPath = Path.of(
-            "src/test/resources/shortest_path_escape.txt"
+            "src/test/resources/dummy_escape.txt"
         );
 
         MockGameState state = new MockGameState(
