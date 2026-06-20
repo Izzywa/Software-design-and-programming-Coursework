@@ -6,3 +6,6 @@ build
 .envrc
 
 .fake
+
+# Ignore files created in temple/logs
+temple/logs/*
