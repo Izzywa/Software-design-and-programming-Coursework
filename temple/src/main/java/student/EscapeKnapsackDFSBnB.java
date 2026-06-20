@@ -64,7 +64,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         if (graph.getWeighted() == null || graph.getWeighted().isEmpty()) {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
-        if (graph.getGoldMap() == null || graph.getGoldMap().isEmpty()) {
+        if (graph.getGoldMap() == null) {
             throw new IllegalArgumentException("Gold map cannot be null or empty");
         }
         // Check if start and end nodes are in the graphs
@@ -243,6 +243,12 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      */
     @Override
     public EscapePath findEscapePath() {
+        // Handling test egde case where there's no gold on map
+        // Theoretical possibility for smaller maps with P = 0.33 ^ node count (Map with 10 nodes has P = 0.0000153 (0.0015%) probability that no node has gold.)
+        if (totalGraphGold == 0) {
+            EscapeStrategy dijkstra = new EscapeDijkstra(state, startNode, endNode);
+            return dijkstra.findEscapePath();
+        }
         // Check validity of graph representations
         checkGraphValidity();
 
