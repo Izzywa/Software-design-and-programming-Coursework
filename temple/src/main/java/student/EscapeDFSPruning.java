@@ -108,6 +108,7 @@ public class EscapeDFSPruning implements EscapeStrategy {
         // Backtrack
         visited.remove(currentNode);
         currentPath.remove(currentPath.size() - 1);
+        stepCount--;
     }
 
     /**
