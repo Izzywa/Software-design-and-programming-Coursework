@@ -379,7 +379,7 @@ public class MockGameState implements ExplorationState, EscapeState {
         return escapeTimeAtStart - timeRemaining;
     }
 
-    int getGoldCollected() {
+    public int getGoldCollected() {
         return goldCollected;
     }
 
