@@ -81,7 +81,6 @@ public class ExplorerTest {
     //     for (int i = 0; i < seeds.length; i++) {
     //         long seed = seeds[i];
     //         MockGameState state = new MockGameState(seed, false);
-    //         state.setExploreSucceeded(true);
     //         state.escape();
     //         assertTrue(
     //             state.getEscapeSucceeded(),
