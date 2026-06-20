@@ -75,26 +75,8 @@ public class ExplorerTest {
         }
     }
 
-    // JY: Comment this out first or not unit tests will fail and cannot merge
-    // @Test
-    // public void testEscapeWithoutExplore() {
-    //     for (int i = 0; i < seeds.length; i++) {
-    //         long seed = seeds[i];
-    //         MockGameState state = new MockGameState(seed, false);
-    //         state.escape();
-    //         assertTrue(
-    //             state.getEscapeSucceeded(),
-    //             String.format("Escape phase failed on seed %d", seed)
-    //         );
-    //         assertFalse(
-    //             state.getEscapeErrored(),
-    //             String.format("Escape phase failed on seed %d", seed)
-    //         );
-    //     }
-    // }
-
     @Test
-    public void testEscapeAfterExplore() {
+    public void testEscape() {
         for (int i = 0; i < seeds.length; i++) {
             long seed = seeds[i];
             MockGameState state = new MockGameState(seed, false);
