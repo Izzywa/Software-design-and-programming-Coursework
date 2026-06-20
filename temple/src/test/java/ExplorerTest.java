@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import game.MockGameState;
 
+/**
+ * Functional tests for the student {@code Explorer} implementation.
+ * Uses {@code MockGameState} and deterministic cavern files.
+ */
 public class ExplorerTest {
     private static final long[] seeds = {
         -6030386710065883781L,
@@ -61,6 +65,7 @@ public class ExplorerTest {
         4466691524055595058L,
     };
 
+    /** Verifies exploration on a simple one-path cavern. */
     @Test
     public void testExploreOnePath() {
         Path exploreCavernPath = Path.of(
@@ -83,6 +88,7 @@ public class ExplorerTest {
         assertEquals(false, state.getExploreErrored());
     }
 
+    /** Verifies exploration on a cavern that requires backtracking. */
     @Test
     public void testExploreBacktrack() {
         Path exploreCavernPath = Path.of(
@@ -105,6 +111,7 @@ public class ExplorerTest {
         assertEquals(false, state.getExploreErrored());
     }
 
+    /** Verifies escape follows the shortest path when no gold is involved. */
     @Test
     public void testEscapeShortest() {
         // Note by JY: We'll not do any exploring here but we need a
@@ -129,6 +136,7 @@ public class ExplorerTest {
         assertEquals(6, state.getEscapeTimeSpent());
     }
 
+    /** Verifies escape collects gold when time allows a richer path. */
     @Test
     public void testEscapeMaxGold() {
         // Note by JY: We'll not do any exploring here but we need a
@@ -154,6 +162,7 @@ public class ExplorerTest {
         assertEquals(10, state.getGoldCollected());
     }
 
+    /** Verifies escape prioritizes the exit when time is tight. */
     @Test
     public void testEscapeTimeLimited() {
         // Note by JY: We'll not do any exploring here but we need a
@@ -179,6 +188,7 @@ public class ExplorerTest {
         assertEquals(0, state.getGoldCollected());
     }
 
+    /** Repeats exploration over a fixed seed set. */
     @Test
     public void testExplore50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
@@ -196,6 +206,7 @@ public class ExplorerTest {
         }
     }
 
+    /** Repeats escape over a fixed seed set. */
     @Test
     public void testEscape50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
