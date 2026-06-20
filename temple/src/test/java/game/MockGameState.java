@@ -38,6 +38,7 @@ public class MockGameState implements ExplorationState, EscapeState {
     private Node position;
     private int stepsTaken;
     private int timeRemaining;
+    private int escapeTimeAtStart;
     private int goldCollected;
     private Stage stage;
     private boolean exploreSucceeded = false;
@@ -63,6 +64,7 @@ public class MockGameState implements ExplorationState, EscapeState {
         position = exploreCavern.getEntrance();
         stepsTaken = 0;
         timeRemaining = Integer.MAX_VALUE;
+        escapeTimeAtStart = Integer.MAX_VALUE;
         goldCollected = 0;
 
         seed = -1;
@@ -105,6 +107,7 @@ public class MockGameState implements ExplorationState, EscapeState {
         position = exploreCavern.getEntrance();
         stepsTaken = 0;
         timeRemaining = Integer.MAX_VALUE;
+        escapeTimeAtStart = Integer.MAX_VALUE;
         goldCollected = 0;
 
         explorer = new Explorer();
@@ -177,6 +180,7 @@ public class MockGameState implements ExplorationState, EscapeState {
             timeRemaining = escapeCavern.minPathLengthToTarget(position);
             gui.ifPresent((g) -> g.moveTo(position));
         }
+        escapeTimeAtStart = timeRemaining;
 
         gui.ifPresent((g) -> g.setLighting(true));
         gui.ifPresent((g) -> g.updateCavern(escapeCavern, timeRemaining));
@@ -364,6 +368,15 @@ public class MockGameState implements ExplorationState, EscapeState {
             throw new IllegalStateException("getTimeRemaining() can only be called while escaping!");
         }
         return timeRemaining;
+    }
+
+    public int getEscapeTimeSpent() {
+        if (stage != Stage.ESCAPE) {
+            throw new IllegalStateException("getEscapeTimeSpent() can only be called while escaping!");
+        }
+        System.out.println(String.format("escapeTimeAtStart=%d", escapeTimeAtStart));
+        System.out.println(String.format("timeRemaining=%d", timeRemaining));
+        return escapeTimeAtStart - timeRemaining;
     }
 
     int getGoldCollected() {

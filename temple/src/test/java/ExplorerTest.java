@@ -106,6 +106,30 @@ public class ExplorerTest {
     }
 
     @Test
+    public void testEscapeShortest() {
+        // Note by JY: We'll not do any exploring here but we need a
+        // exploreCavern file to create the MockGameState
+        // The Gem in the exploreCavern file will be the start location
+        // for the escapeCaverns
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/shortest_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.escape();
+        assertEquals(true, state.getEscapeSucceeded());
+        assertEquals(false, state.getEscapeErrored());
+        assertEquals(6, state.getEscapeTimeSpent());
+    }
+
+    @Test
     public void testExplore50Seeds() {
         for (int i = 0; i < seeds.length; i++) {
             long seed = seeds[i];
