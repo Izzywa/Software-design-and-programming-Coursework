@@ -186,6 +186,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
     /**
      * Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from each node to the exit node
+     * This algorithm traverses the graph backwards from end node towards the start node
      * @return Map<Node,Integer> that contains nodes and their shortest distances to the exit node
      */
     private Map<Node,Integer> shortestDistancesToExit() {
@@ -203,7 +204,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
                 continue;
             }
 
-            for(Edge edge : graph.getWeighted().getOrDefault(current.node, Collections.emptyList())) {
+            for(Edge edge : graph.getInvertedWeighted().getOrDefault(current.node, Collections.emptyList())) {
                 Node neighbour = edge.getDest();
                 int newDist = current.distance + edge.length();
                 if(newDist < shortestDistLookupMap.getOrDefault(neighbour, Integer.MAX_VALUE)) {

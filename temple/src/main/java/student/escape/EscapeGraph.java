@@ -18,6 +18,7 @@ import java.util.List;
 public class EscapeGraph {
     private Map<Node, Collection<Edge>> weighted;
     private Map<Node, Collection<Node>> unweighted;
+    private Map<Node, Collection<Edge>> invertedWeighted;
     private Map<Node, Integer> goldMap;
     
     /**
@@ -39,6 +40,43 @@ public class EscapeGraph {
             unweighted.put(node, neighbours);
             goldMap.put(node, node.getTile().getOriginalGold());
         }
+        invertedWeighted = createInvertedGraph(weighted);
+    }
+
+    /**
+     * Creates an inverted version of a weighte dgraph.
+     * This is required for algorithms which traverse directed graphs backwards from end node to start node.
+     * @param weightedGraph a weighted representation of a graph
+     * @return a map of nodes to their incident edges with weights
+     */
+    public Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
+        Map<Node, Collection<Edge>> inverted = new HashMap<>();
+
+        // Initialize empty lists for every node present in the original graph
+        for (Node src : weightedGraph.keySet()) {
+            inverted.putIfAbsent(src, new ArrayList<>());
+        }
+
+        // Populate with reversed edges
+        for (Map.Entry<Node, Collection<Edge>> entry : weightedGraph.entrySet()) {
+            Node source = entry.getKey();
+            for (Edge edge : entry.getValue()) {
+                Node destination = edge.getDest();
+                int weight = edge.length();
+                // Create a reversed edge: destination -> source with same weight 
+                Edge reversedEdge = new Edge(destination, source, weight);
+                inverted.get(destination).add(reversedEdge);
+            }
+        }
+        return inverted;
+    }
+
+    /**
+     * Returns the inverted version of the weighted representation of the graph.
+     * @return a map of nodes to their incident edges with weights
+     */
+    public Map<Node, Collection<Edge>> getInvertedWeighted() {
+        return invertedWeighted;
     }
 
     /**
