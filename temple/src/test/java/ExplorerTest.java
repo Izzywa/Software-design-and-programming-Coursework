@@ -155,7 +155,7 @@ public class ExplorerTest {
     }
 
     @Test
-    public void testEscapeTimeLimited() {
+    public void testEscapeMaxGoldLimited() {
         // Note by JY: We'll not do any exploring here but we need a
         // exploreCavern file to create the MockGameState
         // The Gem in the exploreCavern file will be the start location
@@ -165,6 +165,31 @@ public class ExplorerTest {
         );
         Path escapeCavernPath = Path.of(
             "src/test/resources/gold_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.escapeTimeLimited(19);
+        assertEquals(true, state.getEscapeSucceeded());
+        assertEquals(false, state.getEscapeErrored());
+        assertEquals(15, state.getEscapeTimeSpent());
+        assertEquals(10, state.getGoldCollected());
+    }
+
+    @Test
+    public void testEscapeTimeShortestLimited() {
+        // Note by JY: We'll not do any exploring here but we need a
+        // exploreCavern file to create the MockGameState
+        // The Gem in the exploreCavern file will be the start location
+        // for the escapeCaverns
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/shortest_escape.txt"
         );
         MockGameState state = new MockGameState(
             exploreCavernPath,
