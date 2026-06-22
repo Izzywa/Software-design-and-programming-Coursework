@@ -121,7 +121,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
             int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
             if(goldA != goldB) {
-                return Integer.compare(goldA, goldB);
+                return Integer.compare(goldB, goldA);
             } else {
                 return Integer.compare(minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
             }
