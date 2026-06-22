@@ -9,6 +9,9 @@ import java.util.Set;
 import game.EscapeState;
 import game.ExplorationState;
 import game.NodeStatus;
+import student.escape.EscapeKnapsackDFSBnB;
+import student.escape.EscapePath;
+import student.escape.EscapeStrategy;
 
 public class Explorer {
 
