@@ -1,5 +1,4 @@
-## Changes from the original CODIO code base
-View the [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/04062026_InitialSetup)
+## [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/Home)
 
 ## Team SDK
 
@@ -10,21 +9,21 @@ View the [Wiki](https://github.com/Izzywa/Software-design-and-programming-Course
 
 - Quick install examples:
 
-  macOS (Homebrew + Temurin 21):
+  ### macOS (Homebrew + Temurin 21):
 
   ```bash
   brew install --cask temurin
   java -version # verify shows 21
   ```
 
-  Windows (Adoptium installer):
+  ### Windows (Adoptium installer):
   - Download and install Temurin JDK 21 from https://adoptium.net
   - Verify `java -version` in PowerShell or cmd.
 
-  Codio:
- ```bash
-  sdk install java 21.0.4-tem 
-  ```
+  ### Codio:
+   ```bash
+    sdk install java 21.0.4-tem 
+    ```
   - When prompted, select to use Java 21 as the default.
   ```baash
   Do you want java 21.0.4-tem to be set as default? (Y/n): 
@@ -69,6 +68,13 @@ note: _there will be some warnings from problems in the code base but the termin
 ```bash
 BUILD SUCCESSFUL in 5s
 9 actionable tasks: 9 executed
+```
+
+# Tests
+The test classes are located in `temple/src/test/java/` and are configured to run with JUnit 5. You can run all tests using Gradle with the following command:
+
+```bash
+./gradlew test
 ```
 
 # Generating JavaDoc
