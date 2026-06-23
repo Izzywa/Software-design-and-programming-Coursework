@@ -80,7 +80,7 @@ public class EscapeDijkstra implements EscapeStrategy {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
         // Check if start and end nodes are in the graph
-        if(!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
+        if (!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
     }
@@ -98,7 +98,8 @@ public class EscapeDijkstra implements EscapeStrategy {
         distanceMap.put(startNode, 0);
 
         // Priority queue to select the node with the smallest distance
-        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> Integer.compare(distanceMap.get(a), distanceMap.get(b)));
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> 
+        Integer.compare(distanceMap.get(a), distanceMap.get(b)));
         pq.add(startNode);
 
         // Dijkstra's algorithm main loop

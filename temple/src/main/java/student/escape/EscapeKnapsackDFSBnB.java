@@ -15,8 +15,10 @@ import game.Node;
 import game.EscapeState;
 
 /**
- * Class that implements a Knapsack-style Depth-first search algorithm with Branch and Bound to find the best path from start to end in a weighted graph that satisfies the remaining time constraint and maximizes gold collected.
- * Branch and Bound is a search algorithm that explores the solution space by creating branches for each decision and uses bounds to prune branches that cannot yield better solutions than the best one found so far.
+ * Class that implements a Knapsack-style Depth-first search algorithm with Branch and Bound to find the best path 
+ * from start to end in a weighted graph that satisfies the remaining time constraint and maximizes gold collected.
+ * Branch and Bound is a search algorithm that explores the solution space by creating branches for each decision 
+ * and uses bounds to prune branches that cannot yield better solutions than the best one found so far.
  * Pruning algorithms implemented in class:
  *      1. Potential available gold less than already collected
  *      2. Potential path is longer than time needed to exit based on Dijkstra's algorithm
@@ -33,7 +35,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     private int bestGold;
     private int totalGraphGold;
     private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome each node
-    private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map to store nodes and a corresponding map with remainingTime to maxGoldFound mapping
+    private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map: Map<Node, Map<remainingTime, maxGoldFound>>
 
     /**
      * Constructor for the EscapeKnapsackDFSBnB class.
@@ -49,8 +51,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
         this.bestPath = null; // Initialize best path as null
-        this.bestGold = -1; // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
-        this.totalGraphGold = graph.getGoldMap().values().stream().mapToInt(Integer::intValue).sum(); // Calculate total gold in the graph
+        // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
+        this.bestGold = -1; 
+        this.totalGraphGold = graph.getGoldMap().values().stream().mapToInt(Integer::intValue).sum();
         this.minDistanceToExit = shortestDistancesToExit();
         this.memoMap = new HashMap<>();
     }
@@ -68,10 +71,10 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             throw new IllegalArgumentException("Gold map cannot be null or empty");
         }
         // Check if start and end nodes are in the graphs
-        if(!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
+        if (!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
-        if(!graph.getGoldMap().containsKey(startNode) || !graph.getGoldMap().containsKey(endNode)) {
+        if (!graph.getGoldMap().containsKey(startNode) || !graph.getGoldMap().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the gold map");
         }
     }
@@ -94,20 +97,22 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         // OR
         // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold
         // If true, we prune the branch
-        if(currentCost + minTimeToExit >= state.getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
+        if (currentCost + minTimeToExit >= state.getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
             return;
         }
 
-        // Memoization can be used to store and check paths visited earlier without recomputing them all the time during recursion
-        // If we've seen this branch before with more or equal time left AND more or equal gold collected, we prune the branch
+        // Memoization can be used to store and check paths visited earlier 
+        // without recomputing them all the time during recursion
+        // If we've seen this branch before with more or equal time left AND more or equal gold collected,
+        // then we prune the branch
         if (shouldPruneBranch(currentNode, timeLeft, currentGold)) {
             return;
         }
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
-        if(currentNode.equals(endNode)) {
-            if(currentGold > bestGold) {
+        if (currentNode.equals(endNode)) {
+            if (currentGold > bestGold) {
                 bestGold = currentGold;
                 bestPath = new ArrayList<>(currentPath);
             }
@@ -120,19 +125,21 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         neighbours.sort((a, b) -> {
             int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
             int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
-            if(goldA != goldB) {
-                return Integer.compare(goldA, goldB);
+            if (goldA != goldB) {
+                return Integer.compare(goldB, goldA);
             } else {
-                return Integer.compare(minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
+                return Integer.compare(
+                    minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), 
+                    minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
             }
         });
 
         //Explore neighbours in for loop
-        for(Edge edge : neighbours) {
+        for (Edge edge : neighbours) {
             Node neighbour = edge.getDest();
             int newCost = currentCost + edge.length();
             // Check if neighbor is unvisited and we have enough time budget
-            if(!visited.contains(neighbour) && newCost + minTimeToExit < state.getTimeRemaining()) {
+            if (!visited.contains(neighbour) && newCost + minTimeToExit < state.getTimeRemaining()) {
                 // Visit and count gold on node
                 int goldOnNode = graph.getGoldMap().getOrDefault(neighbour, 0);
 
@@ -168,13 +175,13 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, k-> new HashMap<>());
 
         //Check previous visits in the memoization map
-        for(Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
             int memoizedTimeLeft = entry.getKey();
             int memoizedGold = entry.getValue();
 
             // If we previously had MORE (or equal) time left, AND collected MORE (or equal) gold,
             // then our current branch is inferior in terms of cost and gold collected
-            if(memoizedTimeLeft >= timeLeft && memoizedGold >= currentGold) {
+            if (memoizedTimeLeft >= timeLeft && memoizedGold >= currentGold) {
                 return true;
             }
         }
@@ -185,7 +192,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     }
 
     /**
-     * Dijktra's algorithm with priority queue implementation to create lookup table with shortest distances from each node to the exit node
+     * Dijktra's algorithm with priority queue implementation to create lookup table 
+     * with shortest distances from each node to the exit node
+     * This algorithm traverses the graph backwards from end node towards the start node
      * @return Map<Node,Integer> that contains nodes and their shortest distances to the exit node
      */
     private Map<Node,Integer> shortestDistancesToExit() {
@@ -195,18 +204,18 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         pq.add(new NodeDistancePair(endNode, 0));
         shortestDistLookupMap.put(endNode, 0);
 
-        while(!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             NodeDistancePair current = pq.poll();
 
             
-            if(current.distance > shortestDistLookupMap.getOrDefault(current.node, Integer.MAX_VALUE)) {
+            if (current.distance > shortestDistLookupMap.getOrDefault(current.node, Integer.MAX_VALUE)) {
                 continue;
             }
 
-            for(Edge edge : graph.getWeighted().getOrDefault(current.node, Collections.emptyList())) {
+            for (Edge edge : graph.getInvertedWeighted().getOrDefault(current.node, Collections.emptyList())) {
                 Node neighbour = edge.getDest();
                 int newDist = current.distance + edge.length();
-                if(newDist < shortestDistLookupMap.getOrDefault(neighbour, Integer.MAX_VALUE)) {
+                if (newDist < shortestDistLookupMap.getOrDefault(neighbour, Integer.MAX_VALUE)) {
                     shortestDistLookupMap.put(neighbour, newDist);
                     pq.add(new NodeDistancePair(neighbour, newDist));
                 }
@@ -219,7 +228,8 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
     
     /**
-     * Inner helper class which stores nodes and shortest distances to populate priority queue that prioritizes nodes by distances
+     * Inner helper class which stores nodes and shortest distances to populate priority queue 
+     * that prioritizes nodes by distances
      */
     private static class NodeDistancePair {
         Node node;
@@ -238,13 +248,15 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
     /**
      * Implements EscapeStrategy interface to find the escape path using the DFS algorithm with pruning.
      * 
-     * Finds the best path in the graph after searching is assisted by pruning unuseful or illegal branches during recursive DFS path discovery.
+     * Finds the best path in the graph after searching is assisted by pruning unuseful 
+     * or illegal branches during recursive DFS path discovery.
      * @return the best possible path from start to end or the shortest path if no valid paths are found
      */
     @Override
     public EscapePath findEscapePath() {
         // Handling test egde case where there's no gold on map
-        // Theoretical possibility for smaller maps with P = 0.33 ^ node count (Map with 10 nodes has P = 0.0000153 (0.0015%) probability that no node has gold.)
+        // Theoretical possibility for smaller maps with P = 0.33 ^ node count 
+        // (Map with 10 nodes has P = 0.0000153 (0.0015%) probability that no node has gold.)
         if (totalGraphGold == 0) {
             EscapeStrategy dijkstra = new EscapeDijkstra(state, startNode, endNode);
             return dijkstra.findEscapePath();

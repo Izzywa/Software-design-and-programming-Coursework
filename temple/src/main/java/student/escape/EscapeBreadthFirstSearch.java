@@ -13,7 +13,8 @@ import game.EscapeState;
 import game.Node;
 
 /**
- * Class that implements the Breadth-first search algorithm to find the shortest path from start to end in an unweighted graph.
+ * Class that implements the Breadth-first search algorithm to find the shortest path 
+ * from start to end in an unweighted graph.
  * Reference: <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Wikipedia BFS</a>
  *
  * <pre>
@@ -69,7 +70,7 @@ public class EscapeBreadthFirstSearch implements EscapeStrategy {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
         // Check if start and end nodes are in the graph
-        if(!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
+        if (!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
     }
@@ -117,7 +118,7 @@ public class EscapeBreadthFirstSearch implements EscapeStrategy {
         searchGraph();
 
         // If we did not find the end node, return an empty path
-        if(!foundPath) {
+        if (!foundPath) {
             return new EscapePath(Collections.emptyList()); // No path found
         }
 
