@@ -11,9 +11,12 @@ import game.Node;
 import game.EscapeState;
 
 /**
- * Class that implements the Depth-first search algorithm to find all paths from start to end in a weighted graph that satisfy the remaining time constraint, then selects the best path based on gold collected.
- * Time complexity: O(V^E) in the worst case, where V is the number of vertices and E is the number of edges. However, with pruning based on remaining time, the actual time complexity can be significantly reduced in practice.
- * Space complexity: O(V) for the visited set and current path, and O(P) for storing all valid paths, where P is the number of valid paths found.
+ * Class that implements the Depth-first search algorithm to find all paths from start to end in a weighted graph 
+ * that satisfy the remaining time constraint, then selects the best path based on gold collected.
+ * Time complexity: O(V^E) in the worst case, where V is the number of vertices and E is the number of edges. 
+ * However, with pruning based on remaining time, the actual time complexity can be significantly reduced in practice.
+ * Space complexity: O(V) for the visited set and current path, and O(P) for storing all valid paths, 
+ * where P is the number of valid paths found.
  * Reference: <a href="https://en.wikipedia.org/wiki/Depth-first_search">Wikipedia DFS</a>
  *
  * <pre>
@@ -68,7 +71,7 @@ public class EscapeDFSPruning implements EscapeStrategy {
             throw new IllegalArgumentException("Graph cannot be null or empty");
         }
         // Check if start and end nodes are in the graph
-        if(!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
+        if (!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
             throw new IllegalArgumentException("Start or end node does not exist in the graph");
         }
     }
@@ -112,9 +115,10 @@ public class EscapeDFSPruning implements EscapeStrategy {
     }
 
     /**
-     * Selects the best path from the list of valid paths based on the total amount of gold collected, and in case of a tie, selects the one with the lowest total cost.
+     * Selects the best path from the list of valid paths based on the total amount of gold collected, 
+     * and in case of a tie, selects the one with the lowest total cost.
      * @param paths the list of valid EscapePaths to select from
-     * @return the best EscapePath based on gold collected and total cost or the shortest path if no valid paths are found
+     * @return the best EscapePath based on gold collected and total cost or the shortest path if no valid paths found
      */
     private EscapePath selectBestPath(List<EscapePath> paths) {
         return paths.stream()
@@ -131,7 +135,8 @@ public class EscapeDFSPruning implements EscapeStrategy {
      * Implements EscapeStrategy interface to find the escape path using the DFS algorithm with pruning.
      * 
      * Finds all possible paths from the start node to the end node that fit within the remaining time.
-     * Then it selects the best path based on the total amount of gold collected, and in case of a tie, selects the one with the lowest total cost.
+     * Then it selects the best path based on the total amount of gold collected, and in case of a tie, 
+     * selects the one with the lowest total cost.
      * @return the best possible path from start to end or the shortest path if no valid paths are found
      */
     @Override

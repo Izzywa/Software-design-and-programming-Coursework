@@ -12,8 +12,13 @@ import java.util.List;
 
 /**
  * Represents the graph for the escape game.
- * Constructs both weighted and unweighted representations of the graph based on the escape state.
- * The weighted graph is used for optimal pathfinding, while the unweighted graph is used for basic connectivity checks.
+ * Constructs the follwoing representations of the graph based on escape state:
+ * -unweighted
+ * -weighted
+ * -inverted weighted
+ * -gold map
+ * The weighted and inverted graphs are used for optimal pathfinding, 
+ * while the unweighted graph is used for basic connectivity checks.
  */
 public class EscapeGraph {
     private Map<Node, Collection<Edge>> weighted;

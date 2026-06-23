@@ -5,9 +5,10 @@ import game.Node;
 import java.util.List;
 
 /**
- * Represents an escape path in the escape game with associated total costs (in terms of time) and total amount of gold found along the path.
- * Implements the Comparable interface to allow for comparison based on the total amount of gold found, which can be used for prioritizing paths in search algorithms.
- * The total cost is calculated as the sum of the lengths of the edges along the path, while the total gold is calculated as the sum of the original gold amounts on the tiles of the nodes along the path.
+ * Represents an escape path in the escape game with associated total costs (in terms of time) and
+ * total amount of gold found along the path.
+ * The total cost is calculated as the sum of the lengths of the edges along the path, 
+ * while the total gold is calculated as the sum of the original gold amounts on the tiles of the nodes along the path.
  */
 public class EscapePath {
     private final List<Node> path;
