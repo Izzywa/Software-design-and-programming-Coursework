@@ -71,3 +71,13 @@ tasks.register<JavaExec>("log") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("main.LOGmain")
 }
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+
+    maxHeapSize = "1G"
+
+    testLogging {
+        events("passed", "failed", "skipped")
+    }
+}
