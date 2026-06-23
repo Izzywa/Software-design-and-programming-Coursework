@@ -5,7 +5,7 @@ import game.ExplorationState;
 
 // Explore imports
 import student.explore.ExploreStrategy;
-import student.explore.HeuristicDFSStrategy;
+import student.explore.HeuristicDFSExploreStrategy;
 
 // Escape imports
 import student.escape.EscapeKnapsackDFSBnB;
@@ -44,7 +44,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        ExploreStrategy strategy = new HeuristicDFSStrategy();
+        ExploreStrategy strategy = new HeuristicDFSExploreStrategy();
         strategy.explore(state);
     }
 

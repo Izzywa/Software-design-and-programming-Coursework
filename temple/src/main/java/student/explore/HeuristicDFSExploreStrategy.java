@@ -25,14 +25,14 @@ import game.NodeStatus;
  *             recursively call DFS(G, w)
  * </pre>
  */
-public class HeuristicDFSStrategy implements ExploreStrategy {
+public class HeuristicDFSExploreStrategy implements ExploreStrategy {
 
     private final Set<Long> discovered;
 
     /**
      * Create a fresh heuristic DFS strategy.
      */
-    public HeuristicDFSStrategy() {
+    public HeuristicDFSExploreStrategy() {
         discovered = new HashSet<>();
     }
 
