@@ -15,35 +15,43 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Testing by way of simulation of running TXTmain over a fixed range of seeds.
+ * Testing by way of simulation of running TXTmain over specific top-tier seeds.
  * Automated tests to ensure the Explore and Escape phases execute without fail,
- * while capturing performance metrics (Gold, Multiplier, Score) for baseline comparisons.
+ * while capturing performance metrics to compare against the League Table.
  */
-public class TestFixedSeed {
+public class LeagueTableSeedTest {
 
     /**
-     * Runs the simulation sequentially from a starting predefined seed to an ending predefined seed.
+     * Runs the simulation sequentially using seeds extracted from the League Table.
      * Captures Gold, Multiplier, and Score from the console output.
      * Log is timestamped so it is never overwritten, allowing for easy A/B testing of algorithms.
      */
     @Test
-    public void testSequentialSeedsWithScoreTracking() throws IOException {
+    public void testLeagueTableSeedsWithScoreTracking() throws IOException {
         File logDir = new File("logs");
         if (!logDir.exists()) logDir.mkdirs(); 
 
         // Add a timestamp to the filename to prevent overwriting
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String logFileName = "logs/simulation_fixed_seed_" + timestamp + ".log";
+        String logFileName = "logs/simulation_league_table_" + timestamp + ".log";
         PrintWriter writer = new PrintWriter(new FileWriter(logFileName));
         
-        System.out.println("Fixed Seed Baseline test running... See " + logFileName);
-        writer.println("Fixed Seed Baseline Log - " + LocalDateTime.now());
+        System.out.println("League Table Baseline test running... See " + logFileName);
+        writer.println("League Table Baseline Log - " + LocalDateTime.now());
         
-        // Define the specific range of seeds to test (1000-1049)
-        long startSeed = 1000;
-        long endSeed = 1049;
-        int totalRuns = (int) (endSeed - startSeed + 1);
+        // Define the specific seeds from the league table
+        long[] leagueSeeds = {
+            -4152836868077314850L, -3967848802208875438L, 5864101433891852061L,
+            7445652272991402161L, 8781946738346443336L, -8753562310865996698L,
+            -757868709594414956L, -5747184872657058727L, -7761980840912806448L,
+            -4501867144509231625L, 9178600685835736767L, 8849755165154918804L,
+            -8795875982559746259L, 8207908124709091172L, 4218948394500449828L,
+            3694314465540184459L, -5936268151507118028L, -4779223688972917879L,
+            -8522969912440837840L, 6496594554013205192L, 6629009396325103285L,
+            2832876979625815005L, -5845531988250598653L, -1906048792819286095L
+        };
         
+        int totalRuns = leagueSeeds.length;
         List<Long> failedSeeds = new ArrayList<>();
         
         // Save BOTH original streams to restore them later
@@ -55,7 +63,8 @@ public class TestFixedSeed {
         long totalGold = 0;
         int successfulRuns = 0;
 
-        for (long currentSeed = startSeed; currentSeed <= endSeed; currentSeed++) {
+        for (int i = 0; i < leagueSeeds.length; i++) {
+            long currentSeed = leagueSeeds[i];
             ByteArrayOutputStream outContent = new ByteArrayOutputStream();
             ByteArrayOutputStream errContent = new ByteArrayOutputStream();
             String status;
@@ -107,18 +116,18 @@ public class TestFixedSeed {
                     successfulRuns++;
                 } catch (NumberFormatException ignored) {}
 
-                writer.println(String.format("Seed %02d: %-10s | Time: %4d ms%s | Gold: %5s | Mult: %4s | Score: %6s", 
+                writer.println(String.format("Seed %20d: %-10s | Time: %4d ms%s | Gold: %5s | Mult: %4s | Score: %6s", 
                                currentSeed, status, duration, timeFlag, gold, multiplier, score));
             } else {
                 // If it failed, we don't have a score to report
-                writer.println(String.format("Seed %02d: %-10s | Time: %4d ms%s | Gold:   N/A | Mult:  N/A | Score:    N/A", 
+                writer.println(String.format("Seed %20d: %-10s | Time: %4d ms%s | Gold:   N/A | Mult:  N/A | Score:    N/A", 
                                currentSeed, status, duration, timeFlag));
             }
         }
 
         // Print a detailed summary with averages
         writer.println("\n--- BASELINE SUMMARY ---");
-        writer.println("Seed Range: " + startSeed + " to " + endSeed);
+        writer.println("Total Runs Completed: " + totalRuns);
         writer.println("Total Runs with Issues: " + failedSeeds.size());
         writer.println(String.format("Average Execution Time: %.2f ms", (double) totalDuration / totalRuns));
         
@@ -132,7 +141,7 @@ public class TestFixedSeed {
         }
         
         writer.close(); 
-        assertTrue(failedSeeds.isEmpty(), "Sequential simulation encountered issues. Check " + logFileName);
+        assertTrue(failedSeeds.isEmpty(), "League Table simulation encountered issues. Check " + logFileName);
     }
 
     /**
