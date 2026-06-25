@@ -50,63 +50,75 @@ import game.Edge;
  * 
  */
 public class EscapeDijkstra implements EscapeStrategy {
-    private final EscapeGraph graph;
-    private final Node startNode;
-    private final Node endNode;
     private Map<Node, Node> parentMap;
     private Map<Node, Integer> distanceMap;
 
     /**
-     * Constructor 
-     * @param state the escape state containing the graph and other relevant information
-     * @param start the starting node
-     * @param end   the target node
+     * No-args constructor for EscapeDijkstra class
      */
-    public EscapeDijkstra(EscapeState state, Node start, Node end) {
-        this.graph = new EscapeGraph(state);
-        this.startNode = start;
-        this.endNode = end;
+    public EscapeDijkstra() {
         this.parentMap = new HashMap<>();
         this.distanceMap = new HashMap<>();
     }
 
     /**
-     * Checks the validity of the graph before performing Dijkstra's algorithm
-     * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
+     * Implements EscapeStrategy interface to find the escape path using Dijkstra's algorithm.
+     * Finds the shortest path from the start node to the end node.
+     * 
+     * @param state the current escape state
+     * @return the shortest path from start to end, or an empty list if no path exists
      */
-    private void checkGraphValidity() {
-        // Check if the graph is null or empty
-        if (graph.getWeighted() == null || graph.getWeighted().isEmpty()) {
-            throw new IllegalArgumentException("Graph cannot be null or empty");
+    @Override
+    public EscapePath findEscapePath(EscapeState state) {
+        EscapeGraph graph = new EscapeGraph(state);
+        // Check if graph is empty or null
+        try {
+            graph.checkGraphValidity();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-        // Check if start and end nodes are in the graph
-        if (!graph.getWeighted().containsKey(startNode) || !graph.getWeighted().containsKey(endNode)) {
-            throw new IllegalArgumentException("Start or end node does not exist in the graph");
+
+        // Perform Dijkstra's algorithm to find the path from start to end
+        dijkstra(graph);
+
+        // If the distance to the end node is still infinity, there is no path
+        if (distanceMap.get(graph.getExitNode()) == Integer.MAX_VALUE) {
+            return new EscapePath(state, Collections.emptyList()); // No path found
         }
+
+        // Reconstruct the path from end to start using the parent map
+        List<Node> path = new LinkedList<>();
+        for (Node node = graph.getExitNode(); node != null; node = parentMap.get(node)) {
+            path.addFirst(node); // Add to the front of the list
+        }
+
+        return new EscapePath(state, path);
     }
 
     /**
      * Performs Dijkstra's algorithm to find the shortest path from start to end
      * Updates the distance map and parent map accordingly during the search process
+     * 
+     * @param graph graph for current escape state
      */
-    private void searchGraph() {
+    public void dijkstra(EscapeGraph graph) {
         // Initialize distances to infinity and parents to null, except for the start node
         for (Node node : graph.getWeighted().keySet()) {
             distanceMap.put(node, Integer.MAX_VALUE);
             parentMap.put(node, null);
         }
-        distanceMap.put(startNode, 0);
+        distanceMap.put(graph.getStartNode(), 0);
 
         // Priority queue to select the node with the smallest distance
         PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> 
         Integer.compare(distanceMap.get(a), distanceMap.get(b)));
-        pq.add(startNode);
+        pq.add(graph.getStartNode());
 
         // Dijkstra's algorithm main loop
         while (!pq.isEmpty()) {
             Node current = pq.poll();
 
-            if (current.equals(endNode)) {
+            if (current.equals(graph.getExitNode())) {
                 break; // Found the shortest path to the end node
             }
 
@@ -122,34 +134,5 @@ public class EscapeDijkstra implements EscapeStrategy {
                 }
             }
         }
-    }
-
-
-    /**
-     * Implements EscapeStrategy interface to find the escape path using Dijkstra's algorithm.
-     * 
-     * Finds the shortest path from the start node to the end node.
-     * @return the shortest path from start to end, or an empty list if no path exists
-     */
-    @Override
-    public EscapePath findEscapePath() {
-        // Check if graph is empty or null
-        checkGraphValidity();
-
-        // Perform Dijkstra's algorithm to find the path from start to end
-        searchGraph();
-
-        // If the distance to the end node is still infinity, there is no path
-        if (distanceMap.get(endNode) == Integer.MAX_VALUE) {
-            return new EscapePath(Collections.emptyList()); // No path found
-        }
-
-        // Reconstruct the path from end to start using the parent map
-        List<Node> path = new LinkedList<>();
-        for (Node node = endNode; node != null; node = parentMap.get(node)) {
-            path.addFirst(node); // Add to the front of the list
-        }
-
-        return new EscapePath(path);
     }
 }

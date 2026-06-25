@@ -8,9 +8,7 @@ import student.explore.ExploreStrategy;
 import student.explore.HeuristicDFSExploreStrategy;
 
 // Escape imports
-import student.escape.EscapeKnapsackDFSBnB;
-import student.escape.EscapePath;
-import student.escape.EscapeStrategy;
+import student.escape.*;
 
 public class Explorer {
     /**
@@ -73,26 +71,8 @@ public class Explorer {
      */
     public void escape(EscapeState state) {
         //TODO: Escape from the cavern before time runs out
-
         // Create an escape strategy with the corresponding algorithm and get the escape path
-        EscapeStrategy strategy = new EscapeKnapsackDFSBnB(state, state.getCurrentNode(), state.getExit());
-        EscapePath path = strategy.findEscapePath();
-         
-        // Pick up gold on the starting node if it exists
-        if(path.getPath().get(0).getTile().getGold() > 0) {
-                state.pickUpGold();
-        }
-
-        // Follow the path to the exit, picking up gold along the way
-        for (int i = 1; i < path.getPath().size(); i++) {
-            state.moveTo(path.getPath().get(i));
-            if(state.getCurrentNode().getTile().getGold() > 0) {
-                state.pickUpGold();
-            }
-
-            if (state.getTimeRemaining() <= 0) {
-                throw new RuntimeException("Time ran out before escaping!");
-            }
-        }
+        EscapeStrategy strategy = new EscapeKnapsackDFSBnB();
+        strategy.escape(state);
     }
 }

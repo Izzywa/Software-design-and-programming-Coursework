@@ -28,68 +28,41 @@ import game.Node;
  * </pre>
  */
 public class EscapeDFSAllPaths implements EscapeStrategy {
-    private final EscapeState state;
-    private final EscapeGraph graph;
-    private final Node startNode;
-    private final Node endNode;
     private List<EscapePath> allPaths;
     private Set<Node> visited;
     private List<Node> currentPath;
     private int pathCount;
     private final int MAX_PATHS = 1000; // Limit the number of paths to explore to prevent combinatorial explosion
-    private EscapePath shortestPath;
 
     /**
-     * Constructor for the EscapeDFSAllPaths class.
-     * @param state the escape state
-     * @param start the start node
-     * @param end the end node
+     * No-args constructor for the EscapeDFSAllPaths class.
      */
-    public EscapeDFSAllPaths(EscapeState state, Node start, Node end) {
-        this.state = state;
-        this.graph = new EscapeGraph(state);
-        this.startNode = start;
-        this.endNode = end;
+    public EscapeDFSAllPaths() {
         this.allPaths = new ArrayList<>();
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
         this.pathCount = 0;
-        EscapeStrategy dijkstraStrategy = new EscapeDijkstra(state, start, end);
-        this.shortestPath = dijkstraStrategy.findEscapePath(); // Initialize with the shortest path found
-    }
-
-    /**
-     * Checks the validity of the graph before performing DFS algorithm
-     * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
-     */
-    private void checkGraphValidity() {
-        // Check if the graph is null or empty
-        if (graph.getUnweighted() == null || graph.getUnweighted().isEmpty()) {
-            throw new IllegalArgumentException("Graph cannot be null or empty");
-        }
-        // Check if start and end nodes are in the graph
-        if (!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
-            throw new IllegalArgumentException("Start or end node does not exist in the graph");
-        }
     }
 
     /**
      * Recursively searches the graph for all possible paths from the current node to the end node.
+     * @param state the current escape state
+     * @param graph graph for current escape state
      * @param currentNode the current node being explored
      */
-    private void searchGraph(Node currentNode) {
+    public void depthFirstSearch(EscapeState state, EscapeGraph graph, Node currentNode) {
         // Mark the current node as visited and add it to the current path
         visited.add(currentNode);
         currentPath.add(currentNode);
 
         // If the current node is the end node, add the current path to the list of all paths
-        if (currentNode.equals(endNode)) {
+        if (currentNode.equals(graph.getExitNode())) {
             pathCount++;
-            allPaths.add(new EscapePath(new ArrayList<>(currentPath)));
+            allPaths.add(new EscapePath(state, new ArrayList<>(currentPath)));
         } else if (pathCount < MAX_PATHS) {
              for (Node neighbor : graph.getUnweighted().getOrDefault(currentNode, Collections.emptyList())) {
                 if (!visited.contains(neighbor)) { // Explore the neighbor node if it has not been visited
-                    searchGraph(neighbor); // Recursively explore the neighbor node
+                    depthFirstSearch(state, graph, neighbor); // Recursively explore the neighbor node
                 }
             }
         }
@@ -101,10 +74,11 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
 
     /**
      * Filters the list of paths based on the remaining time.
+     * @param state the current escape state
      * @param paths the list of EscapePaths to filter
      * @return the list of valid EscapePaths
      */
-    private List<EscapePath> filterPaths(List<EscapePath> paths) {
+    public List<EscapePath> filterPaths(EscapeState state, List<EscapePath> paths) {
         List<EscapePath> validPaths = paths.stream()
                 .filter(path -> path.getTotalCost() <= state.getTimeRemaining())
                 .collect(Collectors.toList());
@@ -115,9 +89,10 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
      * Selects the best path from the list of valid paths based on the total amount of gold collected, 
      * and in case of a tie, selects the one with the lowest total cost.
      * @param paths the list of valid EscapePaths to select from
+     * @param shortestPath a shortest path as backup if no valid paths are found
      * @return the best EscapePath based on gold collected and total cost or the shortest path if no valid paths found
      */
-    private EscapePath selectBestPath(List<EscapePath> paths) {
+    public EscapePath selectBestPath(List<EscapePath> paths, EscapePath shortestPath) {
         return paths.stream()
                 .max((p1, p2) -> {
                     if (p1.getTotalGold() != p2.getTotalGold()) {
@@ -129,19 +104,30 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
     }
 
     /**
-     * Implements EscapeStrategy interface to find the escape path using the DFS algorithm.
-     * 
+     * Implements EscapeStrategy interface to find the escape path using the DFS algorithm. 
      * Finds all possible paths from the start node to the end node. 
      * Then filters the paths based on the remaining time and selects the best path 
      * based on the total amount of gold collected, and in case of a tie, selects the one with the lowest total cost.
+     * 
+     * @param state the current escape state
      * @return the best possible path from start to end or the shortest path if no valid paths are found
      */
     @Override
-    public EscapePath findEscapePath() {
-        checkGraphValidity();
-        searchGraph(startNode);
-        List<EscapePath> validPaths = filterPaths(allPaths);
-        return selectBestPath(validPaths);
+    public EscapePath findEscapePath(EscapeState state) {
+        EscapeGraph graph = new EscapeGraph(state);
+        EscapeStrategy dijkstraStrategy = new EscapeDijkstra();
+        EscapePath shortestPath = dijkstraStrategy.findEscapePath(state);
+
+        // Check if graph is empty or null
+        try {
+            graph.checkGraphValidity();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        depthFirstSearch(state, graph, graph.getStartNode());
+        List<EscapePath> validPaths = filterPaths(state, allPaths);
+        return selectBestPath(validPaths, shortestPath);
     }
 
 }
