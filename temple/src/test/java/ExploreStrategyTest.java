@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import game.ExplorationState;
 import game.MockGameState;
 import student.explore.ExploreStrategy;
+
 import student.explore.HeuristicDFSExploreStrategy;
 import student.explore.NaiveDFSExploreStrategy;
+import student.explore.AStarExploreStrategy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -78,6 +80,12 @@ public class ExploreStrategyTest {
                 @Override
                 ExploreStrategy getExploreStrategy() {
                     return new NaiveDFSExploreStrategy();
+                }
+            },
+            new Strategy("AStarExploreStrategy") {
+                @Override
+                ExploreStrategy getExploreStrategy() {
+                    return new AStarExploreStrategy();
                 }
             },
         };
