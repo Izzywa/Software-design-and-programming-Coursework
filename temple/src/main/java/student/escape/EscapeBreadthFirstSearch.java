@@ -35,59 +35,70 @@ import game.Node;
  * </pre>
  */
 public class EscapeBreadthFirstSearch implements EscapeStrategy {
-    private final EscapeGraph graph;
-    private final Node startNode;
-    private final Node endNode;
     private Queue<Node> queue;
     private Map<Node, Node> parentMap;
     private Set<Node> visited;
     private boolean foundPath;
     
     /**
-     * Constructor 
-     * @param state the escape state containing the graph and other relevant information
-     * @param start the starting node
-     * @param end   the target node
+     * No-args constructor for EscapeBreadthFirstSearch class
      */
-    public EscapeBreadthFirstSearch(EscapeState state, Node start, Node end) {
-        this.graph = new EscapeGraph(state);
-        this.startNode = start;
-        this.endNode = end;
+    public EscapeBreadthFirstSearch() {
         this.queue = new LinkedList<>();
         this.parentMap = new HashMap<>();
         this.visited = new HashSet<>();
         this.foundPath = false;
     }
 
-    
     /**
-     * Checks the validity of the graph before performing BFS
-     * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
+     * Implements EscapeStrategy interface to find the escape path using breadth-first search.
+     * Finds the shortest path from the start node to the end node.
+     * 
+     * @param state the current escape state
+     * @return the shortest path from start to end, or an empty list if no path exists
      */
-    private void checkGraphValidity() {
-        // Check if the graph is null or empty
-        if (graph.getUnweighted() == null || graph.getUnweighted().isEmpty()) {
-            throw new IllegalArgumentException("Graph cannot be null or empty");
+    @Override
+    public EscapePath findEscapePath(EscapeState state) {
+        EscapeGraph graph = new EscapeGraph(state);
+        // Check if graph is empty or null
+        try {
+            graph.checkGraphValidity();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-        // Check if start and end nodes are in the graph
-        if (!graph.getUnweighted().containsKey(startNode) || !graph.getUnweighted().containsKey(endNode)) {
-            throw new IllegalArgumentException("Start or end node does not exist in the graph");
+
+        // Perform BFS to find the path from start to end
+        breadthFirstSearch(graph);
+
+        // If we did not find the end node, return an empty path
+        if (!foundPath) {
+            return new EscapePath(state, Collections.emptyList()); // No path found
         }
+
+        // Reconstruct the path from end to start using the parent map
+        List<Node> path = new LinkedList<>();
+        for (Node node = graph.getExitNode(); node != null; node = parentMap.get(node)) {
+            path.addFirst(node); // Add to the front of the list
+        }
+
+        return new EscapePath(state, path);
     }
 
     /**
      * Performs breadth-first search algorithm to find the path from start to end
      * Updates the queue, visited set, and parent map accordingly during the search process
+     * 
+     * @param graph graph for current escape state
      */
-    private void searchGraph() {
+    public void breadthFirstSearch(EscapeGraph graph) {
         // Start BFS from the start node
-        queue.add(startNode);
-        visited.add(startNode);
+        queue.add(graph.getStartNode());
+        visited.add(graph.getStartNode());
         // Perform BFS until the queue is empty or we find the target node
         while (!queue.isEmpty()) {
             Node current = queue.poll();
             // If we have reached the end node, stop the search
-            if (current.equals(endNode)) {
+            if (current.equals(graph.getExitNode())) {
                 foundPath = true;
                 break;
             }
@@ -103,32 +114,5 @@ public class EscapeBreadthFirstSearch implements EscapeStrategy {
         }
     }
 
-    /**
-     * Implements EscapeStrategy interface to find the escape path using breadth-first search.
-     * 
-     * Finds the shortest path from the start node to the end node.
-     * @return the shortest path from start to end, or an empty list if no path exists
-     */
-    @Override
-    public EscapePath findEscapePath() {
-        // Check if graph is empty or null
-        checkGraphValidity();
-
-        // Perform BFS to find the path from start to end
-        searchGraph();
-
-        // If we did not find the end node, return an empty path
-        if (!foundPath) {
-            return new EscapePath(Collections.emptyList()); // No path found
-        }
-
-        // Reconstruct the path from end to start using the parent map
-        List<Node> path = new LinkedList<>();
-        for (Node node = endNode; node != null; node = parentMap.get(node)) {
-            path.addFirst(node); // Add to the front of the list
-        }
-
-        return new EscapePath(path);
-    }
 
 }
