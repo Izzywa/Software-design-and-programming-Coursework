@@ -97,7 +97,7 @@ public class EscapeGraph {
      * @param weightedGraph a weighted representation of a graph
      * @return a map of nodes to their incident edges with weights
      */
-    public Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
+    public static Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
         Map<Node, Collection<Edge>> inverted = new HashMap<>();
 
         // Initialize empty lists for every node present in the original graph
