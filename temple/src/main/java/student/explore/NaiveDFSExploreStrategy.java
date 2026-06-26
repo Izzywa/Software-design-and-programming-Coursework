@@ -61,7 +61,6 @@ public class NaiveDFSExploreStrategy implements ExploreStrategy {
         }
 
         List<NodeStatus> neighbours = new ArrayList<>(state.getNeighbours());
-        Collections.sort(neighbours);
         for (var neighbour : neighbours) {
             long neighbourId = neighbour.nodeID();
             if (!discovered.contains(neighbourId)) {
