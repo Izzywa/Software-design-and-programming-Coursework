@@ -25,6 +25,10 @@ public class ExploreStrategyTest {
         "src/test/resources/backtrack_explore.txt"
     );
 
+    private static final Path SAMPLE_12X12_EXPLORE_PATH = Path.of(
+        "src/test/resources/sample_12x12_explore.txt"
+    );
+
     private static final Path DUMMY_ESCAPE_PATH = Path.of(
         "src/test/resources/dummy_escape.txt"
     );
@@ -43,6 +47,18 @@ public class ExploreStrategyTest {
     @Test
     public void testExploreStrategyBacktrack() {
         testExploreStrategyPath(BACKTRACK_EXPLORE_PATH);
+    }
+
+    /**
+     * Verifies every registered strategy can solve the sample 12x12 fixture.
+     * Note by JY: A sample 12x12 fixture is chosen to avoid overly long
+     * test times on less efficient explore strategies that are not even
+     * used in the final Explorer class. This is for simple sanity check
+     * purposes only.
+     */
+    @Test
+    public void testExploreSample12x12() {
+        testExploreStrategyPath(SAMPLE_12X12_EXPLORE_PATH);
     }
 
     private static void testExploreStrategyPath(Path explorePath) {
