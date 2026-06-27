@@ -1,13 +1,14 @@
 package student.explore;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import game.ExplorationState;
 import game.NodeStatus;
+import lombok.Getter;
+import lombok.Setter;
 import student.sort.AscendingSort;
 import student.sort.SortingStrategy;
 
@@ -30,6 +31,9 @@ import student.sort.SortingStrategy;
 public class HeuristicDFSExploreStrategy implements ExploreStrategy {
 
     private final Set<Long> discovered;
+
+    @Getter
+    @Setter
     private SortingStrategy sortingStrategy = new AscendingSort();
 
     /**
@@ -64,7 +68,8 @@ public class HeuristicDFSExploreStrategy implements ExploreStrategy {
         }
 
         List<NodeStatus> neighbours = new ArrayList<>(state.getNeighbours());
-        Collections.sort(neighbours);
+        neighbours = sortingStrategy.sort(neighbours);
+
         for (var neighbour : neighbours) {
             long neighbourId = neighbour.nodeID();
             if (!discovered.contains(neighbourId)) {
