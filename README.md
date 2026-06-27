@@ -85,3 +85,6 @@ Run the following command in terminal
 
 You can view the documentation in the following file `temple/build/docs/javadoc/index.html`
 
+# Strategies considered
+## Escape strategy
+![escape strategies](./python/images/explore_strategy_comparison.png)
