@@ -45,7 +45,7 @@ final class ExploreTraversalUtils {
      * @param targetId the destination node
      * @return the shortest path from {@code sourceId} to {@code targetId}
      */
-    private static List<Long> breadthFirstSearch(
+    public static List<Long> breadthFirstSearch(
         Map<Long, Set<Long>> adjacency,
         long sourceId,
         long targetId
