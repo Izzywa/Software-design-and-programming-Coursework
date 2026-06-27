@@ -2,13 +2,20 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import lombok.Getter;
+import lombok.Setter;
 import student.escape.EscapeKnapsackDFSBnB;
 import student.escape.EscapeStrategy;
 import student.explore.ExploreStrategy;
 import student.explore.ExploreStrategyFactory;
 
+@Setter
+@Getter
 public class Explorer {
-    private ExploreStrategy exploreStrategy = ExploreStrategyFactory.getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
+
+  private ExploreStrategy exploreStrategy = ExploreStrategyFactory
+      .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
+
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
      * Once you find the orb, you must return from the function in order to pick
@@ -41,15 +48,6 @@ public class Explorer {
      */
     public void explore(ExplorationState state) {
         exploreStrategy.explore(state);
-    }
-
-    /**
-     * Sets the exploration strategy to use for the next call to {@link #explore(ExplorationState)}.
-     *
-     * @param exploreStrategy the exploration strategy to use
-     */
-    public void setExploreStrategy(ExploreStrategy exploreStrategy) {
-        this.exploreStrategy = exploreStrategy;
     }
 
     /**
