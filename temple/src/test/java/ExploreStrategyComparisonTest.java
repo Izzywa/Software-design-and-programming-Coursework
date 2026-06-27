@@ -1,0 +1,45 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.junit.jupiter.api.Test;
+
+import benchmark.LogToCsv;
+import game.MockGameState;
+import student.explore.ExploreStrategyFactory;
+import student.explore.ExploreStrategyFactory.Strategy;
+
+/**
+ * Compares explore strategies across a set of random seeds and saves the results to CSV.
+ */
+public class ExploreStrategyComparisonTest {
+  @Test
+  public void testExploreStrategyAndSaveMultiplier() {
+    List<Long> seeds = new ArrayList<>();
+
+    for (int i = 0; i < 50; i++) {
+      long seed = new Random().nextLong();
+      seeds.add(seed);
+    }
+
+    List<Strategy> strategies = ExploreStrategyFactory.Strategy.getAllStrategies();
+
+    String filename = "explore_strategy_comparison.csv";
+    String[] headers = {"Strategy", "Seed", "Bonus Factor"};
+    List<String[]> results = new ArrayList<>();
+
+    for (Strategy strategy : strategies) {
+      for (long seed : seeds) {
+        MockGameState state = new MockGameState(seed, false);
+        state.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
+
+        state.explore();
+        double bonusFactor = state.computeBonusFactor();
+        results.add(
+            new String[] {strategy.getName(), String.valueOf(seed), String.valueOf(bonusFactor)});
+      }
+    }
+
+    LogToCsv.saveToCsv(filename, headers, results);
+  }
+}
