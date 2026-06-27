@@ -86,7 +86,7 @@ public class ExploreStrategyFactoryTest {
       mockState.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
       mockState.explore();
 
-      assertEquals(0, mockState.getDistanceToTarget(),
+      assertTrue(mockState.getExploreSucceeded(),
           "The " + strategy.getName() + " strategy should reach the orb.");
     }
   }
