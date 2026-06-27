@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.Map;
 
 import game.ExplorationState;
 import game.NodeStatus;
@@ -35,8 +36,8 @@ public class AStarExploreStrategy implements ExploreStrategy {
     /** Nodes that have already been seen and recorded. */
     private final Set<Long> discovered = new HashSet<>();
 
-    /** Parent pointers used to reconstruct paths through discovered nodes. */
-    private final HashMap<Long, Long> parentMap = new HashMap<>();
+    /** Undirected adjacency between discovered nodes. */
+    private final Map<Long, Set<Long>> adjacency = new HashMap<>();
 
     /** Number of steps from the start to each discovered node, g(n). */
     private final HashMap<Long, Integer> depthMap = new HashMap<>();
@@ -64,14 +65,14 @@ public class AStarExploreStrategy implements ExploreStrategy {
     public void explore(ExplorationState state) {
         /*
          * Starting node
-         * 1. Add starting node to set of nodes seen and recorded
-         * 2. Set parent to null (since it is the 1st node)
+         * 1. Add starting node to set of nodes seen
+         * 2. Create an adjacency entry for the start
          * 3. Set depth, g(n) = 0 (no depth)
          * 4. Search for its neighboring nodes and add them to the queue of Frontier nodes
          */
         rootId = state.getCurrentLocation();
         discovered.add(rootId);
-        parentMap.put(rootId, null);
+        adjacency.computeIfAbsent(rootId, ignored -> new HashSet<>());
         depthMap.put(rootId, 0);
         if (discoverNeighbours(state)) {
             return;
@@ -80,16 +81,16 @@ public class AStarExploreStrategy implements ExploreStrategy {
         /*
          * While there are still frontiers nodes in the queue, iterate over each frontier node:
          * 1. Get the frontier node with the lowest cost and remove it from queue
-         * 2. Expand the lowest cost frontier node: if the lowest cost frontier node is
-         * previously discovered, and we're not standing on it, move to it
+         * 2. Expand the lowest cost frontier node: if  we're not standing on the lowest cost
+         * frontier node, move to it
          * 3. If we end up standing on the orb, we end the search
          * 4. If a neighboring tile on the frontier is the orb and we've moved to it in
          * the discoverNeighbours function, we end the search
          */
         while (!frontier.isEmpty()) {
             FrontierNode next = frontier.remove();
-            if (discovered.contains(next.nodeId()) && next.nodeId() != state.getCurrentLocation()) {
-                ExploreTraversalUtils.moveToDiscoveredNode(state, parentMap, next.nodeId());
+            if (next.nodeId() != state.getCurrentLocation()) {
+                ExploreTraversalUtils.moveToDiscoveredNode(state, adjacency, next.nodeId());
             }
             if (state.getDistanceToTarget() == 0) {
                 return;
@@ -112,21 +113,22 @@ public class AStarExploreStrategy implements ExploreStrategy {
     private boolean discoverNeighbours(ExplorationState state) {
         /*
          * 1. Get the depth g(n) of the current node
-         * 2. For each neighboring node, if the neighboring node is recently added to the set of
-         * nodes seen:
-         *   a. Add the current node as the parent node of the neighboring node
-         *   b. Record the depth of the neighboring node as g(n') = g(n) + 1
+         * 2. For each neighboring node:
+         *   a. Store the edge in both directions in the adjacency map
+         *   b. If the neighbor is new, record its depth as g(n') = g(n) + 1
          *   c. Add the neighboring node to the frontier queue with
          *   f(n') = g(n') + h(n') = g(n) + 1 + h(n')
          * 3. If the neighbor has the orb, move to it and return True
          * 4. Otherwise, return False
          */
-        int currentDepth = depthMap.getOrDefault(state.getCurrentLocation(), 0);
+        long currentId = state.getCurrentLocation();
+        int currentDepth = depthMap.getOrDefault(currentId, 0);
+        adjacency.computeIfAbsent(currentId, ignored -> new HashSet<>());
         Collection<NodeStatus> neighbours = state.getNeighbours();
         for (NodeStatus neighbour : neighbours) {
             long neighbourId = neighbour.nodeID();
+            ExploreTraversalUtils.connectNodes(adjacency, currentId, neighbourId);
             if (discovered.add(neighbourId)) {
-                parentMap.put(neighbourId, state.getCurrentLocation());
                 depthMap.put(neighbourId, currentDepth + 1);
                 frontier.add(new FrontierNode(
                     neighbourId,
