@@ -21,6 +21,9 @@ import game.Tile;
 
 public class EscapeUtilsTest {
 
+    /**
+     * Verifies the return value of the total amount of gold available on the map.
+     */
     @Test
     public void testEscapeGraphTotalGold() { 
         Path exploreCavernPath = Path.of(
@@ -40,6 +43,9 @@ public class EscapeUtilsTest {
         assertEquals(10, graph.getTotalGold());
     }
 
+    /**
+     * Verifies the correctness of the gold map representation of the graph.
+     */
     @Test
     public void testEscapeGraphGetGoldMap() {    
         Map<Long, Integer> expected = new HashMap<>();
@@ -78,7 +84,9 @@ public class EscapeUtilsTest {
         assertTrue(expected.equals(actual)); 
     }
 
-
+    /**
+     * Verifies the correctness of the unweighted representation of the graph.
+     */
     @Test
     public void testEscapeGraphUnweighted() {
         Map<Long, Collection<Long>> expected = new HashMap<>();
@@ -126,6 +134,11 @@ public class EscapeUtilsTest {
         }
     }
 
+    /**
+     * Verifies the correctness of the inverted weighted representation of the graph.
+     * This is achieved by inverting the already inverted weighted graph,
+     * then checking if this equals the original weighted graph before inverting it.
+     */
     @Test
     public void testEscapeGraphInverted() {
         Path exploreCavernPath = Path.of(
@@ -172,6 +185,9 @@ public class EscapeUtilsTest {
         }
     }
 
+    /**
+     * Verifies the correctness of the weighted representation of the graph.
+     */
     @Test
     public void testEscapeGraphWeighted() {
         Map<Long, Collection<String>> expected = new HashMap<>();
@@ -219,6 +235,9 @@ public class EscapeUtilsTest {
         }
     }
 
+    /**
+     * Verifies the return value of the total amount of gold found along the path.
+     */
     @Test
     public void testEscapePathTotalGold() { 
         Path exploreCavernPath = Path.of(
@@ -239,6 +258,9 @@ public class EscapeUtilsTest {
         assertEquals(15, path.getTotalGold());
     }
 
+    /**
+     * Verifies the return value of the total cost of traversing the path.
+     */
     @Test
     public void testEscapePathTotalCost() { 
         Path exploreCavernPath = Path.of(
@@ -259,6 +281,9 @@ public class EscapeUtilsTest {
         assertEquals(12, path.getTotalCost());
     }
 
+    /**
+     * Verifies the return value of the first and last nodes of the path.
+     */
     @Test
     public void testEscapePathFirstAndLastNode() { 
         Path exploreCavernPath = Path.of(
@@ -280,6 +305,9 @@ public class EscapeUtilsTest {
         assertEquals(8L, path.getLastNode().getId());
     }
 
+    /**
+     * Verifies the return value of the list representing the path.
+     */
     @Test
     public void testEscapePathGetPath() {
         ArrayList<Long> expected = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L));
@@ -308,6 +336,9 @@ public class EscapeUtilsTest {
         assertTrue(actual.containsAll(expected));
     }
 
+    /**
+     * Verifies the correct traversal and gold collection along the path.
+     */
     @Test
     public void testEscapePathTraverseAndCollect() { 
         Path exploreCavernPath = Path.of(
