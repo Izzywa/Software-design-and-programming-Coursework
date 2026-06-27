@@ -7,12 +7,18 @@ import org.junit.jupiter.api.Test;
 
 import benchmark.LogToCsv;
 
+/**
+ * Tests for {@link LogToCsv} CSV conversion and file saving.
+ */
 public class LogToCsvTest {
   @Test
   public void testConvertToCsv() {
     String[] data = {"value1", "value2", "value3"};
+
     String expected = "value1,value2,value3";
+    
     String actual = LogToCsv.convertToCsv(data);
+    
     assertEquals(expected, actual, "Expected: " + expected + ", but got: " + actual);
   }
 
@@ -20,6 +26,7 @@ public class LogToCsvTest {
   public void testSaveToCsv() {
     String filename = "test_output.csv";
     String[] headers = {"Header1", "Header2", "Header3"};
+
     List<String[]> data = List.of(
         new String[]{"row1col1", "row1col2", "row1col3"},
         new String[]{"row2col1", "row2col2", "row2col3"}
