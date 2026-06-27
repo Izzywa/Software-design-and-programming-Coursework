@@ -95,6 +95,3 @@ OR
 ```bash
  python python/PlotExploreComparisonGraph.py 
 ```
-
-## Escape strategy
-![escape strategies](./python/images/explore_strategy_comparison.png)
