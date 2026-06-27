@@ -11,8 +11,10 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import game.MockGameState;
+import student.escape.EscapeDijkstra;
 import student.escape.EscapeGraph;
 import student.escape.EscapePath;
+import student.escape.EscapeStrategy;
 import game.Node;
 import game.Edge;
 import game.Tile;
@@ -118,7 +120,7 @@ public class EscapeUtilsTest {
 
         assertTrue(expected.keySet().equals(actual.keySet()));
         for (Long id : expected.keySet()) {
-            assertTrue(expected.get(id).size() == expected.get(id).size());
+            assertTrue(expected.get(id).size() == actual.get(id).size());
             assertTrue(expected.get(id).containsAll(actual.get(id)));
             assertTrue(actual.get(id).containsAll(expected.get(id)));
         }
@@ -164,7 +166,7 @@ public class EscapeUtilsTest {
 
         assertTrue(expected.keySet().equals(actual.keySet()));
         for (Long id : expected.keySet()) {
-            assertTrue(expected.get(id).size() == expected.get(id).size());
+            assertTrue(expected.get(id).size() == actual.get(id).size());
             assertTrue(expected.get(id).containsAll(actual.get(id)));
             assertTrue(actual.get(id).containsAll(expected.get(id)));
         }
@@ -211,10 +213,123 @@ public class EscapeUtilsTest {
 
         assertTrue(expected.keySet().equals(actual.keySet()));
         for (Long id : expected.keySet()) {
-            assertTrue(expected.get(id).size() == expected.get(id).size());
+            assertTrue(expected.get(id).size() == actual.get(id).size());
             assertTrue(expected.get(id).containsAll(actual.get(id)));
             assertTrue(actual.get(id).containsAll(expected.get(id)));
         }
+    }
+
+    @Test
+    public void testEscapePathTotalGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapePath path = strategy.findEscapePath(state);
+        assertEquals(15, path.getTotalGold());
+    }
+
+    @Test
+    public void testEscapePathTotalCost() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapePath path = strategy.findEscapePath(state);
+        assertEquals(12, path.getTotalCost());
+    }
+
+    @Test
+    public void testEscapePathFirstAndLastNode() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapePath path = strategy.findEscapePath(state);
+        assertEquals(1L, path.getFirstNode().getId());
+        assertEquals(8L, path.getLastNode().getId());
+    }
+
+    @Test
+    public void testEscapePathGetPath() {
+        ArrayList<Long> expected = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L));
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapePath path = strategy.findEscapePath(state);
+        ArrayList<Long> actual = new ArrayList<>();
+        for (Node node : path.getPath()) {
+            actual.add(node.getId());
+        }
+
+        assertTrue(expected.size() == actual.size());
+        assertTrue(expected.containsAll(actual));
+        assertTrue(actual.containsAll(expected));
+    }
+
+    @Test
+    public void testEscapePathTraverseAndCollect() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapePath path = strategy.findEscapePath(state);
+        path.traverseAndCollect();
+
+        assertEquals(false, state.getEscapeErrored());
+        assertEquals(8L, state.getCurrentNode().getId());
+        assertEquals(15, state.getGoldCollected());
     }
 
 }
