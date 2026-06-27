@@ -1,7 +1,5 @@
 package student.explore;
 
-import java.util.List;
-
 import lombok.Getter;
 
 /**
@@ -21,9 +19,6 @@ public class ExploreStrategyFactory {
       this.name = name;
     }
 
-    public static List<Strategy> getAllStrategies() {
-      return List.of(HeuristicDFS, NaiveDFS, AStar);
-    }
   }
 
   /**

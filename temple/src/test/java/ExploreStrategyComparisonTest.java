@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +23,8 @@ public class ExploreStrategyComparisonTest {
       seeds.add(seed);
     }
 
-    List<Strategy> strategies = ExploreStrategyFactory.Strategy.getAllStrategies();
+    List<Strategy> strategies =
+        new ArrayList<>(Arrays.asList(ExploreStrategyFactory.Strategy.values()));
 
     String filename = "explore_strategy_comparison.csv";
     String[] headers = {"Strategy", "Seed", "Bonus Factor"};
