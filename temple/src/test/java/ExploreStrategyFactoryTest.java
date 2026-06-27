@@ -85,7 +85,7 @@ public class ExploreStrategyFactoryTest {
 
     assertTrue(
         ((HeuristicDFSExploreStrategy) strategy).getSortingStrategy() instanceof RandomSort,
-        "The factory should return an instance of RandomSort for the HeuristicDFSWithRandomSort strategy."
+        "The factory should return an instance of HeuristicDFSWithRandomSort with a RandomSort sorting strategy."
     );
   }
 
