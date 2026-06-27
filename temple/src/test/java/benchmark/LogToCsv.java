@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
- * Utility class for logging data to a CSV file used in benchmarks.
- * Provides methods to save headers and rows to a CSV file and to
- * convert a String[] to a CSV-formatted line.
- * 
- * Reference: https://www.baeldung.com/java-csv
+ * Utility class for logging data to a CSV file used in benchmarks. Provides methods to save headers
+ * and rows to a CSV file and to convert a String[] to a CSV-formatted line.
+ *
+ * Reference: <a href="https://www.baeldung.com/java-csv">baeldung.com</a>
  */
 public class LogToCsv {
   /** Base directory for benchmark CSV output files. */
@@ -22,16 +23,20 @@ public class LogToCsv {
    *
    * @param filename the CSV file name
    * @param headers the CSV header values
-   * @param data the CSV rows
+   * @param dataLines the CSV rows
    */
   public static void saveToCsv(final String filename, final String[] headers,
-      final List<String[]> data) {
+      final List<String[]> dataLines) {
+
+    File logDir = new File(BASE_PATH);
+    if (!logDir.exists())
+      logDir.mkdirs();
+
     File csvOutputFile = new File(BASE_PATH + filename);
-    try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
-      String headerLine = Stream.of(headers).collect(Collectors.joining(","));
+    try (PrintWriter pw = new PrintWriter(csvOutputFile, UTF_8)) {
+      String headerLine = String.join(",", headers);
       pw.println(headerLine);
 
-      List<String[]> dataLines = data;
       dataLines.stream().map(LogToCsv::convertToCsv).forEach(pw::println);
     } catch (Exception e) {
       System.err.println("Error writing to CSV file: " + e.getMessage());
@@ -45,7 +50,7 @@ public class LogToCsv {
    * @return a comma-separated CSV line
    */
   public static String convertToCsv(String[] data) {
-    return Stream.of(data).collect(Collectors.joining(","));
+    return String.join(",", data);
   }
 
 }
