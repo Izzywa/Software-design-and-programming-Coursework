@@ -10,7 +10,7 @@ import student.sort.RandomSort;
  * order, it also shuffles identical values.
  */
 public class RandomSortTest {
-    private record RandomPair(int value, String letter) implements Comparable<RandomPair> {
+    private record RandomPair (int value, String letter) implements Comparable<RandomPair> {
         @Override
         public int compareTo(RandomPair other) {
             return Integer.compare(value, other.value);
@@ -25,7 +25,8 @@ public class RandomSortTest {
                 new RandomPair(2, "B"),
                 new RandomPair(1, "C"),
                 new RandomPair(3, "D"),
-                new RandomPair(2, "E"));
+                new RandomPair(2, "E")
+        );
 
         List<RandomPair> sortedList = randomSort.sort(list);
 
@@ -44,10 +45,11 @@ public class RandomSortTest {
                 new RandomPair(1, "B"),
                 new RandomPair(1, "C"),
                 new RandomPair(1, "D"),
-                new RandomPair(1, "E"));
+                new RandomPair(1, "E")
+        );
 
         List<RandomPair> sortedList1 = randomSort.sort(list);
-
+        
         // repeat the sort 5 times to check for different orderings
         boolean isDifferentOrder = false;
         for (int i = 0; i < 5; i++) {
