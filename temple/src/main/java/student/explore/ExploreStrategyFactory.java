@@ -1,8 +1,8 @@
 package student.explore;
 
-import lombok.Getter;
-
 import java.util.List;
+
+import lombok.Getter;
 
 /**
  * Factory class for creating instances of {@link ExploreStrategy} implementations.
@@ -21,7 +21,7 @@ public class ExploreStrategyFactory {
       this.name = name;
     }
 
-      public static List<Strategy> getAllStrategies() {
+    public static List<Strategy> getAllStrategies() {
       return List.of(HeuristicDFS, NaiveDFS, AStar);
     }
   }
@@ -35,7 +35,7 @@ public class ExploreStrategyFactory {
    */
   public static ExploreStrategy getExploreStrategy(Strategy strategyName) {
     return switch (strategyName) {
-    case HeuristicDFS -> {
+      case HeuristicDFS -> {
         yield new HeuristicDFSExploreStrategy();
       }
       case NaiveDFS -> {
