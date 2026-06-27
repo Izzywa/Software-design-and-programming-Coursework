@@ -86,5 +86,15 @@ Run the following command in terminal
 You can view the documentation in the following file `temple/build/docs/javadoc/index.html`
 
 # Strategies considered
+Currently, the plot for the different strategies performance need to be generated manually. Run the following command in the terminal
+
+```bash
+ python3 python/PlotExploreComparisonGraph.py 
+```
+OR
+```bash
+ python python/PlotExploreComparisonGraph.py 
+```
+
 ## Escape strategy
 ![escape strategies](./python/images/explore_strategy_comparison.png)
