@@ -43,6 +43,11 @@ public class HeuristicDFSExploreStrategy implements ExploreStrategy {
         discovered = new HashSet<>();
     }
 
+    public HeuristicDFSExploreStrategy(SortingStrategy sortingStrategy) {
+        this();
+        this.sortingStrategy = sortingStrategy;
+    }
+
     /**
      * Explore using depth-first search with distance-based neighbor ordering.
      *
