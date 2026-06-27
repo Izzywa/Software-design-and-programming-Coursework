@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import student.sort.RandomSort;
 
 /**
- * Test class for {@link RandomSort} to confirm that whle it sorts in ascending
- * order, it also shuffles identical values.
+ * Test class for {@link RandomSort} to confirm that while it sorts in ascending order, it also shuffles identical values.
  */
 public class RandomSortTest {
     private record RandomPair (int value, String letter) implements Comparable<RandomPair> {
