@@ -31,7 +31,7 @@ public class MockGameState implements ExplorationState, EscapeState {
 
     private Cavern exploreCavern;
     private Cavern escapeCavern;
-    private final Explorer explorer;
+    public final Explorer explorer;
     private final Optional<GUI> gui;
     private final long seed;
     private final int minTimeToExplore;
