@@ -2,6 +2,9 @@ package student.sort;
 
 import java.util.List;
 
+/**
+ * Sorts a list in ascending order.
+ */
 public class AscendingSort implements SortingStrategy {
 
     @Override
