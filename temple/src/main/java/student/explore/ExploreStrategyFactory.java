@@ -1,5 +1,7 @@
 package student.explore;
 
+import lombok.Getter;
+
 import java.util.List;
 
 /**
@@ -8,11 +10,8 @@ import java.util.List;
 public class ExploreStrategyFactory {
   /**
    * Returns an instance of the specified {@link ExploreStrategy} implementation.
-   *
-   * @param strategyName The name of the strategy to instantiate.
-   * @return An instance of the specified {@link ExploreStrategy}.
-   * @throws IllegalArgumentException If the strategy name is unknown.
    */
+  @Getter
   public enum Strategy {
     HeuristicDFS("HeuristicDFS"), NaiveDFS("NaiveDFS"), AStar("AStar");
 
@@ -22,11 +21,7 @@ public class ExploreStrategyFactory {
       this.name = name;
     }
 
-    public String getName() {
-      return name;
-    }
-
-    public static List<Strategy> getAllStrategies() {
+      public static List<Strategy> getAllStrategies() {
       return List.of(HeuristicDFS, NaiveDFS, AStar);
     }
   }
@@ -39,17 +34,17 @@ public class ExploreStrategyFactory {
    * @throws IllegalArgumentException If the strategy name is unknown.
    */
   public static ExploreStrategy getExploreStrategy(Strategy strategyName) {
-    switch (strategyName) {
-      case HeuristicDFS -> {
-        return new HeuristicDFSExploreStrategy();
+    return switch (strategyName) {
+    case HeuristicDFS -> {
+        yield new HeuristicDFSExploreStrategy();
       }
       case NaiveDFS -> {
-        return new NaiveDFSExploreStrategy();
+        yield new NaiveDFSExploreStrategy();
       }
       case AStar -> {
-        return new AStarExploreStrategy();
+        yield new AStarExploreStrategy();
       }
       default -> throw new IllegalArgumentException("Unknown strategy: " + strategyName);
-    }
+    };
   }
 }
