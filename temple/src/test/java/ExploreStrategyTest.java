@@ -57,7 +57,7 @@ public class ExploreStrategyTest {
      * purposes only.
      */
     @Test
-    public void testExploreSample12x12() {
+    public void testExploreStrategySample12x12() {
         testExploreStrategyPath(SAMPLE_12X12_EXPLORE_PATH);
     }
 
