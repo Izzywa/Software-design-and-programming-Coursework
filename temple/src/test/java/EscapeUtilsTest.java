@@ -17,8 +17,10 @@ import student.escape.EscapePath;
 import student.escape.EscapeStrategy;
 import game.Node;
 import game.Edge;
-import game.Tile;
 
+/**
+ * Unit tests for the EscapeGraph and EscapePath utility classes
+ */
 public class EscapeUtilsTest {
 
     /**
