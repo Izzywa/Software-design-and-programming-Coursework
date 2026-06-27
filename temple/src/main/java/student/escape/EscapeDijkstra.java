@@ -32,7 +32,7 @@ import game.Edge;
  *       u ← Q.extract_min()                    // Remove and return best vertex
  *       for each edge (u, v) :                 // Go through all v neighbors of u
  *          alt ← dist[u] + length(u, v)
- *          if alt < dist[v]:                   // A shorter path to v has been found
+ *          if alt less than dist[v]:           // A shorter path to v has been found
  *             prev[v] ← u
  *             dist[v] ← alt
  *             Q.decrease_priority(v, alt)      // Reorder v in the Queue

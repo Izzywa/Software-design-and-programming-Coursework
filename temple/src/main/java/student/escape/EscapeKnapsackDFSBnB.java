@@ -214,7 +214,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      * This algorithm traverses the graph backwards from end node towards the start node
      * 
      * @param graph graph for current escape state
-     * @return Map<Node,Integer> that contains nodes and their shortest distances to the exit node
+     * @return a map that contains nodes and their shortest distances to the exit node
      */
     public Map<Node,Integer> shortestDistancesToExit(EscapeGraph graph) {
         Map<Node,Integer> shortestDistLookupMap = new HashMap<>();
