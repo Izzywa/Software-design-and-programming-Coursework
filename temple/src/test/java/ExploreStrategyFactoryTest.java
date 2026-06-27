@@ -1,11 +1,19 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import game.MockGameState;
 import student.Explorer;
 import student.explore.AStarExploreStrategy;
 import student.explore.ExploreStrategy;
 import student.explore.ExploreStrategyFactory;
+import student.explore.ExploreStrategyFactory.Strategy;
 import student.explore.HeuristicDFSExploreStrategy;
 import student.explore.NaiveDFSExploreStrategy;
 
@@ -62,5 +70,24 @@ public class ExploreStrategyFactoryTest {
         ExploreStrategyFactory.getExploreStrategy(
             ExploreStrategyFactory.Strategy.AStar) instanceof AStarExploreStrategy,
         "The factory should return an instance of AStarExploreStrategy for the AStar strategy.");
+
+  }
+
+  @RepeatedTest(50)
+  public void testAllStrategiesSucceedInReachingOrb() {
+    long seed = new Random().nextLong();
+
+    List<Strategy> strategies =
+        new ArrayList<>(Arrays.asList(ExploreStrategyFactory.Strategy.values()));
+    
+    for (Strategy strategy : strategies) {
+      MockGameState mockState = new MockGameState(seed, false);
+
+      mockState.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
+      mockState.explore();
+
+      assertEquals(0, mockState.getDistanceToTarget(),
+          "The " + strategy.getName() + " strategy should reach the orb.");
+    }
   }
 }
