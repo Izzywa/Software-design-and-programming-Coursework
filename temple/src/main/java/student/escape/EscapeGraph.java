@@ -27,6 +27,7 @@ public class EscapeGraph {
     private Map<Node, Collection<Node>> unweighted;
     private Map<Node, Collection<Edge>> invertedWeighted;
     private Map<Node, Integer> goldMap;
+    private final int totalGraphGold;
     
     /**
      * Constructor for the EscapeGraph class.
@@ -50,6 +51,7 @@ public class EscapeGraph {
             unweighted.put(node, neighbours);
             goldMap.put(node, node.getTile().getOriginalGold());
         }
+        totalGraphGold = goldMap.values().stream().mapToInt(value -> value == null ? 0 : value).sum();
         invertedWeighted = createInvertedGraph(weighted);
     }
 
@@ -95,7 +97,7 @@ public class EscapeGraph {
      * @param weightedGraph a weighted representation of a graph
      * @return a map of nodes to their incident edges with weights
      */
-    public Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
+    public static Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
         Map<Node, Collection<Edge>> inverted = new HashMap<>();
 
         // Initialize empty lists for every node present in the original graph
@@ -153,8 +155,13 @@ public class EscapeGraph {
         return goldMap;
     }
 
+    /**
+     * Returns the total amount of gold on the graph.
+     * 
+     * @return an integer value for the total gold amount on the graph
+     */
     public int getTotalGold() {
-        return getGoldMap().values().stream().mapToInt(Integer::intValue).sum();
+        return totalGraphGold;
     }
 
     /**
