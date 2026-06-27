@@ -1,6 +1,7 @@
 package student.explore;
 
 import lombok.Getter;
+import student.sort.RandomSort;
 
 /**
  * Factory class for creating instances of {@link ExploreStrategy} implementations.
@@ -11,7 +12,8 @@ public class ExploreStrategyFactory {
    */
   @Getter
   public enum Strategy {
-    HeuristicDFS("HeuristicDFS"), NaiveDFS("NaiveDFS"), AStar("AStar");
+    HeuristicDFS("HeuristicDFS"), NaiveDFS("NaiveDFS"), AStar("AStar"),
+    HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort");
 
     private final String name;
 
@@ -38,6 +40,9 @@ public class ExploreStrategyFactory {
       }
       case AStar -> {
         yield new AStarExploreStrategy();
+      }
+      case HeuristicDFSWithRandomSort -> {
+        yield new HeuristicDFSExploreStrategy(new RandomSort());
       }
       default -> throw new IllegalArgumentException("Unknown strategy: " + strategyName);
     };

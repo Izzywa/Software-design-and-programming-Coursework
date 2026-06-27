@@ -11,3 +11,4 @@ build
 temple/logs/*
 temple/benchmark
 python/images
+.vscode/settings.json
