@@ -13,7 +13,7 @@ import student.explore.ExploreStrategyFactory;
 @Getter
 public class Explorer {
 
-  private ExploreStrategy exploreStrategy = ExploreStrategyFactory
+    private ExploreStrategy exploreStrategy = ExploreStrategyFactory
       .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
 
     /**
