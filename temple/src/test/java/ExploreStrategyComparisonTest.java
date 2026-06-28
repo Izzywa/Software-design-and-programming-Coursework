@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,9 @@ public class ExploreStrategyComparisonTest {
     List<String[]> results = new ArrayList<>();
 
     for (Strategy strategy : strategies) {
-      for (int seed = 0; seed < NUM_SEEDS; seed++) {
+      for (int i = 0; i < NUM_SEEDS; i++) {
+        long seed = new Random().nextLong();
+        
         MockGameState state = new MockGameState(seed, false);
         state.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
 
