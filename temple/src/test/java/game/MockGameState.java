@@ -31,7 +31,7 @@ public class MockGameState implements ExplorationState, EscapeState {
 
     private Cavern exploreCavern;
     private Cavern escapeCavern;
-    private final Explorer explorer;
+    public final Explorer explorer;
     private final Optional<GUI> gui;
     private final long seed;
     private final int minTimeToExplore;
@@ -251,7 +251,7 @@ public class MockGameState implements ExplorationState, EscapeState {
     /**
      * Return the bonus factor, as described in handout.
      */
-    private double computeBonusFactor() {
+    public double computeBonusFactor() {
         double exploreDiff = (stepsTaken - minTimeToExplore) / (double) minTimeToExplore;
         if (exploreDiff <= 0) return MAX_BONUS;
         double multDiff = MAX_BONUS - MIN_BONUS;
