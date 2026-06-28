@@ -9,3 +9,5 @@ build
 
 # Ignore files created in temple/logs
 temple/logs/*
+
+.vscode/settings.json
