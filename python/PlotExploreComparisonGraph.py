@@ -13,23 +13,10 @@ images_dir = BASE_DIR / "python" / "images"
 if not images_dir.exists():
     os.makedirs(images_dir)
 
-# Group by Strategy and calculate mean and std for Bonus Factor
-grouped = df.groupby("Strategy")["Bonus Factor"].agg(["mean", "std"]).reset_index()
-
-plt.figure(figsize=(10, 5))
-plt.errorbar(
-    grouped["mean"],
-    grouped["Strategy"],
-    xerr=grouped["std"],
-    fmt="o",
-    capsize=5,
-    label="Mean ± Std Dev",
-)
+df.boxplot(column="Bonus Factor", by="Strategy", grid=True, vert=False, figsize=(10, 5))
 plt.title("Explore Strategy Comparison")
 plt.xlabel("Bonus Factor")
 plt.ylabel("Strategy")
 plt.yticks(rotation=45)
-plt.legend()
-plt.grid(True)
 plt.tight_layout()
-plt.savefig("python/images/explore_strategy_comparison.png")
+plt.savefig("python/images/explore_strategy_boxplot.png")
