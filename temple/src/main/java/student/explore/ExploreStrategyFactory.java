@@ -4,25 +4,26 @@ import lombok.Getter;
 import student.sort.RandomSort;
 
 /**
- * Factory class for creating instances of {@link ExploreStrategy}
- * implementations.
+ * Factory class for creating instances of {@link ExploreStrategy} implementations.
  */
 public class ExploreStrategyFactory {
-    /**
-     * Returns an instance of the specified {@link ExploreStrategy} implementation.
-     */
-    @Getter
-    public enum Strategy {
-        HeuristicDFS("HeuristicDFS"), NaiveDFS("NaiveDFS"), AStar("AStar"),
-        HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort");
+  /**
+   * The enumeration of available exploration strategies.
+   */
+  @Getter
+  public enum Strategy {
+    HeuristicDFS("HeuristicDFS"), 
+    NaiveDFS("NaiveDFS"), 
+    AStar("AStar"),
+    HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort");
 
-        private final String name;
+    private final String name;
 
-        Strategy(String name) {
-            this.name = name;
-        }
-
+    Strategy(String name) {
+      this.name = name;
     }
+
+  }
 
     /**
      * Returns an instance of the specified {@link ExploreStrategy} implementation.
