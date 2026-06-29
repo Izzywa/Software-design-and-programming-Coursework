@@ -11,11 +11,16 @@ import org.junit.jupiter.api.Test;
 import game.MockGameState;
 import student.Explorer;
 import student.explore.AStarExploreStrategy;
+import student.explore.BeamSearchExploreStrategy;
+import student.explore.BreadthFirstExploreStrategy;
+import student.explore.DynamicAStarExploreStrategy;
 import student.explore.ExploreStrategy;
 import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
 import student.explore.HeuristicDFSExploreStrategy;
+import student.explore.HillClimbingExploreStrategy;
 import student.explore.NaiveDFSExploreStrategy;
+import student.explore.RandomWalkExploreStrategy;
 import student.sort.RandomSort;
 
 /** Tests for {@link ExploreStrategyFactory}. */
@@ -87,6 +92,46 @@ public class ExploreStrategyFactoryTest {
         ((HeuristicDFSExploreStrategy) strategy).getSortingStrategy() instanceof RandomSort,
         "The factory should return an instance of HeuristicDFSWithRandomSort with a RandomSort sorting strategy."
     );
+  }
+
+  @Test
+  public void testBeamSearchExploreStrategyFactory() {
+    assertTrue(
+        ExploreStrategyFactory.getExploreStrategy(
+            ExploreStrategyFactory.Strategy.BeamSearch) instanceof BeamSearchExploreStrategy,
+        "The factory should return an instance of BeamSearchExploreStrategy for the BeamSearch strategy.");
+  }
+
+  @Test 
+  public void testBFSExploreStrategyFactory() {
+    assertTrue(
+        ExploreStrategyFactory.getExploreStrategy(
+            ExploreStrategyFactory.Strategy.BFS) instanceof BreadthFirstExploreStrategy,
+        "The factory should return an instance of BreadthFirstExploreStrategy for the BFS strategy.");
+  }
+
+  @Test
+  public void testDynamicAStarExploreStrategyFactory() {
+    assertTrue(
+        ExploreStrategyFactory.getExploreStrategy(
+            ExploreStrategyFactory.Strategy.DynamicAStar) instanceof DynamicAStarExploreStrategy,
+        "The factory should return an instance of DynamicAStarExploreStrategy for the DynamicAStar strategy.");
+  }
+
+  @Test
+  public void testHillClimbingExploreStrategyFactory() {
+    assertTrue(
+        ExploreStrategyFactory.getExploreStrategy(
+            ExploreStrategyFactory.Strategy.HillClimbing) instanceof HillClimbingExploreStrategy,
+        "The factory should return an instance of HillClimbingExploreStrategy for the HillClimbing strategy.");
+  }
+
+  @Test
+    public void testRandomWalkExploreStrategyFactory() {
+    assertTrue(
+        ExploreStrategyFactory.getExploreStrategy(
+            ExploreStrategyFactory.Strategy.RandomWalk) instanceof RandomWalkExploreStrategy,
+        "The factory should return an instance of RandomWalkExploreStrategy for the RandomWalk strategy.");
   }
 
   @RepeatedTest(50)
