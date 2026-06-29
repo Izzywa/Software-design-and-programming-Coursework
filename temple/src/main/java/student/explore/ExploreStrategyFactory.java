@@ -12,8 +12,15 @@ public class ExploreStrategyFactory {
    */
   @Getter
   public enum Strategy {
-    HeuristicDFS("HeuristicDFS"), NaiveDFS("NaiveDFS"), AStar("AStar"),
-    HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort");
+    HeuristicDFS("HeuristicDFS"), 
+    NaiveDFS("NaiveDFS"), 
+    AStar("AStar"),
+    HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort"),
+    BeamSearch("BeamSearch"),
+    BFS("BFS"),
+    DynamicAStar("DynamicAStar"),
+    HillClimbing("HillClimbing"),
+    RandomWalk("RandomWalk");
 
     private final String name;
 
@@ -43,6 +50,21 @@ public class ExploreStrategyFactory {
       }
       case HeuristicDFSWithRandomSort -> {
         yield new HeuristicDFSExploreStrategy(new RandomSort());
+      }
+      case BeamSearch -> {
+        yield new BeamSearchExploreStrategy();
+      }
+      case BFS -> {
+        yield new BreadthFirstExploreStrategy();
+      }
+      case DynamicAStar -> {
+        yield new DynamicAStarExploreStrategy();
+      }
+      case HillClimbing -> {
+        yield new HillClimbingExploreStrategy();
+      }
+      case RandomWalk -> {
+        yield new RandomWalkExploreStrategy();
       }
       default -> throw new IllegalArgumentException("Unknown strategy: " + strategyName);
     };
