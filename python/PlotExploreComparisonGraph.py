@@ -14,7 +14,6 @@ if not images_dir.exists():
     os.makedirs(images_dir)
 
 df.boxplot(column="Bonus Factor", by="Strategy", grid=True, vert=False, figsize=(10, 5))
-plt.title("Explore Strategy Comparison")
 plt.xlabel("Bonus Factor")
 plt.ylabel("Strategy")
 plt.yticks(rotation=45)
