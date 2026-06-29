@@ -31,6 +31,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
     private int bestGold;
     private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome each node
     private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map: Map<Node, Map<remainingTime, maxGoldFound>>
+    private final int SPARE_TIME_MULTIPLIER = 2;
 
     /**
      * No-args constructor for the EscapeKnapsackDFSBnB class.
@@ -160,6 +161,14 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
                 boolean alreadyVisited = pathVisited.contains(neighbour);
                 // Gold is removed from search if we already visited the node
                 int goldOnNode = alreadyVisited ? 0 : graph.getGoldMap().getOrDefault(neighbour, 0);
+
+                // Skip moving into a zero-gold node if it takes us further from the exit, 
+                // unless we have an abundance of spare time.
+                if (goldOnNode == 0 && neighbourExitTime > minTimeToExit) {
+                    if (timeLeft < minTimeToExit * SPARE_TIME_MULTIPLIER) {
+                        continue; 
+                    }
+                }
 
                 // Update visited, current path and gold available on map before recursive call
                 // But only update gold if the node is not already visited
