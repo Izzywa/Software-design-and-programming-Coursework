@@ -80,12 +80,13 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
 
         // Initialize search with start node and total graph gold
         int startGold = graph.getGoldMap().getOrDefault(graph.getStartNode(), 0);
-        visited.add(graph.getStartNode());
+        Set<Node> pathVisited = new HashSet<>();
+        pathVisited.add(graph.getStartNode());
         currentPath.add(graph.getStartNode());
         totalGraphGold -= startGold;
 
         // Run recursive search from start node
-        knapsackDFS(state, graph, graph.getStartNode(), 0, startGold, totalGraphGold);
+        knapsackDFS(state, graph, graph.getStartNode(), 0, startGold, totalGraphGold, pathVisited);
         // Return best path
         return new EscapePath(state, bestPath);
     }
@@ -105,7 +106,9 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * @param currentGold total gold found along this branch
      * @param totalGraphGold total gold on graph
      */
-    public void knapsackDFS(EscapeState state, EscapeGraph graph, Node currentNode, int currentCost, int currentGold, int totalGraphGold) {
+    public void knapsackDFS(EscapeState state, EscapeGraph graph, Node currentNode, 
+                            int currentCost, int currentGold, int totalGraphGold, Set<Node> pathVisited) {
+
         int minTimeToExit = minDistanceToExit.getOrDefault(currentNode, Integer.MAX_VALUE);
         int timeLeft = state.getTimeRemaining() - currentCost;
         // Check if 
@@ -152,23 +155,29 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
             // 1. Check if we have enough time to hit this neighbor and still make it to the exit
             // 2. We must still check if we already visited a neighbour to ensure 
             // that we don't forage gold from an already visited node
-            if (!visited.contains(neighbour) && newCost + minTimeToExit < state.getTimeRemaining()) {
+            int neighbourExitTime = minDistanceToExit.getOrDefault(neighbour, Integer.MAX_VALUE);
+            if ( newCost + neighbourExitTime < state.getTimeRemaining()) {
                 // Visit and count gold on node
                 int goldOnNode = graph.getGoldMap().getOrDefault(neighbour, 0);
 
                 // Update visited, current path and gold available on map before recursive call
                 // But only update gold if the node is not already visited
-                visited.add(neighbour);
+                boolean inserted = pathVisited.add(neighbour);
                 currentPath.add(neighbour);
-                totalGraphGold -= goldOnNode;
+                if (inserted) {
+                    totalGraphGold -= goldOnNode;
+                }
 
                 // Recurse
-                knapsackDFS(state, graph, neighbour, newCost, currentGold + goldOnNode, totalGraphGold);
+                knapsackDFS(state, graph, neighbour, newCost, currentGold + goldOnNode, totalGraphGold, pathVisited);
 
                 //Track back state changes after return from recursive call
-                visited.remove(neighbour);
+                if (inserted) {
+                    pathVisited.remove(neighbour);
+                    totalGraphGold += goldOnNode;
+                }
                 currentPath.remove(currentPath.size() - 1);
-                totalGraphGold += goldOnNode;
+                
             }
         }
 
