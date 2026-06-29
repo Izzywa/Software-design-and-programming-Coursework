@@ -135,20 +135,8 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         }
 
         // Memeoization efficiency can be improved if we discover paths with higher potantial gold values first
-        // We can use a greedy approach to sort the neighbours based on gold amount
-        // This is similar to sorting the neighbours by distance to orb that we did in the explore phase
-        List<Edge> neighbours = new ArrayList<>(graph.getWeighted().getOrDefault(currentNode, Collections.emptyList()));
-        neighbours.sort((a, b) -> {
-            int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
-            int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
-            if (goldA != goldB) {
-                return Integer.compare(goldB, goldA);
-            } else {
-                return Integer.compare(
-                    minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), 
-                    minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
-            }
-        });
+        // Greedy sorting neighbours
+        List<Edge> neighbours = sortNeighbours(graph, currentNode);
 
         //Explore neighbours in for loop
         for (Edge edge : neighbours) {
@@ -174,6 +162,30 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
             }
         }
 
+    }
+
+    /**
+     * Greedy sorting of neighbour edges in descending order based on gold amount,
+     * then based on distance from exit node if they hold the same amount of gold
+     * 
+     * @param graph graph for current escape state
+     * @param currentNode the current node being explored
+     * @return a sorted list of neighbour edges
+     */
+    public List<Edge> sortNeighbours(EscapeGraph graph, Node currentNode) {
+        List<Edge> neighbours = new ArrayList<>(graph.getWeighted().getOrDefault(currentNode, Collections.emptyList()));
+        neighbours.sort((a, b) -> {
+            int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
+            int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
+            if (goldA != goldB) {
+                return Integer.compare(goldB, goldA);
+            } else {
+                return Integer.compare(
+                    minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), 
+                    minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
+            }
+        });
+        return neighbours;
     }
 
     /**
