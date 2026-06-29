@@ -31,7 +31,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
     private int bestGold;
     private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome each node
     private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map: Map<Node, Map<remainingTime, maxGoldFound>>
-    private final int SPARE_TIME_MULTIPLIER = 2;
+    private final double SPARE_TIME_MULTIPLIER = 1.25;
 
     /**
      * No-args constructor for the EscapeKnapsackDFSBnB class.
@@ -144,9 +144,17 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
         // Greedy sorting neighbours
         List<Edge> neighbours = sortNeighbours(graph, currentNode);
 
+        // Identify the immediate parent node we just came from to prevent advancing that direction
+        Node immediateParent = currentPath.size() >= 2 ? currentPath.get(currentPath.size() - 2) : null;
+
         //Explore neighbours in for loop
         for (Edge edge : neighbours) {
             Node neighbour = edge.getDest();
+
+            if (neighbour.equals(immediateParent)) {
+                continue;
+            }
+
             int newCost = currentCost + edge.length();
 
             // Instead of excluding already visited neighbour nodes, we allow exploration of neighbour cells
@@ -186,8 +194,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
                     pathVisited.remove(neighbour);
                     totalGraphGold += goldOnNode;
                 }
-                currentPath.remove(currentPath.size() - 1);
-                
+                currentPath.remove(currentPath.size() - 1);    
             }
         }
 
