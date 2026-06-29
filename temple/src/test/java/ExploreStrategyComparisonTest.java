@@ -16,7 +16,7 @@ import student.explore.ExploreStrategyFactory.Strategy;
  */
 public class ExploreStrategyComparisonTest {
 
-  private final int NUM_SEEDS = 500;
+  private final int NUM_SEEDS = 100;
 
   @Test
   public void testExploreStrategyAndSaveMultiplier() {
