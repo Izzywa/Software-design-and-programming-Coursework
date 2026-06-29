@@ -71,6 +71,24 @@ public class EscapePath {
     }
 
     /**
+     * Returns the first node in the path.
+     * 
+     * @return a Node object at the beginning of the list
+     */
+    public Node getFirstNode() {
+        return path.get(0);
+    }
+
+    /**
+     * Returns the last node in the path.
+     * 
+     * @return a Node object at the endof the list
+     */
+    public Node getLastNode() {
+        return path.get(path.size() - 1);
+    }
+
+    /**
      * Returns the total cost of the path.
      * 
      * @return the total cost

@@ -16,6 +16,7 @@ import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
 import student.explore.HeuristicDFSExploreStrategy;
 import student.explore.NaiveDFSExploreStrategy;
+import student.sort.RandomSort;
 
 /** Tests for {@link ExploreStrategyFactory}. */
 public class ExploreStrategyFactoryTest {
@@ -71,6 +72,21 @@ public class ExploreStrategyFactoryTest {
             ExploreStrategyFactory.Strategy.AStar) instanceof AStarExploreStrategy,
         "The factory should return an instance of AStarExploreStrategy for the AStar strategy.");
 
+  }
+
+  @Test
+  public void testDfsRandomSortExploreStrategyFactory() {
+    ExploreStrategy strategy = ExploreStrategyFactory
+        .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFSWithRandomSort);
+
+    assertTrue(
+        strategy instanceof HeuristicDFSExploreStrategy,
+        "The factory should return an instance of HeuristicDFSExploreStrategy for the HeuristicDFSWithRandomSort strategy.");
+
+    assertTrue(
+        ((HeuristicDFSExploreStrategy) strategy).getSortingStrategy() instanceof RandomSort,
+        "The factory should return an instance of HeuristicDFSWithRandomSort with a RandomSort sorting strategy."
+    );
   }
 
   @RepeatedTest(50)

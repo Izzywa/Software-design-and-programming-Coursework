@@ -444,6 +444,16 @@ public class MockGameState implements ExplorationState, EscapeState {
         this.exploreSucceeded = exploreSucceeded;
     }
 
+    /** Setter method for Explore Stage */
+    public void setExploreStage() {
+        this.stage = Stage.EXPLORE;
+    }
+
+    /** Setter method for Escape Stage */
+    public void setEscapeStage() {
+        this.stage = Stage.ESCAPE;
+    }
+
     private void output(Optional<GUI> gui, String s) {
         System.err.println(s);
         gui.ifPresent((g) -> g.displayError(s));
