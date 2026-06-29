@@ -244,6 +244,9 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
             }
         }
 
+        // Clean up outdated entries that are explicitly worse than our new tracking entry
+        timeToGoldMap.entrySet().removeIf(entry -> entry.getKey() <= timeLeft && entry.getValue() <= currentGold);
+
         // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
