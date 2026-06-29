@@ -1,10 +1,15 @@
 package student.escape;
 
+import lombok.Getter;
+
 /**
  * Factory class for creating instances of {@link EscapeStrategy} implementations.
  */
 public class EscapeStrategyFactory {
 
+    /**
+     * 
+     */
     @Getter
   public enum Strategy {
     BFS("BFS"),
