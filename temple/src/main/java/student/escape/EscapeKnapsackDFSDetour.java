@@ -77,10 +77,11 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
         // Populate map to store shortest distance to exit frome each node
         minDistanceToExit = shortestDistancesToExit(graph);
 
+        // Initiliaze path-local set for storing vistied nodes
+        Set<Node> pathVisited = new HashSet<>();
 
         // Initialize search with start node and total graph gold
         int startGold = graph.getGoldMap().getOrDefault(graph.getStartNode(), 0);
-        Set<Node> pathVisited = new HashSet<>();
         pathVisited.add(graph.getStartNode());
         currentPath.add(graph.getStartNode());
         totalGraphGold -= startGold;
@@ -105,6 +106,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * @param currentCost the cost to reach the current node
      * @param currentGold total gold found along this branch
      * @param totalGraphGold total gold on graph
+     * @param pathVisited set to store nodes visited along the path
      */
     public void knapsackDFS(EscapeState state, EscapeGraph graph, Node currentNode, 
                             int currentCost, int currentGold, int totalGraphGold, Set<Node> pathVisited) {
@@ -151,14 +153,13 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
             // instead of a global set of vistied nodes
             // We have to initialize that set before calling the recursion, then it's passed as a parameter
 
-            // Then we modify the main loop:
-            // 1. Check if we have enough time to hit this neighbor and still make it to the exit
-            // 2. We must still check if we already visited a neighbour to ensure 
-            // that we don't forage gold from an already visited node
+            // Check if we have enough time to hit this neighbor and still make it to the exit
             int neighbourExitTime = minDistanceToExit.getOrDefault(neighbour, Integer.MAX_VALUE);
             if ( newCost + neighbourExitTime < state.getTimeRemaining()) {
-                // Visit and count gold on node
-                int goldOnNode = graph.getGoldMap().getOrDefault(neighbour, 0);
+                // Boolean flag to exclude parent nodes from the search to prevent loops
+                boolean alreadyVisited = pathVisited.contains(neighbour);
+                // Gold is removed from search if we already visited the node
+                int goldOnNode = alreadyVisited ? 0 : graph.getGoldMap().getOrDefault(neighbour, 0);
 
                 // Update visited, current path and gold available on map before recursive call
                 // But only update gold if the node is not already visited
