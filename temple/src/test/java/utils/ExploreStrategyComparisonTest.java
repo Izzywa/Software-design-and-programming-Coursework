@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.jupiter.api.Test;
-
 import game.MockGameState;
 import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
@@ -18,24 +16,34 @@ import student.explore.ExploreStrategyFactory.Strategy;
 public class ExploreStrategyComparisonTest {
 
     /**
+     * Main method to run the explore strategy comparison test
+     * and save results to CSV.
+     * @param args not used
+     */
+    public static void main(String[] args) {
+        ExploreStrategyComparisonTest test =
+        new ExploreStrategyComparisonTest();
+        test.testExploreStrategyAndSaveMultiplier();
+    }
+
+    /**
      * Compares explore strategies across a set of random seeds and saves the
      * results to CSV.
      */
-    @Test
     public void testExploreStrategyAndSaveMultiplier() {
-        final int NUM_SEEDS = 500;
-        final long RANDOM_SEED = 123456789L;
+        final int numSeeds = 500;
+        final long randomSeed = 123456789L;
 
         List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(ExploreStrategyFactory.Strategy.values()));
 
         String filename = "explore_strategy_comparison.csv";
-        String[] headers = { "Strategy", "Seed", "Bonus Factor" };
+        String[] headers = {"Strategy", "Seed", "Bonus Factor"};
         List<String[]> results = new ArrayList<>();
 
-        Random random = new Random(RANDOM_SEED);
+        Random random = new Random(randomSeed);
         List<Long> seeds = new ArrayList<>();
-        for (int i = 0; i < NUM_SEEDS; i++) {
+        for (int i = 0; i < numSeeds; i++) {
             seeds.add(random.nextLong());
         }
 
