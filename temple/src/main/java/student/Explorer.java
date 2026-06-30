@@ -77,7 +77,7 @@ public class Explorer {
     public void escape(EscapeState state) {
         //TODO: Escape from the cavern before time runs out
         // Create an escape strategy with the corresponding algorithm and get the escape path
-        EscapeStrategy strategy = new EscapeKnapsackDFSBnB();
+        EscapeStrategy strategy = new EscapeKnapsackDFSDetour();
         strategy.escape(state);
     }
 }
