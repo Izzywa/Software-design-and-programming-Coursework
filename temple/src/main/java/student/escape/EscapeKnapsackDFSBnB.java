@@ -139,8 +139,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         for (Edge edge : neighbours) {
             Node neighbour = edge.getDest();
             int newCost = bState.currentCost + edge.length();
+            int neighbourMinTime = wrapper.getMinDistanceToExit().getOrDefault(neighbour, Integer.MAX_VALUE);
             // Check if neighbor is unvisited and we have enough time budget
-            if (!visited.contains(neighbour) && newCost + minTimeToExit < wrapper.getState().getTimeRemaining()) {
+            if (!visited.contains(neighbour) && newCost + neighbourMinTime < wrapper.getState().getTimeRemaining()) {
                 // Visit and count gold on node
                 int goldOnNode = wrapper.getGraph().getGoldMap().getOrDefault(neighbour, 0);
 
@@ -211,6 +212,9 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
                 return true;
             }
         }
+
+        // Clean up outdated entries that are explicitly worse than our new tracking entry
+        timeToGoldMap.entrySet().removeIf(entry -> entry.getKey() <= timeLeft && entry.getValue() <= currentGold);
 
         // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
