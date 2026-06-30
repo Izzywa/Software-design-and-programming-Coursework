@@ -23,7 +23,6 @@ import game.EscapeState;
  *      3. Memoization-based pruning of inferior branches
  */
 public class EscapeKnapsackDFSBnB implements EscapeStrategy {
-    private Set<Node> visited;
     private List<Node> currentPath;
     private List<Node> bestPath;
     private int bestGold;
@@ -33,7 +32,6 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      * No-args constructor for the EscapeKnapsackDFSBnB class.
      */
     public EscapeKnapsackDFSBnB() {
-        this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
         this.bestPath = null; // Initialize best path as null
         // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
@@ -71,13 +69,21 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         }
 
         // Initialize search with start node and total graph gold
+        Set<Node> visited = new HashSet<>();
         int startGold = wrapper.getGraph().getGoldMap().getOrDefault(wrapper.getGraph().getStartNode(), 0);
         visited.add(wrapper.getGraph().getStartNode());
         currentPath.add(wrapper.getGraph().getStartNode());
-        totalGraphGold -= startGold;
+
+        // Create initial BranchState
+        BranchState initialState = new BranchState(
+            wrapper.getGraph().getStartNode(),
+            0,
+            startGold,
+            totalGraphGold - startGold
+        );
 
         // Run recursive search from start node
-        knapsackDFS(wrapper, wrapper.getGraph().getStartNode(), 0, startGold, totalGraphGold);
+        knapsackDFS(wrapper, initialState, visited);
         // Return best path
         return new EscapePath(state, bestPath);
     }
@@ -97,43 +103,42 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      * @param currentGold total gold found along this branch
      * @param totalGraphGold total gold on graph
      */
-    public void knapsackDFS(EscapeStateWrapper wrapper, Node currentNode, int currentCost, int currentGold, int totalGraphGold) {
-        int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(currentNode, Integer.MAX_VALUE);
-        int timeLeft = wrapper.getState().getTimeRemaining() - currentCost;
+    public void knapsackDFS(EscapeStateWrapper wrapper, BranchState bState, Set<Node> visited) {
+        int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(bState.currentNode, Integer.MAX_VALUE);
+        int timeLeft = wrapper.getState().getTimeRemaining() - bState.currentCost;
         // Check if 
         // 1. current total cost + minimum time (shortest path) from current node exceeds total escape time
         // OR
         // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold
         // If true, we prune the branch
-        if (currentCost + minTimeToExit >= wrapper.getState().getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
-            return;
-        }
+        if (bState.currentCost + minTimeToExit >= wrapper.getState().getTimeRemaining() 
+            || bState.currentGold + bState.totalGraphGold <= bestGold) { return; }
 
         // Memoization can be used to store and check paths visited earlier 
         // without recomputing them all the time during recursion
         // If we've seen this branch before with more or equal time left AND more or equal gold collected,
         // then we prune the branch
-        if (shouldPruneBranch(currentNode, timeLeft, currentGold)) {
+        if (shouldPruneBranch(bState.currentNode, timeLeft, bState.currentGold)) {
             return;
         }
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
-        if (currentNode.equals(wrapper.getGraph().getExitNode())) {
-            if (currentGold > bestGold) {
-                bestGold = currentGold;
+        if (bState.currentNode.equals(wrapper.getGraph().getExitNode())) {
+            if (bState.currentGold > bestGold) {
+                bestGold = bState.currentGold;
                 bestPath = new ArrayList<>(currentPath);
             }
         }
 
         // Memeoization efficiency can be improved if we discover paths with higher potantial gold values first
         // Greedy sorting neighbours
-        List<Edge> neighbours = sortNeighbours(wrapper, currentNode);
+        List<Edge> neighbours = sortNeighbours(wrapper, bState.currentNode);
 
         //Explore neighbours in for loop
         for (Edge edge : neighbours) {
             Node neighbour = edge.getDest();
-            int newCost = currentCost + edge.length();
+            int newCost = bState.currentCost + edge.length();
             // Check if neighbor is unvisited and we have enough time budget
             if (!visited.contains(neighbour) && newCost + minTimeToExit < wrapper.getState().getTimeRemaining()) {
                 // Visit and count gold on node
@@ -142,15 +147,15 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
                 // Update visited, current path and gold available on map before recursive call
                 visited.add(neighbour);
                 currentPath.add(neighbour);
-                totalGraphGold -= goldOnNode;
+
+                BranchState nextState = bState.moveTo(neighbour, edge.length(), goldOnNode);
 
                 // Recurse
-                knapsackDFS(wrapper, neighbour, newCost, currentGold + goldOnNode, totalGraphGold);
+                knapsackDFS(wrapper, nextState, visited);
 
                 //Track back state changes after return from recursive call
                 visited.remove(neighbour);
                 currentPath.remove(currentPath.size() - 1);
-                totalGraphGold += goldOnNode;
             }
         }
 
@@ -210,5 +215,24 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
+    }
+
+    /**
+     * BranchState record to encapsulate branch-specific data
+     * 
+     * @param currentNode the current node being explored
+     * @param currentCost the cost to reach the current node
+     * @param currentGold total gold found along this branch
+     * @param totalGraphGold total gold remaining on graph
+     */
+    public record BranchState(Node currentNode, int currentCost, int currentGold, int totalGraphGold) {
+        public BranchState moveTo(Node neighbour, int edgeLength, int goldOnNode) {
+            return new BranchState(
+                neighbour, 
+                this.currentCost + edgeLength,
+                this.currentGold + goldOnNode,
+                this.totalGraphGold - goldOnNode
+            );
+        }
     }
 }
