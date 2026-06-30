@@ -23,7 +23,6 @@ import game.EscapeState;
  *      3. Memoization-based pruning of inferior branches
  */
 public class EscapeKnapsackDFSBnB implements EscapeStrategy {
-    private List<Node> currentPath;
     private List<Node> bestPath;
     private int bestGold;
     private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map: Map<Node, Map<remainingTime, maxGoldFound>>
@@ -32,7 +31,6 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      * No-args constructor for the EscapeKnapsackDFSBnB class.
      */
     public EscapeKnapsackDFSBnB() {
-        this.currentPath = new ArrayList<>();
         this.bestPath = null; // Initialize best path as null
         // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
         this.bestGold = -1;
@@ -70,6 +68,8 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
 
         // Initialize search with start node and total graph gold
         Set<Node> visited = new HashSet<>();
+        List<Node> currentPath = new ArrayList<>();
+
         int startGold = wrapper.getGraph().getGoldMap().getOrDefault(wrapper.getGraph().getStartNode(), 0);
         visited.add(wrapper.getGraph().getStartNode());
         currentPath.add(wrapper.getGraph().getStartNode());
@@ -83,7 +83,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
         );
 
         // Run recursive search from start node
-        knapsackDFS(wrapper, initialState, visited);
+        knapsackDFS(wrapper, initialState, visited, currentPath);
         // Return best path
         return new EscapePath(state, bestPath);
     }
@@ -103,7 +103,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
      * @param currentGold total gold found along this branch
      * @param totalGraphGold total gold on graph
      */
-    public void knapsackDFS(EscapeStateWrapper wrapper, BranchState bState, Set<Node> visited) {
+    public void knapsackDFS(EscapeStateWrapper wrapper, BranchState bState, Set<Node> visited, List<Node> currentPath) {
         int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(bState.currentNode, Integer.MAX_VALUE);
         int timeLeft = wrapper.getState().getTimeRemaining() - bState.currentCost;
         // Check if 
@@ -152,7 +152,7 @@ public class EscapeKnapsackDFSBnB implements EscapeStrategy {
                 BranchState nextState = bState.moveTo(neighbour, edge.length(), goldOnNode);
 
                 // Recurse
-                knapsackDFS(wrapper, nextState, visited);
+                knapsackDFS(wrapper, nextState, visited, currentPath);
 
                 //Track back state changes after return from recursive call
                 visited.remove(neighbour);
