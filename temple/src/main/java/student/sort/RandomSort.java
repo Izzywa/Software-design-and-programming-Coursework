@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * Sorts a list in random order for the items in the list that is the same
- * values
+ * value.s
  * If the items are different values, they will be sorted in ascending order.
  */
 public class RandomSort implements SortingStrategy {
