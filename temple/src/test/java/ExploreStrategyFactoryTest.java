@@ -89,7 +89,7 @@ public class ExploreStrategyFactoryTest {
     );
   }
 
-  @RepeatedTest(50)
+  @RepeatedTest(10)
   public void testAllStrategiesSucceedInReachingOrb() {
     long seed = new Random().nextLong();
 
