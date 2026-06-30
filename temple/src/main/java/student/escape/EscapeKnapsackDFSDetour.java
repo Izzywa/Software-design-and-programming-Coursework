@@ -97,7 +97,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * @param currentNode the current node being explored
      * @param currentCost the cost to reach the current node
      * @param currentGold total gold found along this branch
-     * @param totalGraphGold total gold on graph
+     * @param totalGraphGold total gold remaining on graph
      * @param pathVisited set to store nodes visited along the path
      */
     public void knapsackDFS(EscapeStateWrapper wrapper, Node currentNode, 
@@ -248,5 +248,24 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
         // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
+    }
+
+    /**
+     * BranchState record to encapsulate branch-specific data
+     * 
+     * @param currentNode the current node being explored
+     * @param currentCost the cost to reach the current node
+     * @param currentGold total gold found along this branch
+     * @param totalGraphGold total gold remaining on graph
+     */
+    public record BranchState(Node currentNode, int currentCost, int currentGold, int totalGraphGold) {
+        public BranchState moveTo(Node neighbour, int edgeLength, int goldOnNode) {
+            return new BranchState(
+                neighbour, 
+                this.currentCost + edgeLength,
+                this.currentGold + goldOnNode,
+                this.totalGraphGold - goldOnNode
+            );
+        }
     }
 }
