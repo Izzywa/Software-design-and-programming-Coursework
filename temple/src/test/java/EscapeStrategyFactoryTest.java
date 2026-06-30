@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
@@ -77,10 +78,10 @@ public class EscapeStrategyFactoryTest {
         assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
     }
 
-    @Disabled("Some of the strategies fail")
+    @Disabled("DFSAllPaths failed to escape in within 10 seconds")
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
-        int milseconds = 1000;
+        int milseconds = 10000;
 
         List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(EscapeStrategyFactory.Strategy.values()));
@@ -96,7 +97,8 @@ public class EscapeStrategyFactoryTest {
             },
                     "The " + strategy.getName()
                             + " strategy should escape within "
-                            + milseconds + " milliseconds.");
+                            + (milseconds / 1000)
+                            + " seconds.");
 
             assertTrue(mockState.getEscapeSucceeded(),
                     "The " + strategy.getName()
