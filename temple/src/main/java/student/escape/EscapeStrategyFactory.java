@@ -17,7 +17,8 @@ public class EscapeStrategyFactory {
         DFSAllPaths("DFSAllPaths"),
         DFSPruning("DFSPruning"),
         Dijkstra("Dijkstra"),
-        KnapsackDFS("KnapsackDFS");
+        KnapsackDFS("KnapsackDFS"),
+        KnapsackDetour("KnapsackDetour");
 
         private final String name;
 
@@ -51,6 +52,9 @@ public class EscapeStrategyFactory {
             }
             case KnapsackDFS -> {
                 yield new EscapeKnapsackDFSBnB();
+            }
+            case KnapsackDetour -> {
+                yield new EscapeKnapsackDFSDetour();
             }
             default -> throw new IllegalArgumentException(
                     "Unknown strategy: " + strategyName);

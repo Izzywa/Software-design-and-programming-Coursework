@@ -22,7 +22,7 @@ public class Explorer {
      * By default, it uses a knapsack-based depth-first search strategy.
      */
     private EscapeStrategy escapeStrategy = EscapeStrategyFactory
-        .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackDFS);
+        .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackDetour);
 
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
