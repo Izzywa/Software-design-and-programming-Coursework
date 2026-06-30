@@ -8,7 +8,7 @@ import student.sort.RandomSort;
  */
 public class ExploreStrategyFactory {
   /**
-   * The enumeration of available exploration strategies.
+   * Returns an instance of the specified {@link ExploreStrategy} implementation.
    */
   @Getter
   public enum Strategy {
