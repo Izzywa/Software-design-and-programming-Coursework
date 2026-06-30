@@ -4,19 +4,16 @@ import game.EscapeState;
 import game.ExplorationState;
 import lombok.Getter;
 import lombok.Setter;
-import student.escape.EscapeKnapsackDFSBnB;
-import student.escape.EscapeStrategy;
 import student.explore.ExploreStrategy;
 import student.explore.ExploreStrategyFactory;
+
+// Escape imports
+import student.escape.*;
 
 @Setter
 @Getter
 public class Explorer {
 
-    /**
-     * The exploration strategy to use for finding the orb in the cavern.
-     * By default, it uses a heuristic depth-first search strategy.
-     */
     private ExploreStrategy exploreStrategy = ExploreStrategyFactory
       .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
 
