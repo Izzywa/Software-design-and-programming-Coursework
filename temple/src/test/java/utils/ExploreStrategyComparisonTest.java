@@ -10,21 +10,10 @@ import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
 
 /**
- * Compares explore strategies across a set of random seeds and saves the
- * results to CSV.
+ * Utility class that compares explore strategies across a set of
+ * random seeds and saves the results to CSV.
  */
 public class ExploreStrategyComparisonTest {
-
-    /**
-     * Main method to run the explore strategy comparison test
-     * and save results to CSV.
-     * @param args not used
-     */
-    public static void main(String[] args) {
-        ExploreStrategyComparisonTest test =
-        new ExploreStrategyComparisonTest();
-        test.testExploreStrategyAndSaveMultiplier();
-    }
 
     /**
      * Compares explore strategies across a set of random seeds and saves the
