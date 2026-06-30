@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class LogToCsv {
     /** Base directory for benchmark CSV output files. */
-    private static final String BASE_PATH = "utils/";
+    private static final String BASE_PATH = "src/test/resources/benchmark/";
 
     /**
      * Saves the given data to the benchmark/ folder as a CSV file.
