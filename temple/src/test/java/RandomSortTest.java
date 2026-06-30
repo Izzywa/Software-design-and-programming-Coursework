@@ -49,7 +49,7 @@ public class RandomSortTest {
 
         List<RandomPair> sortedList1 = randomSort.sort(list);
         
-        // repeat the sort 5 times to rule out the possibility of getting the same order by chance
+        // repeat the sort 5 times to check for different orderings
         boolean isDifferentOrder = false;
         for (int i = 0; i < 5; i++) {
             List<RandomPair> sortedList2 = randomSort.sort(list);
