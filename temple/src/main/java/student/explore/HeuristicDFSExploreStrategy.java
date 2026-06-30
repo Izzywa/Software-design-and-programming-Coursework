@@ -43,11 +43,6 @@ public class HeuristicDFSExploreStrategy implements ExploreStrategy {
         discovered = new HashSet<>();
     }
 
-    /**
-     * Create a fresh heuristic DFS strategy with a custom sorting strategy.
-     * @param sortingStrategy the sorting strategy to use for ordering neighbors
-     * based on their distance to the orb
-     */
     public HeuristicDFSExploreStrategy(SortingStrategy sortingStrategy) {
         this();
         this.sortingStrategy = sortingStrategy;
