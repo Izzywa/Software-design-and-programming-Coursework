@@ -8,7 +8,7 @@ import student.sort.RandomSort;
 /**
  * Test the SortingStrategy in HeuristicDFSExploreStrategy.
  */
-public class DfsSortingTest {
+public class DFSSortingTest {
     @Test
     public void testDefaultSortingStrategy() {
         HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy();
