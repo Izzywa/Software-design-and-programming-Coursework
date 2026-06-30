@@ -1,9 +1,9 @@
 package utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.nio.file.Files;
 import java.util.List;
 
@@ -25,17 +25,17 @@ public class LogToCsv {
      * @param dataLines the CSV rows
      */
     public static void saveToCsv(
-        final String filename,
-        final String[] headers,
-        final List<String[]> dataLines) {
+            final String filename,
+            final String[] headers,
+            final List<String[]> dataLines) {
 
         try {
             Files.createDirectory(new File(BASE_PATH).toPath());
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error creating directory: " + e.getMessage());
         }
         File csvOutputFile = new File(BASE_PATH + filename);
-        
+
         try (PrintWriter pw = new PrintWriter(csvOutputFile, UTF_8)) {
             String headerLine = String.join(",", headers);
             pw.println(headerLine);
@@ -52,7 +52,7 @@ public class LogToCsv {
      * @param data the values to convert
      * @return a comma-separated CSV line
      */
-    public static String convertToCsv(String[] data) {
+    public static String convertToCsv(final String[] data) {
         return String.join(",", data);
     }
 
