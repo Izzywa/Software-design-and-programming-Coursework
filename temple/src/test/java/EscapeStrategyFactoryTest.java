@@ -78,6 +78,7 @@ public class EscapeStrategyFactoryTest {
     }
 
     @Disabled("Some of the strategies fail")
+    public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
         int milseconds = 1000;
 
