@@ -29,12 +29,9 @@ public class RandomSort implements SortingStrategy {
                 .map(item -> new RandomPair<>(item, random.nextDouble()))
                 .sorted((a, b) -> {
                     int compare = a.value.compareTo(b.value);
-                    if (compare != 0) {
+                    if (compare != 0)
                         return compare; // Keep original sorting order
-                    }
-                    return Double.compare(
-                        a.randomScore, b.randomScore
-                    ); // Shuffle identical values
+                    return Double.compare(a.randomScore, b.randomScore); // Shuffle identical values
                 })
                 .map(pair -> pair.value)
                 .collect(Collectors.toList());
