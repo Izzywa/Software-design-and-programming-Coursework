@@ -77,7 +77,7 @@ public class EscapeStrategyFactoryTest {
     }
 
     @Disabled(
-        "One of the strategies is causing java.io.EOFException"
+        "Some of the strategies fail and something is causing java.io.EOFException"
     )
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
