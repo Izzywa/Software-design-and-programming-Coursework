@@ -25,11 +25,9 @@ import game.EscapeState;
  *      3. Memoization-based pruning of inferior branches
  */
 public class EscapeKnapsackDFSDetour implements EscapeStrategy {
-    private Set<Node> visited;
     private List<Node> currentPath;
     private List<Node> bestPath;
     private int bestGold;
-    private Map<Node, Integer> minDistanceToExit; // Map to store shortest distance to exit frome each node
     private Map<Node, Map<Integer, Integer>> memoMap; // Memoization map: Map<Node, Map<remainingTime, maxGoldFound>>
     private final double SPARE_TIME_MULTIPLIER = 1.25;
 
@@ -37,12 +35,10 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * No-args constructor for the EscapeKnapsackDFSBnB class.
      */
     public EscapeKnapsackDFSDetour() {
-        this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
         this.bestPath = null; // Initialize best path as null
         // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
         this.bestGold = -1;
-        this.minDistanceToExit = new HashMap<>();
         this.memoMap = new HashMap<>();
     }
 
@@ -57,8 +53,8 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
     @Override
     public EscapePath findEscapePath(EscapeState state) {
         //Initialize graph
-        EscapeGraph graph = new EscapeGraph(state);
-        int totalGraphGold = graph.getTotalGold();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        int totalGraphGold = wrapper.getGraph().getTotalGold();
 
         // Handling test egde case where there's no gold on map
         // Theoretical possibility for smaller maps with P = 0.33 ^ node count 
@@ -70,25 +66,22 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
 
         // Check graph validity
         try {
-            graph.checkGraphValidity();
+            wrapper.getGraph().checkGraphValidity();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
-
-        // Populate map to store shortest distance to exit frome each node
-        minDistanceToExit = shortestDistancesToExit(graph);
 
         // Initiliaze path-local set for storing vistied nodes
         Set<Node> pathVisited = new HashSet<>();
 
         // Initialize search with start node and total graph gold
-        int startGold = graph.getGoldMap().getOrDefault(graph.getStartNode(), 0);
-        pathVisited.add(graph.getStartNode());
-        currentPath.add(graph.getStartNode());
+        int startGold = wrapper.getGraph().getGoldMap().getOrDefault(wrapper.getGraph().getStartNode(), 0);
+        pathVisited.add(wrapper.getGraph().getStartNode());
+        currentPath.add(wrapper.getGraph().getStartNode());
         totalGraphGold -= startGold;
 
         // Run recursive search from start node
-        knapsackDFS(state, graph, graph.getStartNode(), 0, startGold, totalGraphGold, pathVisited);
+        knapsackDFS(wrapper, wrapper.getGraph().getStartNode(), 0, startGold, totalGraphGold, pathVisited);
         // Return best path
         return new EscapePath(state, bestPath);
     }
@@ -109,17 +102,17 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * @param totalGraphGold total gold on graph
      * @param pathVisited set to store nodes visited along the path
      */
-    public void knapsackDFS(EscapeState state, EscapeGraph graph, Node currentNode, 
+    public void knapsackDFS(EscapeStateWrapper wrapper, Node currentNode, 
                             int currentCost, int currentGold, int totalGraphGold, Set<Node> pathVisited) {
 
-        int minTimeToExit = minDistanceToExit.getOrDefault(currentNode, Integer.MAX_VALUE);
-        int timeLeft = state.getTimeRemaining() - currentCost;
+        int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(currentNode, Integer.MAX_VALUE);
+        int timeLeft = wrapper.getState().getTimeRemaining() - currentCost;
         // Check if 
         // 1. current total cost + minimum time (shortest path) from current node exceeds total escape time
         // OR
         // 2. current gold + the remaining gold available in the graph is less than or equal to bestGold
         // If true, we prune the branch
-        if (currentCost + minTimeToExit >= state.getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
+        if (currentCost + minTimeToExit >= wrapper.getState().getTimeRemaining() || currentGold + totalGraphGold <= bestGold) {
             return;
         }
 
@@ -133,7 +126,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
 
         // Base case for recursion: end node reached
         // Update best gold and best path if currentGold is more than the bestGold stored so far
-        if (currentNode.equals(graph.getExitNode())) {
+        if (currentNode.equals(wrapper.getGraph().getExitNode())) {
             if (currentGold > bestGold) {
                 bestGold = currentGold;
                 bestPath = new ArrayList<>(currentPath);
@@ -142,7 +135,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
 
         // Memeoization efficiency can be improved if we discover paths with higher potantial gold values first
         // Greedy sorting neighbours
-        List<Edge> neighbours = sortNeighbours(graph, currentNode);
+        List<Edge> neighbours = sortNeighbours(wrapper, currentNode);
 
         // Identify the immediate parent node we just came from to prevent advancing that direction
         Node immediateParent = currentPath.size() >= 2 ? currentPath.get(currentPath.size() - 2) : null;
@@ -163,12 +156,12 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
             // We have to initialize that set before calling the recursion, then it's passed as a parameter
 
             // Check if we have enough time to hit this neighbor and still make it to the exit
-            int neighbourExitTime = minDistanceToExit.getOrDefault(neighbour, Integer.MAX_VALUE);
-            if ( newCost + neighbourExitTime < state.getTimeRemaining()) {
+            int neighbourExitTime = wrapper.getMinDistanceToExit().getOrDefault(neighbour, Integer.MAX_VALUE);
+            if (newCost + neighbourExitTime < wrapper.getState().getTimeRemaining()) {
                 // Boolean flag to exclude parent nodes from the search to prevent loops
                 boolean alreadyVisited = pathVisited.contains(neighbour);
                 // Gold is removed from search if we already visited the node
-                int goldOnNode = alreadyVisited ? 0 : graph.getGoldMap().getOrDefault(neighbour, 0);
+                int goldOnNode = alreadyVisited ? 0 : wrapper.getGraph().getGoldMap().getOrDefault(neighbour, 0);
 
                 // Skip moving into a zero-gold node if it takes us further from the exit, 
                 // unless we have an abundance of spare time.
@@ -187,7 +180,7 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
                 }
 
                 // Recurse
-                knapsackDFS(state, graph, neighbour, newCost, currentGold + goldOnNode, totalGraphGold, pathVisited);
+                knapsackDFS(wrapper, neighbour, newCost, currentGold + goldOnNode, totalGraphGold, pathVisited);
 
                 //Track back state changes after return from recursive call
                 if (inserted) {
@@ -208,17 +201,17 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
      * @param currentNode the current node being explored
      * @return a sorted list of neighbour edges
      */
-    public List<Edge> sortNeighbours(EscapeGraph graph, Node currentNode) {
-        List<Edge> neighbours = new ArrayList<>(graph.getWeighted().getOrDefault(currentNode, Collections.emptyList()));
+    public List<Edge> sortNeighbours(EscapeStateWrapper wrapper, Node currentNode) {
+        List<Edge> neighbours = new ArrayList<>(wrapper.getGraph().getWeighted().getOrDefault(currentNode, Collections.emptyList()));
         neighbours.sort((a, b) -> {
-            int goldA = graph.getGoldMap().getOrDefault(a.getDest(), 0);
-            int goldB = graph.getGoldMap().getOrDefault(b.getDest(), 0);
+            int goldA = wrapper.getGraph().getGoldMap().getOrDefault(a.getDest(), 0);
+            int goldB = wrapper.getGraph().getGoldMap().getOrDefault(b.getDest(), 0);
             if (goldA != goldB) {
                 return Integer.compare(goldB, goldA);
             } else {
                 return Integer.compare(
-                    minDistanceToExit.getOrDefault(a.getDest(), Integer.MAX_VALUE), 
-                    minDistanceToExit.getOrDefault(b.getDest(), Integer.MAX_VALUE));
+                    wrapper.getMinDistanceToExit().getOrDefault(a.getDest(), Integer.MAX_VALUE), 
+                    wrapper.getMinDistanceToExit().getOrDefault(b.getDest(), Integer.MAX_VALUE));
             }
         });
         return neighbours;
@@ -257,61 +250,5 @@ public class EscapeKnapsackDFSDetour implements EscapeStrategy {
         // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
-    }
-
-    /**
-     * Dijktra's algorithm with priority queue implementation to create lookup table 
-     * with shortest distances from each node to the exit node
-     * This algorithm traverses the graph backwards from end node towards the start node
-     * 
-     * @param graph graph for current escape state
-     * @return a map that contains nodes and their shortest distances to the exit node
-     */
-    public Map<Node,Integer> shortestDistancesToExit(EscapeGraph graph) {
-        Map<Node,Integer> shortestDistLookupMap = new HashMap<>();
-        PriorityQueue<NodeDistancePair> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.distance));
-
-        pq.add(new NodeDistancePair(graph.getExitNode(), 0));
-        shortestDistLookupMap.put(graph.getExitNode(), 0);
-
-        while (!pq.isEmpty()) {
-            NodeDistancePair current = pq.poll();
-
-            
-            if (current.distance > shortestDistLookupMap.getOrDefault(current.node, Integer.MAX_VALUE)) {
-                continue;
-            }
-
-            for (Edge edge : graph.getInvertedWeighted().getOrDefault(current.node, Collections.emptyList())) {
-                Node neighbour = edge.getDest();
-                int newDist = current.distance + edge.length();
-                if (newDist < shortestDistLookupMap.getOrDefault(neighbour, Integer.MAX_VALUE)) {
-                    shortestDistLookupMap.put(neighbour, newDist);
-                    pq.add(new NodeDistancePair(neighbour, newDist));
-                }
-            }
-            
-        }
-
-        return shortestDistLookupMap;
-    }
-
-    
-    /**
-     * Inner helper class which stores nodes and shortest distances to populate priority queue 
-     * that prioritizes nodes by distances
-     */
-    private static class NodeDistancePair {
-        Node node;
-        int distance;
-        /** 
-         * Constructor
-         * @param node current node
-         * @param distance distance from current node to a certain node
-         */
-        NodeDistancePair(Node node, int distance) {
-            this.node = node;
-            this.distance = distance;
-        }
     }
 }

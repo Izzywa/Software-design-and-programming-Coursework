@@ -33,7 +33,7 @@ public class EscapeStateWrapper {
      * 
      * @return current EscapeState
      */
-    public EscapeState getEscapeState() {
+    public EscapeState getState() {
         return state;
     }
 
@@ -42,7 +42,7 @@ public class EscapeStateWrapper {
      * 
      * @return current EscapeGraph
      */
-    public EscapeGraph getEscapeGraph() {
+    public EscapeGraph getGraph() {
         return graph;
     }
 
