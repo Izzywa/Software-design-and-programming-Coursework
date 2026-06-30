@@ -77,8 +77,7 @@ public class EscapeStrategyFactoryTest {
         assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
     }
 
-    @Disabled("Some of the strategies fail and something is causing java.io.EOFException")
-    public final void testAllStrategiesSucceedInEscaping() {
+    @Disabled("Some of the strategies fail")
         long seed = new Random().nextLong();
         int milseconds = 1000;
 
