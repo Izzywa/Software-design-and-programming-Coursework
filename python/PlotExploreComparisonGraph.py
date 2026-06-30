@@ -6,7 +6,15 @@ import pathlib as path
 
 BASE_DIR = path.Path(__file__).resolve().parent.parent
 
-filename = BASE_DIR / "temple" / "benchmark" / "explore_strategy_comparison.csv"
+filename = (
+    BASE_DIR
+    / "temple"
+    / "src"
+    / "test"
+    / "resources"
+    / "benchmark"
+    / "explore_strategy_comparison.csv"
+)
 df = pd.read_csv(filename)
 
 images_dir = BASE_DIR / "python" / "images"
