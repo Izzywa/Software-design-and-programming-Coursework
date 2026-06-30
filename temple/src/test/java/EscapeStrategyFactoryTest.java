@@ -2,7 +2,6 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.RepeatedTest;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
 import student.escape.EscapeStrategyFactory.Strategy;
 
+/** Tests for {@link EscapeStrategyFactory}. */
 public class EscapeStrategyFactoryTest {
 
     @Test
