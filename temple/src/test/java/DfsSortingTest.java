@@ -9,20 +9,19 @@ import student.sort.RandomSort;
  * Test the SortingStrategy in HeuristicDFSExploreStrategy.
  */
 public class DfsSortingTest {
-  @Test
-  public void testDefaultSortingStrategy() {
-    HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy();
+    @Test
+    public void testDefaultSortingStrategy() {
+        HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy();
 
-    assertTrue(strategy.getSortingStrategy() instanceof AscendingSort,
-        "Default sorting strategy should be AscendingSort");
-  }
+        assertTrue(strategy.getSortingStrategy() instanceof AscendingSort,
+                "Default sorting strategy should be AscendingSort");
+    }
 
-  
-  @Test
-  public void testRandomSortStrategyConstructor() {
-    HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy(new RandomSort());
+    @Test
+    public void testRandomSortStrategyConstructor() {
+        HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy(new RandomSort());
 
-    assertTrue(strategy.getSortingStrategy() instanceof RandomSort,
-        "Custom sorting strategy should be RandomSort");
-  }
+        assertTrue(strategy.getSortingStrategy() instanceof RandomSort,
+                "Custom sorting strategy should be RandomSort");
+    }
 }
