@@ -103,7 +103,9 @@ public class ExploreStrategyFactoryTest {
       MockGameState mockState = new MockGameState(seed, false);
 
       assertTimeoutPreemptively(Duration.ofMillis(milseconds), () -> {
-      mockState.explorer
+      mockState.explorer.setExploreStrategy(
+              ExploreStrategyFactory.getExploreStrategy(strategy)
+      );
       
       mockState.explore();
       },
