@@ -30,7 +30,8 @@ public class EscapeStrategyFactoryTest {
     public void testEscapeStrategyDefault() {
         Explorer explorer = new Explorer();
         assertTrue(
-                explorer.getEscapeStrategy() instanceof EscapeKnapsackDFSBnB);
+            explorer.getEscapeStrategy() instanceof EscapeKnapsackDFSDetour,
+            "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
     }
 
     @Test
@@ -76,9 +77,7 @@ public class EscapeStrategyFactoryTest {
         assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
     }
 
-    @Disabled(
-        "Some of the strategies fail and something is causing java.io.EOFException"
-    )
+    @Disabled("Some of the strategies fail and something is causing java.io.EOFException")
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
         int milseconds = 1000;
@@ -96,8 +95,8 @@ public class EscapeStrategyFactoryTest {
                 mockState.escape();
             },
                     "The " + strategy.getName()
-                    + " strategy should escape within "
-                    + milseconds + " milliseconds.");
+                            + " strategy should escape within "
+                            + milseconds + " milliseconds.");
 
             assertTrue(mockState.getEscapeSucceeded(),
                     "The " + strategy.getName()
