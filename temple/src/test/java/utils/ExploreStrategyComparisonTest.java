@@ -1,3 +1,5 @@
+package utils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -5,7 +7,6 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import utils.LogToCsv;
 import game.MockGameState;
 import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
