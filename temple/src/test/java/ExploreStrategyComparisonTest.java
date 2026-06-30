@@ -5,7 +5,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import benchmark.LogToCsv;
+import utils.LogToCsv;
 import game.MockGameState;
 import student.explore.ExploreStrategyFactory;
 import student.explore.ExploreStrategyFactory.Strategy;
@@ -16,15 +16,14 @@ import student.explore.ExploreStrategyFactory.Strategy;
  */
 public class ExploreStrategyComparisonTest {
 
-    private final int NUM_SEEDS = 500;
-    private final long RANDOM_SEED = 123456789L;
-
     /**
      * Compares explore strategies across a set of random seeds and saves the
      * results to CSV.
      */
     @Test
     public void testExploreStrategyAndSaveMultiplier() {
+        final int NUM_SEEDS = 500;
+        final long RANDOM_SEED = 123456789L;
 
         List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(ExploreStrategyFactory.Strategy.values()));

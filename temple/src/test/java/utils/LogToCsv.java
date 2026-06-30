@@ -1,20 +1,21 @@
-package benchmark;
+package utils;
 
 import java.io.File;
 import java.io.PrintWriter;
 import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.nio.file.Files;
 import java.util.List;
 
 /**
  * Utility class for logging data to a CSV file used in benchmarks. Provides
  * methods to save headers
  * and rows to a CSV file and to convert a String[] to a CSV-formatted line.
- *
  * Reference: <a href="https://www.baeldung.com/java-csv">baeldung.com</a>
  */
 public class LogToCsv {
     /** Base directory for benchmark CSV output files. */
-    private static final String BASE_PATH = "benchmark/";
+    private static final String BASE_PATH = "utils/";
 
     /**
      * Saves the given data to the benchmark/ folder as a CSV file.
@@ -23,14 +24,18 @@ public class LogToCsv {
      * @param headers   the CSV header values
      * @param dataLines the CSV rows
      */
-    public static void saveToCsv(final String filename, final String[] headers,
-            final List<String[]> dataLines) {
+    public static void saveToCsv(
+        final String filename,
+        final String[] headers,
+        final List<String[]> dataLines) {
 
-        File logDir = new File(BASE_PATH);
-        if (!logDir.exists())
-            logDir.mkdirs();
-
+        try {
+            Files.createDirectory(new File(BASE_PATH).toPath());
+        } catch (Exception e) {
+            System.err.println("Error creating directory: " + e.getMessage());
+        }
         File csvOutputFile = new File(BASE_PATH + filename);
+        
         try (PrintWriter pw = new PrintWriter(csvOutputFile, UTF_8)) {
             String headerLine = String.join(",", headers);
             pw.println(headerLine);

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import benchmark.LogToCsv;
+import utils.LogToCsv;
 
 /**
  * Tests for {@link LogToCsv} CSV conversion and file saving.
@@ -34,6 +34,6 @@ public class LogToCsvTest {
 
     LogToCsv.saveToCsv(filename, headers, data);
 
-    assertTrue(new File("benchmark/" + filename).exists(), "CSV file was not created.");
+    assertTrue(new File("utils/" + filename).exists(), "CSV file was not created.");
   }
 }
