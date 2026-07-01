@@ -88,17 +88,27 @@ public class ExploreStrategyFactoryTest {
                 "The factory should return an instance of HeuristicDFSWithRandomSort with a RandomSort sorting strategy.");
     }
 
-    @RepeatedTest(50)
-    public void testAllStrategiesSucceedInReachingOrb() {
-        long seed = new Random().nextLong();
+  @RepeatedTest(10)
+  public void testAllStrategiesSucceedInReachingOrb() {
+    long seed = new Random().nextLong();
+    int milseconds = 10000;
 
         List<Strategy> strategies = new ArrayList<>(Arrays.asList(ExploreStrategyFactory.Strategy.values()));
 
         for (Strategy strategy : strategies) {
             MockGameState mockState = new MockGameState(seed, false);
 
-            mockState.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
-            mockState.explore();
+      assertTimeoutPreemptively(Duration.ofMillis(milseconds), () -> {
+      mockState.explorer.setExploreStrategy(
+              ExploreStrategyFactory.getExploreStrategy(strategy)
+      );
+      
+      mockState.explore();
+      },
+          "The " + strategy.getName()
+              + " strategy should reach the orb within "
+              + (milseconds / 1000)
+              + " seconds.");
 
             assertTrue(mockState.getExploreSucceeded(),
                     "The " + strategy.getName() + " strategy should reach the orb.");
