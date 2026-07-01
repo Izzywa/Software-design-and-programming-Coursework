@@ -4,11 +4,10 @@ import game.EscapeState;
 import game.ExplorationState;
 import lombok.Getter;
 import lombok.Setter;
+import student.escape.EscapeStrategy;
+import student.escape.EscapeStrategyFactory;
 import student.explore.ExploreStrategy;
 import student.explore.ExploreStrategyFactory;
-
-// Escape imports
-import student.escape.*;
 
 @Setter
 @Getter
@@ -16,6 +15,14 @@ public class Explorer {
 
     private ExploreStrategy exploreStrategy = ExploreStrategyFactory
       .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
+
+    /**
+     * The escape strategy to use for escaping the cavern
+     * and collecting gold.
+     * By default, it uses a knapsack-based depth-first search strategy.
+     */
+    private EscapeStrategy escapeStrategy = EscapeStrategyFactory
+        .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackDetour);
 
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
@@ -75,9 +82,6 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        //TODO: Escape from the cavern before time runs out
-        // Create an escape strategy with the corresponding algorithm and get the escape path
-        EscapeStrategy strategy = new EscapeKnapsackDFSBnB();
-        strategy.escape(state);
+        escapeStrategy.escape(state);
     }
 }

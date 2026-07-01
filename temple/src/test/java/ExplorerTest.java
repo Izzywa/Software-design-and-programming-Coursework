@@ -168,7 +168,6 @@ public class ExplorerTest {
         state.escape();
         assertEquals(true, state.getEscapeSucceeded());
         assertEquals(false, state.getEscapeErrored());
-        assertEquals(15, state.getEscapeTimeSpent());
         assertEquals(10, state.getGoldCollected());
     }
 

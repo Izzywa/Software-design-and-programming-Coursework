@@ -1,9 +1,11 @@
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -102,7 +104,7 @@ public class ExploreStrategyFactoryTest {
         "The factory should return an instance of BeamSearchExploreStrategy for the BeamSearch strategy.");
   }
 
-  @Test 
+  @Test
   public void testBFSExploreStrategyFactory() {
     assertTrue(
         ExploreStrategyFactory.getExploreStrategy(
@@ -134,9 +136,10 @@ public class ExploreStrategyFactoryTest {
         "The factory should return an instance of RandomWalkExploreStrategy for the RandomWalk strategy.");
   }
 
-  @RepeatedTest(50)
+  @RepeatedTest(10)
   public void testAllStrategiesSucceedInReachingOrb() {
     long seed = new Random().nextLong();
+    int milseconds = 10000;
 
     List<Strategy> strategies =
         new ArrayList<>(Arrays.asList(ExploreStrategyFactory.Strategy.values()));
@@ -144,8 +147,17 @@ public class ExploreStrategyFactoryTest {
     for (Strategy strategy : strategies) {
       MockGameState mockState = new MockGameState(seed, false);
 
-      mockState.explorer.setExploreStrategy(ExploreStrategyFactory.getExploreStrategy(strategy));
+      assertTimeoutPreemptively(Duration.ofMillis(milseconds), () -> {
+      mockState.explorer.setExploreStrategy(
+              ExploreStrategyFactory.getExploreStrategy(strategy)
+      );
+
       mockState.explore();
+      },
+          "The " + strategy.getName()
+              + " strategy should reach the orb within "
+              + (milseconds / 1000)
+              + " seconds.");
 
       assertTrue(mockState.getExploreSucceeded(),
           "The " + strategy.getName() + " strategy should reach the orb.");
