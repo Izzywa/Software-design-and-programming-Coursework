@@ -87,12 +87,11 @@ public class EscapeKnapsackDFSSimple extends EscapeKnapsackDFSBase {
      *    3. New branch is inferior in terms of time remaining and gold compared to already known branches
      * the remaining time is exceeded a certain limit and the branch is pruned
      * 
-     * @param state the current escape state
-     * @param graph graph for current escape state
-     * @param currentNode the current node being explored
-     * @param currentCost the cost to reach the current node
-     * @param currentGold total gold found along this branch
-     * @param totalGraphGold total gold on graph
+     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
+     * @param bState the current BranchState object that contains the current node, cost, gold collected, 
+     * and remaining total graph gold
+     * @param visited the set of nodes that have been visited in the current path
+     * @param currentPath the list of nodes that form the current path from start to the current node
      */
     @Override
     public void knapsackDFS(

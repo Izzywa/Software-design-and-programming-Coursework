@@ -74,12 +74,11 @@ public abstract class EscapeKnapsackDFSBase implements EscapeStrategy {
     /** 
      * Abstract method to be implemented by subclasses to perform a knapsack-style DFS search.
      * 
-     * @param state the current escape state
-     * @param graph graph for current escape state
-     * @param currentNode the current node being explored
-     * @param currentCost the cost to reach the current node
-     * @param currentGold total gold found along this branch
-     * @param totalGraphGold total gold on graph
+     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
+     * @param bState the current BranchState object that contains the current node, cost, gold collected, 
+     * and remaining total graph gold
+     * @param visited the set of nodes that have been visited in the current path
+     * @param currentPath the list of nodes that form the current path from start to the current node
      */
     public abstract void knapsackDFS(
         EscapeStateWrapper wrapper, 
@@ -91,14 +90,14 @@ public abstract class EscapeKnapsackDFSBase implements EscapeStrategy {
      * Greedy sorting of neighbour edges in descending order based on gold amount,
      * then based on distance from exit node if they hold the same amount of gold
      * 
-     * @param graph graph for current escape state
+     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
      * @param currentNode the current node being explored
      * @return a sorted list of neighbour edges
      */
     public List<Edge> sortNeighbours(EscapeStateWrapper wrapper, Node currentNode) {
         List<Edge> neighbours = 
         new ArrayList<>(wrapper.getGraph().getWeighted().getOrDefault(currentNode, Collections.emptyList()));
-        
+
         neighbours.sort((a, b) -> {
             int goldA = wrapper.getGraph().getGoldMap().getOrDefault(a.getDest(), 0);
             int goldB = wrapper.getGraph().getGoldMap().getOrDefault(b.getDest(), 0);

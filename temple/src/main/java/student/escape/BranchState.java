@@ -2,13 +2,19 @@ package student.escape;
 
 import game.Node;
 
+/**
+ * Class that encapsulates the state of a branch in the search tree for escape strategies.
+ * It holds information about the current node, the cost to reach it, the total gold found along this branch,
+ * and the total gold remaining on the graph.
+ */
 public class BranchState {
     private final Node currentNode;
     private final int currentCost;
     private final int currentGold;
     private final int totalGraphGold;
-        /**
-     * BranchState record to encapsulate branch-specific data
+        
+    /**
+     * Constructs a new BranchState with the specified parameters.
      * 
      * @param currentNode the current node being explored
      * @param currentCost the cost to reach the current node

@@ -1,12 +1,9 @@
 package student.escape;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 
 import game.Edge;
 import game.Node;
@@ -91,13 +88,11 @@ public class EscapeKnapsackDFSDetour extends EscapeKnapsackDFSBase {
      *    3. New branch is inferior in terms of time remaining and gold compared to already known branches
      * the remaining time is exceeded a certain limit and the branch is pruned
      * 
-     * @param state the current escape state
-     * @param graph graph for current escape state
-     * @param currentNode the current node being explored
-     * @param currentCost the cost to reach the current node
-     * @param currentGold total gold found along this branch
-     * @param totalGraphGold total gold remaining on graph
-     * @param pathVisited set to store nodes visited along the path
+     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
+     * @param bState the current BranchState object that contains the current node, cost, gold collected, 
+     * and remaining total graph gold
+     * @param visited the set of nodes that have been visited in the current path
+     * @param currentPath the list of nodes that form the current path from start to the current node
      */
     public void knapsackDFS(
         EscapeStateWrapper wrapper, 
