@@ -1,4 +1,4 @@
-package student.escape;
+package student.escape.experiment;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +11,9 @@ import java.util.Collections;
 
 import game.EscapeState;
 import game.Node;
+import student.escape.EscapeGraph;
+import student.escape.EscapePath;
+import student.escape.EscapeStrategy;
 
 /**
  * Class that implements the Breadth-first search algorithm to find the shortest path 

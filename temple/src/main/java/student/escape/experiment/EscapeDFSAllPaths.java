@@ -1,4 +1,4 @@
-package student.escape;
+package student.escape.experiment;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 import game.EscapeState;
 import game.Node;
+import student.escape.EscapeDijkstra;
+import student.escape.EscapeGraph;
+import student.escape.EscapePath;
+import student.escape.EscapeStrategy;
 
 /**
  * Class that implements the Depth-first search algorithm to find all paths from start to end in an unweighted graph
