@@ -95,7 +95,12 @@ public class EscapeKnapsackDFSBnB extends EscapeKnapsackDFSBase {
      * @param totalGraphGold total gold on graph
      */
     @Override
-    public void knapsackDFS(EscapeStateWrapper wrapper, BranchState bState, Set<Node> visited, List<Node> currentPath) {
+    public void knapsackDFS(
+        EscapeStateWrapper wrapper, 
+        BranchState bState, 
+        Set<Node> visited, 
+        List<Node> currentPath) {
+
         int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(bState.getCurrentNode(), Integer.MAX_VALUE);
         int timeLeft = wrapper.getState().getTimeRemaining() - bState.getCurrentCost();
         // Check if 
@@ -110,7 +115,7 @@ public class EscapeKnapsackDFSBnB extends EscapeKnapsackDFSBase {
         // without recomputing them all the time during recursion
         // If we've seen this branch before with more or equal time left AND more or equal gold collected,
         // then we prune the branch
-        if (shouldPruneBranch(bState.getCurrentNode(), timeLeft, bState.getCurrentGold())) {
+        if (super.shouldPruneBranch(bState.getCurrentNode(), timeLeft, bState.getCurrentGold())) {
             return;
         }
 
@@ -125,7 +130,7 @@ public class EscapeKnapsackDFSBnB extends EscapeKnapsackDFSBase {
 
         // Memeoization efficiency can be improved if we discover paths with higher potantial gold values first
         // Greedy sorting neighbours
-        List<Edge> neighbours = sortNeighbours(wrapper, bState.getCurrentNode());
+        List<Edge> neighbours = super.sortNeighbours(wrapper, bState.getCurrentNode());
 
         //Explore neighbours in for loop
         for (Edge edge : neighbours) {
