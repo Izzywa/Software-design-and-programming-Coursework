@@ -17,7 +17,7 @@ import student.sort.SortingStrategy;
  *
  * Reference:
  * <a href="https://en.wikipedia.org/wiki/Depth-first_search">
- *   Wikipedia DFS
+ * Wikipedia DFS
  * </a>
  *
  * <pre>
@@ -32,6 +32,11 @@ public class HeuristicDFSExploreStrategy implements ExploreStrategy {
 
     private final Set<Long> discovered;
 
+    /**
+     * The sorting strategy to use for ordering neighbors
+     * based on their distance to the orb.
+     * By default, it uses ascending order.
+     */
     @Getter
     @Setter
     private SortingStrategy sortingStrategy = new AscendingSort();
@@ -43,6 +48,12 @@ public class HeuristicDFSExploreStrategy implements ExploreStrategy {
         discovered = new HashSet<>();
     }
 
+    /**
+     * Create a fresh heuristic DFS strategy with a custom sorting strategy.
+     * 
+     * @param sortingStrategy the sorting strategy to use for ordering neighbors
+     *                        based on their distance to the orb
+     */
     public HeuristicDFSExploreStrategy(SortingStrategy sortingStrategy) {
         this();
         this.sortingStrategy = sortingStrategy;

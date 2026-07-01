@@ -13,6 +13,10 @@ import student.explore.ExploreStrategyFactory;
 @Getter
 public class Explorer {
 
+    /**
+     * The exploration strategy to use for finding the orb in the cavern.
+     * By default, it uses a heuristic depth-first search strategy.
+     */
     private ExploreStrategy exploreStrategy = ExploreStrategyFactory
       .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
 

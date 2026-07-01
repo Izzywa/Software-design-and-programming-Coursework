@@ -8,12 +8,12 @@ import student.sort.RandomSort;
  */
 public class ExploreStrategyFactory {
   /**
-   * Returns an instance of the specified {@link ExploreStrategy} implementation.
+   * The enumeration of available exploration strategies.
    */
   @Getter
   public enum Strategy {
-    HeuristicDFS("HeuristicDFS"), 
-    NaiveDFS("NaiveDFS"), 
+    HeuristicDFS("HeuristicDFS"),
+    NaiveDFS("NaiveDFS"),
     AStar("AStar"),
     HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort"),
     BeamSearch("BeamSearch"),
