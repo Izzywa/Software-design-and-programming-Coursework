@@ -1,4 +1,4 @@
-package student.escape;
+package student.escape.experiment;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 import game.EscapeState;
 import game.Node;
+import student.escape.EscapeDijkstra;
+import student.escape.EscapeGraph;
+import student.escape.EscapePath;
+import student.escape.EscapeStrategy;
 
 /**
  * Class that implements the Depth-first search algorithm to find all paths from start to end in an unweighted graph
@@ -27,7 +31,7 @@ import game.Node;
  *             DFS(G, w)
  * </pre>
  */
-public class EscapeDFSAllPaths implements EscapeStrategy {
+public class EscapeDFSNaive implements EscapeStrategy {
     private List<EscapePath> allPaths;
     private Set<Node> visited;
     private List<Node> currentPath;
@@ -37,7 +41,7 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
     /**
      * No-args constructor for the EscapeDFSAllPaths class.
      */
-    public EscapeDFSAllPaths() {
+    public EscapeDFSNaive() {
         this.allPaths = new ArrayList<>();
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();

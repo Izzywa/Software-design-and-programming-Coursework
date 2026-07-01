@@ -13,11 +13,9 @@ public class EscapeStrategyFactory {
      */
     @Getter
     public enum Strategy {
-        BFS("BFS"),
-        DFSAllPaths("DFSAllPaths"),
         DFSPruning("DFSPruning"),
         Dijkstra("Dijkstra"),
-        KnapsackDFS("KnapsackDFS"),
+        KnapsackSimple("KnapsackSimple"),
         KnapsackDetour("KnapsackDetour");
 
         private final String name;
@@ -38,20 +36,14 @@ public class EscapeStrategyFactory {
      */
     public static EscapeStrategy getEscapeStrategy(Strategy strategyName) {
         return switch (strategyName) {
-            case BFS -> {
-                yield new EscapeBreadthFirstSearch();
-            }
-            case DFSAllPaths -> {
-                yield new EscapeDFSAllPaths();
-            }
             case DFSPruning -> {
                 yield new EscapeDFSPruning();
             }
             case Dijkstra -> {
                 yield new EscapeDijkstra();
             }
-            case KnapsackDFS -> {
-                yield new EscapeKnapsackDFSBnB();
+            case KnapsackSimple -> {
+                yield new EscapeKnapsackDFSSimple();
             }
             case KnapsackDetour -> {
                 yield new EscapeKnapsackDFSDetour();

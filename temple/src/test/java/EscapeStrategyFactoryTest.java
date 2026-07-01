@@ -14,11 +14,9 @@ import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
 import student.Explorer;
-import student.escape.EscapeBreadthFirstSearch;
-import student.escape.EscapeDFSAllPaths;
 import student.escape.EscapeDFSPruning;
 import student.escape.EscapeDijkstra;
-import student.escape.EscapeKnapsackDFSBnB;
+import student.escape.EscapeKnapsackDFSSimple;
 import student.escape.EscapeKnapsackDFSDetour;
 import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
@@ -33,20 +31,6 @@ public class EscapeStrategyFactoryTest {
         assertTrue(
             explorer.getEscapeStrategy() instanceof EscapeKnapsackDFSDetour,
             "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
-    }
-
-    @Test
-    public void testGetBFSStrategy() {
-        EscapeStrategy bfsStrategy = EscapeStrategyFactory.getEscapeStrategy(
-                EscapeStrategyFactory.Strategy.BFS);
-        assertTrue(bfsStrategy instanceof EscapeBreadthFirstSearch);
-    }
-
-    @Test
-    public void testGetDFSAllPathsStrategy() {
-        EscapeStrategy dfsAllPathsStrategy = EscapeStrategyFactory
-                .getEscapeStrategy(EscapeStrategyFactory.Strategy.DFSAllPaths);
-        assertTrue(dfsAllPathsStrategy instanceof EscapeDFSAllPaths);
     }
 
     @Test
@@ -66,8 +50,8 @@ public class EscapeStrategyFactoryTest {
     @Test
     public void testGetKnapsackDFSStrategy() {
         EscapeStrategy knapsackDFSStrategy = EscapeStrategyFactory
-                .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackDFS);
-        assertTrue(knapsackDFSStrategy instanceof EscapeKnapsackDFSBnB);
+                .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackSimple);
+        assertTrue(knapsackDFSStrategy instanceof EscapeKnapsackDFSSimple);
     }
 
     @Test
