@@ -31,7 +31,7 @@ import student.escape.EscapeStrategy;
  *             DFS(G, w)
  * </pre>
  */
-public class EscapeDFSAllPaths implements EscapeStrategy {
+public class EscapeDFSNaive implements EscapeStrategy {
     private List<EscapePath> allPaths;
     private Set<Node> visited;
     private List<Node> currentPath;
@@ -41,7 +41,7 @@ public class EscapeDFSAllPaths implements EscapeStrategy {
     /**
      * No-args constructor for the EscapeDFSAllPaths class.
      */
-    public EscapeDFSAllPaths() {
+    public EscapeDFSNaive() {
         this.allPaths = new ArrayList<>();
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
