@@ -81,3 +81,10 @@ tasks.named<Test>("test") {
         events("passed", "failed", "skipped")
     }
 }
+
+tasks.register<JavaExec>("compare") {
+    group = "application"
+    description = "Run the explore strategy comparison"
+    classpath = sourceSets["test"].runtimeClasspath
+    mainClass.set("utils.ComparisonMain")
+}
