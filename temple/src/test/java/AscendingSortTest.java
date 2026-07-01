@@ -7,7 +7,7 @@ import student.sort.AscendingSort;
 
 public class AscendingSortTest {
     @Test
-    public void testDescendingSort() {
+    public void testAscendingSort() {
         AscendingSort ascendingSort = new AscendingSort();
 
         List<Integer> list = List.of(5, 2, 9, 1, 5, 6);
