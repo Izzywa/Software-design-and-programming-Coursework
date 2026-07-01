@@ -19,12 +19,12 @@ import game.EscapeState;
  *      2. Potential path is longer than time needed to exit based on Dijkstra's algorithm
  *      3. Memoization-based pruning of inferior branches
  */
-public class EscapeKnapsackDFSBnB extends EscapeKnapsackDFSBase {
+public class EscapeKnapsackDFSSimple extends EscapeKnapsackDFSBase {
 
     /**
      * No-args constructor for the EscapeKnapsackDFSBnB class.
      */
-    public EscapeKnapsackDFSBnB() {
+    public EscapeKnapsackDFSSimple() {
         super();
     }
 

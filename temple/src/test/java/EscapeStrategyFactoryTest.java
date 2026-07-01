@@ -18,7 +18,7 @@ import student.escape.EscapeBreadthFirstSearch;
 import student.escape.EscapeDFSAllPaths;
 import student.escape.EscapeDFSPruning;
 import student.escape.EscapeDijkstra;
-import student.escape.EscapeKnapsackDFSBnB;
+import student.escape.EscapeKnapsackDFSSimple;
 import student.escape.EscapeKnapsackDFSDetour;
 import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
@@ -66,8 +66,8 @@ public class EscapeStrategyFactoryTest {
     @Test
     public void testGetKnapsackDFSStrategy() {
         EscapeStrategy knapsackDFSStrategy = EscapeStrategyFactory
-                .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackDFS);
-        assertTrue(knapsackDFSStrategy instanceof EscapeKnapsackDFSBnB);
+                .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackSimple);
+        assertTrue(knapsackDFSStrategy instanceof EscapeKnapsackDFSSimple);
     }
 
     @Test

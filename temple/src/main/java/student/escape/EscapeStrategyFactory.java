@@ -17,7 +17,7 @@ public class EscapeStrategyFactory {
         DFSAllPaths("DFSAllPaths"),
         DFSPruning("DFSPruning"),
         Dijkstra("Dijkstra"),
-        KnapsackDFS("KnapsackDFS"),
+        KnapsackSimple("KnapsackSimple"),
         KnapsackDetour("KnapsackDetour");
 
         private final String name;
@@ -50,8 +50,8 @@ public class EscapeStrategyFactory {
             case Dijkstra -> {
                 yield new EscapeDijkstra();
             }
-            case KnapsackDFS -> {
-                yield new EscapeKnapsackDFSBnB();
+            case KnapsackSimple -> {
+                yield new EscapeKnapsackDFSSimple();
             }
             case KnapsackDetour -> {
                 yield new EscapeKnapsackDFSDetour();
