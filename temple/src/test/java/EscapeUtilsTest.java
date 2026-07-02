@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import game.MockGameState;
-import student.escape.EscapeDijkstra;
+import student.escape.DijkstraEscapeStrategy;
 import student.escape.EscapeGraph;
 import student.escape.EscapePath;
 import student.escape.EscapeStrategy;
@@ -255,7 +255,7 @@ public class EscapeUtilsTest {
         );
         state.setExploreSucceeded(true);
         state.setEscapeStage();
-        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapeStrategy strategy = new DijkstraEscapeStrategy();
         EscapePath path = strategy.findEscapePath(state);
         assertEquals(15, path.getTotalGold());
     }
@@ -278,7 +278,7 @@ public class EscapeUtilsTest {
         );
         state.setExploreSucceeded(true);
         state.setEscapeStage();
-        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapeStrategy strategy = new DijkstraEscapeStrategy();
         EscapePath path = strategy.findEscapePath(state);
         assertEquals(12, path.getTotalCost());
     }
@@ -301,7 +301,7 @@ public class EscapeUtilsTest {
         );
         state.setExploreSucceeded(true);
         state.setEscapeStage();
-        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapeStrategy strategy = new DijkstraEscapeStrategy();
         EscapePath path = strategy.findEscapePath(state);
         assertEquals(1L, path.getFirstNode().getId());
         assertEquals(8L, path.getLastNode().getId());
@@ -326,7 +326,7 @@ public class EscapeUtilsTest {
         );
         state.setExploreSucceeded(true);
         state.setEscapeStage();
-        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapeStrategy strategy = new DijkstraEscapeStrategy();
         EscapePath path = strategy.findEscapePath(state);
         ArrayList<Long> actual = new ArrayList<>();
         for (Node node : path.getPath()) {
@@ -356,7 +356,7 @@ public class EscapeUtilsTest {
         );
         state.setExploreSucceeded(true);
         state.setEscapeStage();
-        EscapeStrategy strategy = new EscapeDijkstra();
+        EscapeStrategy strategy = new DijkstraEscapeStrategy();
         EscapePath path = strategy.findEscapePath(state);
         path.traverseAndCollect();
 

@@ -27,7 +27,7 @@ import game.EscapeState;
  *             DFS(G, w)
  * </pre>
  */
-public class EscapeDFSPruning implements EscapeStrategy {
+public class DFSPruningEscapeStrategy implements EscapeStrategy {
     private List<EscapePath> allPaths;
     private Set<Node> visited;
     private List<Node> currentPath;
@@ -39,7 +39,7 @@ public class EscapeDFSPruning implements EscapeStrategy {
     /**
      * No-args constructor for the EscapeDFSPruning class.
      */
-    public EscapeDFSPruning() {
+    public DFSPruningEscapeStrategy() {
         this.allPaths = new ArrayList<>();
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
@@ -120,7 +120,7 @@ public class EscapeDFSPruning implements EscapeStrategy {
     @Override
     public EscapePath findEscapePath(EscapeState state) {
         EscapeGraph graph = new EscapeGraph(state);
-        EscapeStrategy dijkstraStrategy = new EscapeDijkstra();
+        EscapeStrategy dijkstraStrategy = new DijkstraEscapeStrategy();
         EscapePath shortestPath = dijkstraStrategy.findEscapePath(state);
 
         // Check if graph is empty or null

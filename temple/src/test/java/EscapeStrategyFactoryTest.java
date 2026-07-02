@@ -14,10 +14,10 @@ import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
 import student.Explorer;
-import student.escape.EscapeDFSPruning;
-import student.escape.EscapeDijkstra;
-import student.escape.EscapeKnapsackDFSSimple;
-import student.escape.EscapeKnapsackDFSDetour;
+import student.escape.DFSPruningEscapeStrategy;
+import student.escape.DijkstraEscapeStrategy;
+import student.escape.KnapsackDFSSimpleEscapeStrategy;
+import student.escape.KnapsackDFSDetourEscapeStrategy;
 import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
 import student.escape.EscapeStrategyFactory.Strategy;
@@ -29,7 +29,7 @@ public class EscapeStrategyFactoryTest {
     public void testEscapeStrategyDefault() {
         Explorer explorer = new Explorer();
         assertTrue(
-            explorer.getEscapeStrategy() instanceof EscapeKnapsackDFSDetour,
+            explorer.getEscapeStrategy() instanceof KnapsackDFSDetourEscapeStrategy,
             "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
     }
 
@@ -37,21 +37,21 @@ public class EscapeStrategyFactoryTest {
     public void testGetDFSPruningStrategy() {
         EscapeStrategy dfsPruningStrategy = EscapeStrategyFactory
                 .getEscapeStrategy(EscapeStrategyFactory.Strategy.DFSPruning);
-        assertTrue(dfsPruningStrategy instanceof EscapeDFSPruning);
+        assertTrue(dfsPruningStrategy instanceof DFSPruningEscapeStrategy);
     }
 
     @Test
     public void testGetDijkstraStrategy() {
         EscapeStrategy dijkstraStrategy = EscapeStrategyFactory
                 .getEscapeStrategy(EscapeStrategyFactory.Strategy.Dijkstra);
-        assertTrue(dijkstraStrategy instanceof EscapeDijkstra);
+        assertTrue(dijkstraStrategy instanceof DijkstraEscapeStrategy);
     }
 
     @Test
     public void testGetKnapsackDFSStrategy() {
         EscapeStrategy knapsackDFSStrategy = EscapeStrategyFactory
                 .getEscapeStrategy(EscapeStrategyFactory.Strategy.KnapsackSimple);
-        assertTrue(knapsackDFSStrategy instanceof EscapeKnapsackDFSSimple);
+        assertTrue(knapsackDFSStrategy instanceof KnapsackDFSSimpleEscapeStrategy);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class EscapeStrategyFactoryTest {
         EscapeStrategy knapsackDetourStrategy = EscapeStrategyFactory
                 .getEscapeStrategy(
                         EscapeStrategyFactory.Strategy.KnapsackDetour);
-        assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
+        assertTrue(knapsackDetourStrategy instanceof KnapsackDFSDetourEscapeStrategy);
     }
 
     @Disabled("DFSAllPaths failed to escape in within 10 seconds")

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import game.EscapeState;
 import game.Node;
-import student.escape.EscapeDijkstra;
+import student.escape.DijkstraEscapeStrategy;
 import student.escape.EscapeGraph;
 import student.escape.EscapePath;
 import student.escape.EscapeStrategy;
@@ -31,7 +31,7 @@ import student.escape.EscapeStrategy;
  *             DFS(G, w)
  * </pre>
  */
-public class EscapeDFSNaive implements EscapeStrategy {
+public class DFSNaiveEscapeStrategy implements EscapeStrategy {
     private List<EscapePath> allPaths;
     private Set<Node> visited;
     private List<Node> currentPath;
@@ -41,7 +41,7 @@ public class EscapeDFSNaive implements EscapeStrategy {
     /**
      * No-args constructor for the EscapeDFSAllPaths class.
      */
-    public EscapeDFSNaive() {
+    public DFSNaiveEscapeStrategy() {
         this.allPaths = new ArrayList<>();
         this.visited = new HashSet<>();
         this.currentPath = new ArrayList<>();
@@ -119,7 +119,7 @@ public class EscapeDFSNaive implements EscapeStrategy {
     @Override
     public EscapePath findEscapePath(EscapeState state) {
         EscapeGraph graph = new EscapeGraph(state);
-        EscapeStrategy dijkstraStrategy = new EscapeDijkstra();
+        EscapeStrategy dijkstraStrategy = new DijkstraEscapeStrategy();
         EscapePath shortestPath = dijkstraStrategy.findEscapePath(state);
 
         // Check if graph is empty or null

@@ -11,7 +11,7 @@ import game.Edge;
 import game.EscapeState;
 import game.Node;
 
-public abstract class EscapeKnapsackDFSBase implements EscapeStrategy {
+public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
     private List<Node> bestPath;
     private int bestGold;
     private Map<Node, Map<Integer, Integer>> memoMap;
@@ -19,7 +19,7 @@ public abstract class EscapeKnapsackDFSBase implements EscapeStrategy {
     /**
      * No-args constructor for the EscapeKnapsackDFSBase class.
      */
-    public EscapeKnapsackDFSBase() {
+    public KnapsackDFSBaseEscapeStrategy() {
         this.bestPath = null; // Initialize best path as null
         // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
         this.bestGold = -1;
