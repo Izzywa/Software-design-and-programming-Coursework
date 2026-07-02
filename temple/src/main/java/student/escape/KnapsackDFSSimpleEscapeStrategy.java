@@ -22,7 +22,7 @@ import game.EscapeState;
 public class KnapsackDFSSimpleEscapeStrategy extends KnapsackDFSBaseEscapeStrategy {
 
     /**
-     * No-args constructor for the EscapeKnapsackDFSBnB class.
+     * No-args constructor for the KnapsackDFSSimpleEscapeStrategy class.
      */
     public KnapsackDFSSimpleEscapeStrategy() {
         super();

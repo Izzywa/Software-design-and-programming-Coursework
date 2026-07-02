@@ -44,7 +44,7 @@ public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
     private boolean foundPath;
     
     /**
-     * No-args constructor for EscapeBreadthFirstSearch class
+     * No-args constructor for BreadthFirstSearchEscapeStrategy class
      */
     public BreadthFirstSearchEscapeStrategy() {
         this.queue = new LinkedList<>();

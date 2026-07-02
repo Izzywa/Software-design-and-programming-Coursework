@@ -37,7 +37,7 @@ public class DFSPruningEscapeStrategy implements EscapeStrategy {
     private final int MAX_STEPS = 500000; // Limit the maximum steps to prevent pseudo-infinite loops
 
     /**
-     * No-args constructor for the EscapeDFSPruning class.
+     * No-args constructor for the DFSPruningEscapeStrategy class.
      */
     public DFSPruningEscapeStrategy() {
         this.allPaths = new ArrayList<>();

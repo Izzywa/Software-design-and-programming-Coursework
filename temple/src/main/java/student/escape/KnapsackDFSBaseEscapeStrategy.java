@@ -17,7 +17,7 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
     private Map<Node, Map<Integer, Integer>> memoMap;
 
     /**
-     * No-args constructor for the EscapeKnapsackDFSBase class.
+     * No-args constructor for the KnapsackDFSBaseEscapeStrategy class.
      */
     public KnapsackDFSBaseEscapeStrategy() {
         this.bestPath = null; // Initialize best path as null

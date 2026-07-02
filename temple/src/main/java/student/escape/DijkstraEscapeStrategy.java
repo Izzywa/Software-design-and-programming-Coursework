@@ -54,7 +54,7 @@ public class DijkstraEscapeStrategy implements EscapeStrategy {
     private Map<Node, Integer> distanceMap;
 
     /**
-     * No-args constructor for EscapeDijkstra class
+     * No-args constructor for DijkstraEscapeStrategy class
      */
     public DijkstraEscapeStrategy() {
         this.parentMap = new HashMap<>();

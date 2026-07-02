@@ -23,7 +23,7 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
     private final double SPARE_TIME_MULTIPLIER = 1.25;
 
     /**
-     * No-args constructor for the EscapeKnapsackDFSDetour class.
+     * No-args constructor for the KnapsackDFSDetourEscapeStrategy class.
      */
     public KnapsackDFSDetourEscapeStrategy() {
         super();

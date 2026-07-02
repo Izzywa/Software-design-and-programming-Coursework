@@ -39,7 +39,7 @@ public class DFSNaiveEscapeStrategy implements EscapeStrategy {
     private final int MAX_PATHS = 1000; // Limit the number of paths to explore to prevent combinatorial explosion
 
     /**
-     * No-args constructor for the EscapeDFSAllPaths class.
+     * No-args constructor for the DFSNaiveEscapeStrategy class.
      */
     public DFSNaiveEscapeStrategy() {
         this.allPaths = new ArrayList<>();
