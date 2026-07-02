@@ -47,3 +47,17 @@ plt.ylabel("Strategy")
 plt.yticks(rotation=45)
 plt.tight_layout()
 plt.savefig("python/images/escape_strategy_gold_time_boxplot.png")
+
+plt.clf()
+
+df_over_10_seconds = df[df['Time Taken'] > 10000][["Strategy", "Seed", "Time Taken"]]
+table = plt.table(
+    cellText=df_over_10_seconds.values,
+    colLabels=df_over_10_seconds.columns,
+    loc="center",
+    cellLoc="center",
+    bbox=[0, 0, 1, 1],
+)
+plt.axis("off")
+plt.title("Escape Strategy Comparison - Time Taken > 10 seconds")
+plt.savefig("python/images/escape_strategy_time_over_10_seconds.png")
