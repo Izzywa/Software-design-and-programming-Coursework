@@ -10,7 +10,7 @@ import student.escape.EscapeStrategyFactory;
 
 /**
  * Utility class that compares escape strategies across a set of
- *  random seeds and saves the results to CSV.
+ * random seeds and saves the results to CSV.
  */
 public class EscapeStrategyComparisonTest {
     /**
@@ -26,7 +26,7 @@ public class EscapeStrategyComparisonTest {
 
         String filename = "escape_strategy_comparison.csv";
         String[] headers = {
-            "Strategy", "Seed", "Gold Collected", "Time Given", "Time Taken"
+                "Strategy", "Seed", "Gold Collected", "Time Given", "Time Taken"
         };
         List<String[]> results = new ArrayList<>();
 
@@ -44,9 +44,7 @@ public class EscapeStrategyComparisonTest {
 
                 state.explore();
 
-                long startTime = System.currentTimeMillis();
-                state.escape();
-                long endTime = System.currentTimeMillis();
+                long timeTaken = timeTakenToEscape(state);
 
                 results.add(
                         new String[] {
@@ -54,10 +52,39 @@ public class EscapeStrategyComparisonTest {
                                 String.valueOf(seed),
                                 String.valueOf(state.getGoldCollected()),
                                 String.valueOf(state.computeTimeToEscape()),
-                                String.valueOf(endTime - startTime)
+                                String.valueOf(timeTaken)
                         });
             }
         }
         LogToCsv.saveToCsv(filename, headers, results);
+    }
+
+    /**
+     * Times how long it takes to escape from the game state.
+     * The escape is given 60 seconds to complete, after which it is terminated.
+     * This is to prevent the test from hanging indefinitely
+     * if the escape strategy fails.
+     * @param state the game state to escape from
+     * @return the time taken to escape in milliseconds
+     */
+    private long timeTakenToEscape(MockGameState state) {
+        long startTime = System.currentTimeMillis();
+        int timeout = 60000;
+        try {
+            Thread escapeThread = new Thread(state::escape);
+            escapeThread.start();
+            escapeThread.join(timeout);
+
+            if (escapeThread.isAlive()) {
+                escapeThread.interrupt();
+                throw new RuntimeException(
+                    "Escape took too long and was terminated."
+                );
+            }
+        } catch (RuntimeException | InterruptedException e) {
+            System.out.println("Escape took too long and was terminated.");
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
     }
 }
