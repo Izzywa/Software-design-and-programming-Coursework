@@ -14,7 +14,8 @@ import student.escape.EscapeStrategyFactory.Strategy;
  * random seeds and saves the results to CSV.
  */
 public class EscapeStrategyComparisonTest {
-    int timeout = 60000;
+    int timeout = 30000;
+
     /**
      * Compares escape strategies across a set of random seeds and saves the
      * results to CSV.
@@ -53,10 +54,9 @@ public class EscapeStrategyComparisonTest {
                                 strategy.getName(),
                                 String.valueOf(seed),
                                 String.valueOf(
-                                    timeTaken == timeout
-                                    ? 0
-                                    : state.getGoldCollected()
-                                ),
+                                        timeTaken == timeout
+                                                ? 0
+                                                : state.getGoldCollected()),
                                 String.valueOf(state.computeTimeToEscape()),
                                 String.valueOf(timeTaken)
                         });
@@ -76,14 +76,14 @@ public class EscapeStrategyComparisonTest {
         long startTime = System.currentTimeMillis();
         try {
             Thread escapeThread = new Thread(state::escape);
+            escapeThread.setDaemon(true);
             escapeThread.start();
             escapeThread.join(timeout);
 
             if (escapeThread.isAlive()) {
                 escapeThread.interrupt();
                 throw new RuntimeException(
-                    "Escape took too long and was terminated."
-                );
+                        "Escape took too long and was terminated.");
             }
         } catch (RuntimeException | InterruptedException e) {
             System.out.println("Escape took too long and was terminated.");
