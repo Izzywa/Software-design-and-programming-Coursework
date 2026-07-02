@@ -19,12 +19,12 @@ import game.EscapeState;
  *      2. Potential path is longer than time needed to exit based on Dijkstra's algorithm
  *      3. Memoization-based pruning of inferior branches
  */
-public class EscapeKnapsackDFSSimple extends EscapeKnapsackDFSBase {
+public class KnapsackDFSSimpleEscapeStrategy extends KnapsackDFSBaseEscapeStrategy {
 
     /**
-     * No-args constructor for the EscapeKnapsackDFSBnB class.
+     * No-args constructor for the KnapsackDFSSimpleEscapeStrategy class.
      */
-    public EscapeKnapsackDFSSimple() {
+    public KnapsackDFSSimpleEscapeStrategy() {
         super();
     }
 
@@ -46,7 +46,7 @@ public class EscapeKnapsackDFSSimple extends EscapeKnapsackDFSBase {
         // Theoretical possibility for smaller maps with P = 0.33 ^ node count 
         // (Map with 10 nodes has P = 0.0000153 (0.0015%) probability that no node has gold.)
         if (totalGraphGold == 0) {
-            EscapeStrategy dijkstra = new EscapeDijkstra();
+            EscapeStrategy dijkstra = new DijkstraEscapeStrategy();
             return dijkstra.findEscapePath(state);
         }
 

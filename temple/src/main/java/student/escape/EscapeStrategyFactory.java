@@ -36,10 +36,10 @@ public class EscapeStrategyFactory {
      */
     public static EscapeStrategy getEscapeStrategy(Strategy strategyName) {
         return switch (strategyName) {
-            case Dijkstra -> new EscapeDijkstra();
-            case KnapsackSimple -> new EscapeKnapsackDFSSimple();
-            case KnapsackDetour ->  new EscapeKnapsackDFSDetour();
-            case DFSPruning -> new EscapeDFSPruning();
+            case Dijkstra -> new DijkstraEscapeStrategy();
+            case KnapsackSimple -> new KnapsackDFSSimpleEscapeStrategy();
+            case KnapsackDetour -> new KnapsackDFSDetourEscapeStrategy();
+            case DFSPruning -> new DFSPruningEscapeStrategy();
         };
     }
 }
