@@ -7,6 +7,7 @@ import java.util.Random;
 
 import game.MockGameState;
 import student.escape.EscapeStrategyFactory;
+import student.escape.EscapeStrategyFactory.Strategy;
 
 /**
  * Utility class that compares escape strategies across a set of
@@ -21,7 +22,7 @@ public class EscapeStrategyComparisonTest {
         final int numSeeds = 500;
         final long randomSeed = 123456789L;
 
-        List<EscapeStrategyFactory.Strategy> strategies = new ArrayList<>(
+        List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(EscapeStrategyFactory.Strategy.values()));
 
         String filename = "escape_strategy_comparison.csv";
