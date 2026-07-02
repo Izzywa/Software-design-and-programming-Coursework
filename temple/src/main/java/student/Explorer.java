@@ -18,7 +18,7 @@ public class Explorer {
      * By default, it uses a heuristic depth-first search strategy.
      */
     private ExploreStrategy exploreStrategy = ExploreStrategyFactory
-      .getExploreStrategy(ExploreStrategyFactory.Strategy.HeuristicDFS);
+      .getExploreStrategy(ExploreStrategyFactory.Strategy.DynamicAStar);
 
     /**
      * The escape strategy to use for escaping the cavern
