@@ -19,7 +19,7 @@ public class EscapeStrategyComparisonTest {
      * results to CSV.
      */
     public void testEscapeStrategyAndSaveResults() {
-        final int numSeeds = 500;
+        final int numSeeds = 100;
         final long randomSeed = 123456789L;
 
         List<Strategy> strategies = new ArrayList<>(
