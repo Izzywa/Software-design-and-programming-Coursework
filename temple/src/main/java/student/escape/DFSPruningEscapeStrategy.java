@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import game.Edge;
 import game.Node;
@@ -119,9 +123,31 @@ public class DFSPruningEscapeStrategy implements EscapeStrategy {
      */
     @Override
     public EscapePath findEscapePath(EscapeState state) {
+        final long SEARCH_TIMEOUT_MS = 10000L; // Timeout in milliseconds
+        EscapePath fallbackPath = findShortestEscapePath(state);
+
+        // Start the optimization search in a separate thread
+        CompletableFuture<EscapePath> optimizationTask = CompletableFuture.supplyAsync(() -> {
+            return findOptimizedGoldEscapePath(state);
+        });
+
+        // Wait for the optimization task to complete or timeout
+        try {
+            return optimizationTask.get(SEARCH_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            optimizationTask.cancel(true); // Cancel the optimization task if it times out
+            System.out.println("Optimization search timed out. Returning fallback path.");
+            return fallbackPath;
+        } catch (InterruptedException | ExecutionException e) {
+            // Log the error and fall back safely if something goes wrong structurally
+            System.err.println("Optimization failed due to an error: " + e.getMessage());
+            return fallbackPath;
+        }
+    }
+
+    public EscapePath findOptimizedGoldEscapePath(EscapeState state) {
         EscapeGraph graph = new EscapeGraph(state);
-        EscapeStrategy dijkstraStrategy = new DijkstraEscapeStrategy();
-        EscapePath shortestPath = dijkstraStrategy.findEscapePath(state);
+        EscapePath shortestPath = findShortestEscapePath(state);
 
         // Check if graph is empty or null
         try {
@@ -132,6 +158,17 @@ public class DFSPruningEscapeStrategy implements EscapeStrategy {
         stepCount = 0; // Reset step count before starting the search
         depthFirstSearchPruning(state, graph, graph.getStartNode(), 0);
         return selectBestPath(allPaths, shortestPath);
+    }
+
+    /**
+     * Finds the shortest escape path using Dijkstra's algorithm as a fallback.
+     *
+     * @param state the current escape state
+     * @return the shortest escape path
+     */
+    public EscapePath findShortestEscapePath(EscapeState state) {
+        EscapeStrategy dijkstra = new DijkstraEscapeStrategy();
+        return dijkstra.findEscapePath(state);
     }
 
 }
