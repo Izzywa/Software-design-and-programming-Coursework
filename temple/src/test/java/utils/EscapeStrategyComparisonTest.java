@@ -83,6 +83,7 @@ public class EscapeStrategyComparisonTest {
             }
         } catch (RuntimeException | InterruptedException e) {
             System.out.println("Escape took too long and was terminated.");
+            return timeout;
         }
         long endTime = System.currentTimeMillis();
         return endTime - startTime;
