@@ -14,6 +14,7 @@ import student.escape.EscapeStrategyFactory.Strategy;
  * random seeds and saves the results to CSV.
  */
 public class EscapeStrategyComparisonTest {
+    int timeout = 60000;
     /**
      * Compares escape strategies across a set of random seeds and saves the
      * results to CSV.
@@ -51,7 +52,11 @@ public class EscapeStrategyComparisonTest {
                         new String[] {
                                 strategy.getName(),
                                 String.valueOf(seed),
-                                String.valueOf(state.getGoldCollected()),
+                                String.valueOf(
+                                    timeTaken == timeout
+                                    ? 0
+                                    : state.getGoldCollected()
+                                ),
                                 String.valueOf(state.computeTimeToEscape()),
                                 String.valueOf(timeTaken)
                         });
@@ -69,7 +74,6 @@ public class EscapeStrategyComparisonTest {
      */
     private long timeTakenToEscape(MockGameState state) {
         long startTime = System.currentTimeMillis();
-        int timeout = 60000;
         try {
             Thread escapeThread = new Thread(state::escape);
             escapeThread.start();
