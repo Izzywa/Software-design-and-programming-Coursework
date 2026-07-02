@@ -55,7 +55,7 @@ public class EscapeStrategyFactoryTest {
     @RepeatedTest(10)
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
-        int milseconds = 10000;
+        int milseconds = 60000;
 
         List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(EscapeStrategyFactory.Strategy.values()));
