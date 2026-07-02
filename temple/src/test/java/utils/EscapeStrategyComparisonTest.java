@@ -34,7 +34,6 @@ public class EscapeStrategyComparisonTest {
                 "Gold Collected",
                 "Time Given",
                 "Time Taken",
-                "Seed"
         };
         List<String[]> results = new ArrayList<>();
 
@@ -63,8 +62,7 @@ public class EscapeStrategyComparisonTest {
                                                 ? 0
                                                 : state.getGoldCollected()),
                                 String.valueOf(state.computeTimeToEscape()),
-                                String.valueOf(timeTaken),
-                                String.valueOf(seed)
+                                String.valueOf(timeTaken)
                         });
             }
         }
