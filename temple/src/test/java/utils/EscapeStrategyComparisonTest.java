@@ -62,8 +62,7 @@ public class EscapeStrategyComparisonTest {
     /**
      * Times how long it takes to escape from the game state.
      * The escape is given 60 seconds to complete, after which it is terminated.
-     * This is to prevent the test from hanging indefinitely
-     * if the escape strategy fails.
+     * This is to prevent the test from hanging indefinitely.
      * @param state the game state to escape from
      * @return the time taken to escape in milliseconds
      */
