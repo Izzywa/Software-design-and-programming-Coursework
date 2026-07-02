@@ -40,34 +40,15 @@ public class ExploreStrategyFactory {
      */
     public static ExploreStrategy getExploreStrategy(Strategy strategyName) {
         return switch (strategyName) {
-            case HeuristicDFS -> {
-                yield new HeuristicDFSExploreStrategy();
-            }
-            case NaiveDFS -> {
-                yield new NaiveDFSExploreStrategy();
-            }
-            case AStar -> {
-                yield new AStarExploreStrategy();
-            }
-            case HeuristicDFSWithRandomSort -> {
-                yield new HeuristicDFSExploreStrategy(new RandomSort());
-            }
-            case BeamSearch -> {
-                yield new BeamSearchExploreStrategy();
-            }
-            case BFS -> {
-                yield new BreadthFirstExploreStrategy();
-            }
-            case DynamicAStar -> {
-                yield new DynamicAStarExploreStrategy();
-            }
-            case HillClimbing -> {
-                yield new HillClimbingExploreStrategy();
-            }
-            case RandomWalk -> {
-                yield new RandomWalkExploreStrategy();
-            }
-            default -> throw new IllegalArgumentException("Unknown strategy: " + strategyName);
+            case HeuristicDFS -> new HeuristicDFSExploreStrategy();
+            case NaiveDFS -> new NaiveDFSExploreStrategy();
+            case AStar -> new AStarExploreStrategy();
+            case HeuristicDFSWithRandomSort -> new HeuristicDFSExploreStrategy(new RandomSort());
+            case BeamSearch -> new BeamSearchExploreStrategy();
+            case BFS -> new BreadthFirstExploreStrategy();
+            case DynamicAStar -> new DynamicAStarExploreStrategy();
+            case HillClimbing -> new HillClimbingExploreStrategy();
+            case RandomWalk -> new RandomWalkExploreStrategy();
         };
     }
 }
