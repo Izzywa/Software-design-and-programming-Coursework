@@ -29,7 +29,12 @@ public class EscapeStrategyComparisonTest {
 
         String filename = "escape_strategy_comparison.csv";
         String[] headers = {
-                "Strategy", "Seed", "Gold Collected", "Time Given", "Time Taken"
+                "Strategy",
+                "Seed",
+                "Gold Collected",
+                "Time Given",
+                "Time Taken",
+                "Seed"
         };
         List<String[]> results = new ArrayList<>();
 
@@ -58,7 +63,8 @@ public class EscapeStrategyComparisonTest {
                                                 ? 0
                                                 : state.getGoldCollected()),
                                 String.valueOf(state.computeTimeToEscape()),
-                                String.valueOf(timeTaken)
+                                String.valueOf(timeTaken),
+                                String.valueOf(seed)
                         });
             }
         }
