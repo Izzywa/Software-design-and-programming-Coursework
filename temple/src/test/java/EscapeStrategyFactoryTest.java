@@ -1,8 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
 import student.Explorer;
-import student.escape.EscapeDFSPruning;
 import student.escape.EscapeDijkstra;
 import student.escape.EscapeKnapsackDFSSimple;
 import student.escape.EscapeKnapsackDFSDetour;
@@ -31,13 +28,6 @@ public class EscapeStrategyFactoryTest {
         assertTrue(
             explorer.getEscapeStrategy() instanceof EscapeKnapsackDFSDetour,
             "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
-    }
-
-    @Test
-    public void testGetDFSPruningStrategy() {
-        EscapeStrategy dfsPruningStrategy = EscapeStrategyFactory
-                .getEscapeStrategy(EscapeStrategyFactory.Strategy.DFSPruning);
-        assertTrue(dfsPruningStrategy instanceof EscapeDFSPruning);
     }
 
     @Test
@@ -62,7 +52,7 @@ public class EscapeStrategyFactoryTest {
         assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
     }
 
-    @Disabled("DFSAllPaths failed to escape in within 10 seconds")
+    @RepeatedTest(10)
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
         int milseconds = 10000;

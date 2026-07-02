@@ -13,7 +13,6 @@ public class EscapeStrategyFactory {
      */
     @Getter
     public enum Strategy {
-        DFSPruning("DFSPruning"),
         Dijkstra("Dijkstra"),
         KnapsackSimple("KnapsackSimple"),
         KnapsackDetour("KnapsackDetour");
@@ -36,20 +35,9 @@ public class EscapeStrategyFactory {
      */
     public static EscapeStrategy getEscapeStrategy(Strategy strategyName) {
         return switch (strategyName) {
-            case DFSPruning -> {
-                yield new EscapeDFSPruning();
-            }
-            case Dijkstra -> {
-                yield new EscapeDijkstra();
-            }
-            case KnapsackSimple -> {
-                yield new EscapeKnapsackDFSSimple();
-            }
-            case KnapsackDetour -> {
-                yield new EscapeKnapsackDFSDetour();
-            }
-            default -> throw new IllegalArgumentException(
-                    "Unknown strategy: " + strategyName);
+            case Dijkstra -> new EscapeDijkstra();
+            case KnapsackSimple -> new EscapeKnapsackDFSSimple();
+            case KnapsackDetour ->  new EscapeKnapsackDFSDetour();
         };
     }
 }
