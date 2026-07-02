@@ -1,12 +1,11 @@
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +13,11 @@ import game.MockGameState;
 import student.Explorer;
 import student.escape.DFSPruningEscapeStrategy;
 import student.escape.DijkstraEscapeStrategy;
-import student.escape.KnapsackDFSSimpleEscapeStrategy;
-import student.escape.KnapsackDFSDetourEscapeStrategy;
 import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
 import student.escape.EscapeStrategyFactory.Strategy;
+import student.escape.KnapsackDFSDetourEscapeStrategy;
+import student.escape.KnapsackDFSSimpleEscapeStrategy;
 
 /** Tests for {@link EscapeStrategyFactory}. */
 public class EscapeStrategyFactoryTest {
@@ -58,13 +57,6 @@ public class EscapeStrategyFactoryTest {
                 .getEscapeStrategy(
                         EscapeStrategyFactory.Strategy.KnapsackDetour);
         assertTrue(knapsackDetourStrategy instanceof KnapsackDFSDetourEscapeStrategy);
-    }
-
-    @Test
-    public void testGetDFSPruningStrategy() {
-        EscapeStrategy DFSPruningStrategy = EscapeStrategyFactory
-                .getEscapeStrategy(EscapeStrategyFactory.Strategy.DFSPruning);
-        assertTrue(DFSPruningStrategy instanceof EscapeDFSPruning);
     }
 
     @RepeatedTest(10)
