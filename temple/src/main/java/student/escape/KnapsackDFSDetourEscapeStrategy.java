@@ -20,7 +20,7 @@ import game.EscapeState;
  *      3. Memoization-based pruning of inferior branches
  */
 public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrategy {
-    private final double SPARE_TIME_MULTIPLIER = 1.25;
+    private final double SPARE_TIME_MULTIPLIER = 0.5;
 
     /**
      * No-args constructor for the KnapsackDFSDetourEscapeStrategy class.
@@ -38,7 +38,7 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
      * @return the best possible path from start to end or the shortest path if no valid paths are found
      */
     @Override
-    public EscapePath findEscapePath(EscapeState state) {
+    public EscapePath findOptimizedGoldEscapePath(EscapeState state) {
         //Initialize EscapeState wrapper object
         EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
         int totalGraphGold = wrapper.getGraph().getTotalGold();
@@ -47,8 +47,7 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
         // Theoretical possibility for smaller maps with P = 0.33 ^ node count 
         // (Map with 10 nodes has P = 0.0000153 (0.0015%) probability that no node has gold.)
         if (totalGraphGold == 0) {
-            EscapeStrategy dijkstra = new DijkstraEscapeStrategy();
-            return dijkstra.findEscapePath(state);
+            return findShortestEscapePath(state);
         }
 
         // Check graph validity
@@ -99,6 +98,11 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
         BranchState bState, 
         Set<Node> pathVisited, 
         List<Node> currentPath) {
+
+        // Check if current thread is interrupted due to timeout and throw an exception to stop the search
+        if (Thread.currentThread().isInterrupted()) {
+            throw new RuntimeException("Search cancelled due to timeout");
+        }
 
         int minTimeToExit = wrapper.getMinDistanceToExit().getOrDefault(bState.getCurrentNode(), Integer.MAX_VALUE);
         int timeLeft = wrapper.getState().getTimeRemaining() - bState.getCurrentCost();
