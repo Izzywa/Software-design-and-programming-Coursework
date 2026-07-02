@@ -12,11 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
 import student.Explorer;
-import student.escape.EscapeDijkstra;
-import student.escape.EscapeKnapsackDFSSimple;
-import student.escape.EscapeKnapsackDFSDetour;
-import student.escape.EscapeStrategy;
-import student.escape.EscapeStrategyFactory;
+import student.escape.*;
 import student.escape.EscapeStrategyFactory.Strategy;
 
 /** Tests for {@link EscapeStrategyFactory}. */
@@ -50,6 +46,13 @@ public class EscapeStrategyFactoryTest {
                 .getEscapeStrategy(
                         EscapeStrategyFactory.Strategy.KnapsackDetour);
         assertTrue(knapsackDetourStrategy instanceof EscapeKnapsackDFSDetour);
+    }
+
+    @Test
+    public void testGetDFSPruningStrategy() {
+        EscapeStrategy DFSPruningStrategy = EscapeStrategyFactory
+                .getEscapeStrategy(EscapeStrategyFactory.Strategy.DFSPruning);
+        assertTrue(DFSPruningStrategy instanceof EscapeDFSPruning);
     }
 
     @RepeatedTest(10)

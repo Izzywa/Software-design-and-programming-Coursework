@@ -13,6 +13,7 @@ public class EscapeStrategyFactory {
      */
     @Getter
     public enum Strategy {
+        DFSPruning("DFSPruning"),
         Dijkstra("Dijkstra"),
         KnapsackSimple("KnapsackSimple"),
         KnapsackDetour("KnapsackDetour");
@@ -38,6 +39,7 @@ public class EscapeStrategyFactory {
             case Dijkstra -> new EscapeDijkstra();
             case KnapsackSimple -> new EscapeKnapsackDFSSimple();
             case KnapsackDetour ->  new EscapeKnapsackDFSDetour();
+            case DFSPruning -> new EscapeDFSPruning();
         };
     }
 }
