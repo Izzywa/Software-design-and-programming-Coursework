@@ -49,14 +49,14 @@ import game.Edge;
  *        u ← prev[u]                           // Traverse from target to source
  * 
  */
-public class EscapeDijkstra implements EscapeStrategy {
+public class DijkstraEscapeStrategy implements EscapeStrategy {
     private Map<Node, Node> parentMap;
     private Map<Node, Integer> distanceMap;
 
     /**
-     * No-args constructor for EscapeDijkstra class
+     * No-args constructor for DijkstraEscapeStrategy class
      */
-    public EscapeDijkstra() {
+    public DijkstraEscapeStrategy() {
         this.parentMap = new HashMap<>();
         this.distanceMap = new HashMap<>();
     }

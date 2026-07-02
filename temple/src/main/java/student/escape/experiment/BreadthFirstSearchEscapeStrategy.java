@@ -37,16 +37,16 @@ import student.escape.EscapeStrategy;
  *     return false
  * </pre>
  */
-public class EscapeBreadthFirstSearch implements EscapeStrategy {
+public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
     private Queue<Node> queue;
     private Map<Node, Node> parentMap;
     private Set<Node> visited;
     private boolean foundPath;
     
     /**
-     * No-args constructor for EscapeBreadthFirstSearch class
+     * No-args constructor for BreadthFirstSearchEscapeStrategy class
      */
-    public EscapeBreadthFirstSearch() {
+    public BreadthFirstSearchEscapeStrategy() {
         this.queue = new LinkedList<>();
         this.parentMap = new HashMap<>();
         this.visited = new HashSet<>();

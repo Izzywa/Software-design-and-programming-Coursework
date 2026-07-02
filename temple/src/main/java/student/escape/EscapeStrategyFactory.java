@@ -37,16 +37,16 @@ public class EscapeStrategyFactory {
     public static EscapeStrategy getEscapeStrategy(Strategy strategyName) {
         return switch (strategyName) {
             case DFSPruning -> {
-                yield new EscapeDFSPruning();
+                yield new DFSPruningEscapeStrategy();
             }
             case Dijkstra -> {
-                yield new EscapeDijkstra();
+                yield new DijkstraEscapeStrategy();
             }
             case KnapsackSimple -> {
-                yield new EscapeKnapsackDFSSimple();
+                yield new KnapsackDFSSimpleEscapeStrategy();
             }
             case KnapsackDetour -> {
-                yield new EscapeKnapsackDFSDetour();
+                yield new KnapsackDFSDetourEscapeStrategy();
             }
             default -> throw new IllegalArgumentException(
                     "Unknown strategy: " + strategyName);
