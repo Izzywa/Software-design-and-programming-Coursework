@@ -446,6 +446,8 @@ public class EscapeUtilsTest {
     /**
      * Verifies the correctness of the sorting of neighbour edges based on gold and
      * then based on distance from exit node if they hold the same amount of gold.
+     * 
+     * This is a test for the case where there is no gold in the neighbouring nodes.
      */
     @Test
     public void testSortNeighboursNoGold() { 
@@ -469,6 +471,36 @@ public class EscapeUtilsTest {
         assertEquals(2, sortedNeighbours.size());
         assertEquals(4L, sortedNeighbours.get(0).getDest().getId());
         assertEquals(2L, sortedNeighbours.get(1).getDest().getId());
+    }
+
+    /**
+     * Verifies the correctness of the sorting of neighbour edges based on gold and
+     * then based on distance from exit node if they hold the same amount of gold.
+     * 
+     * This is a test for the case where there is gold in the neighbouring nodes.
+     */
+    @Test
+    public void testSortNeighboursGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Node currentNode = wrapper.getState().getCurrentNode();
+        KnapsackDFSDetourEscapeStrategy strategy = new KnapsackDFSDetourEscapeStrategy();
+        List<Edge> sortedNeighbours = strategy.sortNeighbours(wrapper, currentNode);
+        assertEquals(2, sortedNeighbours.size());
+        assertEquals(2L, sortedNeighbours.get(0).getDest().getId());
+        assertEquals(4L, sortedNeighbours.get(1).getDest().getId());
     }
 
 }
