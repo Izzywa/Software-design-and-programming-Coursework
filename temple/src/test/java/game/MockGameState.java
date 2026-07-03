@@ -242,7 +242,7 @@ public class MockGameState implements ExplorationState, EscapeState {
     /**
      * Return the time to escape
      */
-    private int computeTimeToEscape() {
+    public int computeTimeToEscape() {
         int minTimeToEscape = escapeCavern.minPathLengthToTarget(position);
         return (int) (minTimeToEscape + EXTRA_TIME_FACTOR * (Cavern.MAX_EDGE_WEIGHT + 1) * escapeCavern.numOpenTiles() / 2);
 

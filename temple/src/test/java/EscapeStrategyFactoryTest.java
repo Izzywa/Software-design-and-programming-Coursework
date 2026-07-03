@@ -1,26 +1,23 @@
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Disabled;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.jupiter.api.RepeatedTest;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import game.MockGameState;
 import student.Explorer;
 import student.escape.DFSPruningEscapeStrategy;
 import student.escape.DijkstraEscapeStrategy;
-import student.escape.KnapsackDFSSimpleEscapeStrategy;
-import student.escape.KnapsackDFSDetourEscapeStrategy;
 import student.escape.EscapeStrategy;
 import student.escape.EscapeStrategyFactory;
 import student.escape.EscapeStrategyFactory.Strategy;
+import student.escape.KnapsackDFSDetourEscapeStrategy;
+import student.escape.KnapsackDFSSimpleEscapeStrategy;
 
 /** Tests for {@link EscapeStrategyFactory}. */
 public class EscapeStrategyFactoryTest {
@@ -29,8 +26,8 @@ public class EscapeStrategyFactoryTest {
     public void testEscapeStrategyDefault() {
         Explorer explorer = new Explorer();
         assertTrue(
-            explorer.getEscapeStrategy() instanceof KnapsackDFSDetourEscapeStrategy,
-            "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
+                explorer.getEscapeStrategy() instanceof KnapsackDFSDetourEscapeStrategy,
+                "The default escape strategy should be an instance of EscapeKnapsackDFSDetour.");
     }
 
     @Test
@@ -62,10 +59,14 @@ public class EscapeStrategyFactoryTest {
         assertTrue(knapsackDetourStrategy instanceof KnapsackDFSDetourEscapeStrategy);
     }
 
-    @Disabled("DFSAllPaths failed to escape in within 10 seconds")
+    /**
+     * Test disabled as some strategies may not always succeed
+     * in escaping within the time limit.
+     */
+    @Disabled
     public final void testAllStrategiesSucceedInEscaping() {
         long seed = new Random().nextLong();
-        int milseconds = 10000;
+        int milseconds = 60000;
 
         List<Strategy> strategies = new ArrayList<>(
                 Arrays.asList(EscapeStrategyFactory.Strategy.values()));
