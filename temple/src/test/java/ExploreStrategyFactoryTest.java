@@ -52,8 +52,8 @@ public class ExploreStrategyFactoryTest {
     public void testExploreStrategyDefault() {
         Explorer explorer = new Explorer();
 
-        assertTrue(explorer.getExploreStrategy() instanceof HeuristicDFSExploreStrategy,
-                "The default exploration strategy should be an instance of HeuristicDFSExploreStrategy.");
+        assertTrue(explorer.getExploreStrategy() instanceof DynamicAStarExploreStrategy,
+                "The default exploration strategy should be an instance of DynamicAStarExploreStrategy.");
     }
 
     @Test
