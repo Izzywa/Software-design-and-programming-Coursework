@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import game.Edge;
 import game.EscapeState;
@@ -62,15 +66,6 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
         this.bestGold = bestGold;
     }
 
-    /**
-     * Abstract method of EscapeStrategy interfaceto be implemented by subclasses 
-     * to find the best escape path using a knapsack-style DFS search.
-     *
-     * @param state the current escape state
-     */
-    @Override
-    public abstract EscapePath findEscapePath(EscapeState state);
-
     /** 
      * Abstract method to be implemented by subclasses to perform a knapsack-style DFS search.
      * 
@@ -85,6 +80,56 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
         BranchState bState, 
         Set<Node> visited, 
         List<Node> currentPath);
+
+    
+    /** 
+     * Abstract method to be implemented by subclasses to find the best escape path using a knapsack-style DFS search.
+     * 
+     * @param state the current escape state
+     * @return the best optimized escape path
+     */
+    public abstract EscapePath findOptimizedGoldEscapePath(EscapeState state);
+
+    /**
+     * Finds the shortest escape path using Dijkstra's algorithm as a fallback.
+     *
+     * @param state the current escape state
+     * @return the shortest escape path
+     */
+    public EscapePath findShortestEscapePath(EscapeState state) {
+        EscapeStrategy dijkstra = new DijkstraEscapeStrategy();
+        return dijkstra.findEscapePath(state);
+    }
+
+    /**
+     * Abstract method of EscapeStrategy interface to be implemented by subclasses 
+     * This implementation returns the best optimized escape path or a fallback path.
+     *
+     * @param state the current escape state
+     */
+    @Override
+    public EscapePath findEscapePath(EscapeState state) {
+        final long SEARCH_TIMEOUT_MS = 10000L; // Timeout in milliseconds
+        EscapePath fallbackPath = findShortestEscapePath(state);
+
+        // Start the optimization search in a separate thread
+        CompletableFuture<EscapePath> optimizationTask = CompletableFuture.supplyAsync(() -> {
+            return findOptimizedGoldEscapePath(state);
+        });
+
+        // Wait for the optimization task to complete or timeout
+        try {
+            return optimizationTask.get(SEARCH_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            optimizationTask.cancel(true); // Cancel the optimization task if it times out
+            System.out.println("Optimization search timed out. Returning fallback path.");
+            return fallbackPath;
+        } catch (InterruptedException | ExecutionException e) {
+            // Log the error and fall back safely if something goes wrong structurally
+            System.err.println("Optimization failed due to an error: " + e.getMessage());
+            return fallbackPath;
+        }
+    }
 
     /**
      * Greedy sorting of neighbour edges in descending order based on gold amount,
