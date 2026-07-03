@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -507,7 +506,7 @@ public class EscapeUtilsTest {
     /**
      * Verifies the correctness of the selection of the best path based on gold collected and total cost.
      * 
-     * This is a test for the case where there is no gold in the neighbouring nodes.
+     * This is a test for the case where there is gold in the neighbouring nodes.
      * The best path is selected based on the lowest total cost.
      */
     @Test
@@ -561,6 +560,67 @@ public class EscapeUtilsTest {
         assertEquals(1L, bestPath.getPath().get(0).getId());
         assertEquals(4L, bestPath.getPath().get(1).getId());
         assertEquals(5L, bestPath.getPath().get(2).getId());
+        assertEquals(6L, bestPath.getPath().get(3).getId());
+        assertEquals(7L, bestPath.getPath().get(4).getId());
+    }
+
+    /**
+     * Verifies the correctness of the selection of the best path based on gold collected and total cost.
+     * 
+     * This is a test for the case where there is gold in the neighbouring nodes.
+     * The best path is selected based on the highest total gold collected.
+     */
+    @Test
+    public void testSelectBestPathGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+
+        List<EscapePath> paths = new ArrayList<>();
+        List<Node> path1Nodes = new ArrayList<>();
+        List<Node> path2Nodes = new ArrayList<>();
+
+        EscapeGraph graph = new EscapeGraph(state);
+        for (Node node : graph.getWeighted().keySet()) {
+            if (node.getId() == 1L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 2L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 3L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 4L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 5L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 6L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 7L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            }
+        }
+
+        paths.add(new EscapePath(state, path1Nodes));
+        paths.add(new EscapePath(state, path2Nodes));
+
+        DFSPruningEscapeStrategy strategy = new DFSPruningEscapeStrategy();
+        EscapePath bestPath = strategy.selectBestPath(paths, null);
+        assertEquals(5, bestPath.getPath().size());
+        assertEquals(1L, bestPath.getPath().get(0).getId());
+        assertEquals(2L, bestPath.getPath().get(1).getId());
+        assertEquals(3L, bestPath.getPath().get(2).getId());
         assertEquals(6L, bestPath.getPath().get(3).getId());
         assertEquals(7L, bestPath.getPath().get(4).getId());
     }
