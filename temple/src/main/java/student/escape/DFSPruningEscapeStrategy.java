@@ -61,6 +61,11 @@ public class DFSPruningEscapeStrategy implements EscapeStrategy {
      * @param currentCost the cost to reach the current node
      */
     public void depthFirstSearchPruning(EscapeState state, EscapeGraph graph, Node currentNode, int currentCost) {
+        // Check if current thread is interrupted due to timeout and throw an exception to stop the search
+        if (Thread.currentThread().isInterrupted()) {
+            throw new RuntimeException("Search cancelled due to timeout");
+        }
+
         // Increment the step count for each recursive call
         stepCount++;
          // PRUNING: If we already exceeded the remaining time, stop exploring this branch
