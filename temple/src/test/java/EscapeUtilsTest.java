@@ -404,4 +404,41 @@ public class EscapeUtilsTest {
         assertTrue(expected.equals(actual)); 
     }
 
+    /**
+     * Verifies the correctness of the minimum distance to exit for each node for two paths.
+     */
+    @Test
+    public void testGetMinDistanceToExitTwoPaths() { 
+        Map<Long, Integer> expected = new HashMap<>();
+        expected.put(1L, 9);
+        expected.put(2L, 8);
+        expected.put(3L, 5);
+        expected.put(4L, 7);
+        expected.put(5L, 6);
+        expected.put(6L, 2);
+        expected.put(7L, 0);
+
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_no_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Map<Node, Integer> minDistanceToExit = wrapper.getMinDistanceToExit();
+        Map<Long, Integer> actual = new HashMap<>();
+        for (Node node : minDistanceToExit.keySet()) {
+            actual.put(node.getId(), minDistanceToExit.get(node));
+        }
+
+        assertTrue(expected.equals(actual)); 
+    }
+
 }
