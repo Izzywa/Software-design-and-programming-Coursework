@@ -14,6 +14,7 @@ import game.MockGameState;
 import student.escape.DijkstraEscapeStrategy;
 import student.escape.EscapeGraph;
 import student.escape.EscapePath;
+import student.escape.EscapeStateWrapper;
 import student.escape.EscapeStrategy;
 import game.Node;
 import game.Edge;
@@ -363,6 +364,44 @@ public class EscapeUtilsTest {
         assertEquals(false, state.getEscapeErrored());
         assertEquals(8L, state.getCurrentNode().getId());
         assertEquals(15, state.getGoldCollected());
+    }
+
+    /**
+     * Verifies the correctness of the minimum distance to exit for each node for a single path.
+     */
+    @Test
+    public void testGetMinDistanceToExitSinglePath() { 
+        Map<Long, Integer> expected = new HashMap<>();
+        expected.put(1L, 13);
+        expected.put(2L, 11);
+        expected.put(3L, 10);
+        expected.put(4L, 7);
+        expected.put(5L, 6);
+        expected.put(6L, 2);
+        expected.put(7L, 1);
+        expected.put(8L, 0);
+
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Map<Node, Integer> minDistanceToExit = wrapper.getMinDistanceToExit();
+        Map<Long, Integer> actual = new HashMap<>();
+        for (Node node : minDistanceToExit.keySet()) {
+            actual.put(node.getId(), minDistanceToExit.get(node));
+        }
+
+        assertTrue(expected.equals(actual)); 
     }
 
 }
