@@ -105,7 +105,7 @@ public class DFSPruningEscapeStrategy implements EscapeStrategy {
      * @param shortestPath a shortest path as backup if no valid paths are found
      * @return the best EscapePath based on gold collected and total cost or the shortest path if no valid paths found
      */
-    private EscapePath selectBestPath(List<EscapePath> paths, EscapePath shortestPath) {
+    public EscapePath selectBestPath(List<EscapePath> paths, EscapePath shortestPath) {
         return paths.stream()
                 .max((p1, p2) -> {
                     if (p1.getTotalGold() != p2.getTotalGold()) {
