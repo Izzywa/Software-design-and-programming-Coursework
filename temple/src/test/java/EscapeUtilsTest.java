@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -9,12 +8,16 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import game.MockGameState;
+import student.escape.DFSPruningEscapeStrategy;
 import student.escape.DijkstraEscapeStrategy;
 import student.escape.EscapeGraph;
 import student.escape.EscapePath;
+import student.escape.EscapeStateWrapper;
 import student.escape.EscapeStrategy;
+import student.escape.KnapsackDFSDetourEscapeStrategy;
 import game.Node;
 import game.Edge;
 
@@ -363,6 +366,263 @@ public class EscapeUtilsTest {
         assertEquals(false, state.getEscapeErrored());
         assertEquals(8L, state.getCurrentNode().getId());
         assertEquals(15, state.getGoldCollected());
+    }
+
+    /**
+     * Verifies the correctness of the minimum distance to exit for each node for a single path.
+     */
+    @Test
+    public void testGetMinDistanceToExitSinglePath() { 
+        Map<Long, Integer> expected = new HashMap<>();
+        expected.put(1L, 13);
+        expected.put(2L, 11);
+        expected.put(3L, 10);
+        expected.put(4L, 7);
+        expected.put(5L, 6);
+        expected.put(6L, 2);
+        expected.put(7L, 1);
+        expected.put(8L, 0);
+
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/one_path_escape.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Map<Node, Integer> minDistanceToExit = wrapper.getMinDistanceToExit();
+        Map<Long, Integer> actual = new HashMap<>();
+        for (Node node : minDistanceToExit.keySet()) {
+            actual.put(node.getId(), minDistanceToExit.get(node));
+        }
+
+        assertTrue(expected.equals(actual)); 
+    }
+
+    /**
+     * Verifies the correctness of the minimum distance to exit for each node for two paths.
+     */
+    @Test
+    public void testGetMinDistanceToExitTwoPaths() { 
+        Map<Long, Integer> expected = new HashMap<>();
+        expected.put(1L, 9);
+        expected.put(2L, 8);
+        expected.put(3L, 5);
+        expected.put(4L, 7);
+        expected.put(5L, 6);
+        expected.put(6L, 2);
+        expected.put(7L, 0);
+
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_no_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Map<Node, Integer> minDistanceToExit = wrapper.getMinDistanceToExit();
+        Map<Long, Integer> actual = new HashMap<>();
+        for (Node node : minDistanceToExit.keySet()) {
+            actual.put(node.getId(), minDistanceToExit.get(node));
+        }
+
+        assertTrue(expected.equals(actual)); 
+    }
+
+    /**
+     * Verifies the correctness of the sorting of neighbour edges based on gold and
+     * then based on distance from exit node if they hold the same amount of gold.
+     * 
+     * This is a test for the case where there is no gold in the neighbouring nodes.
+     */
+    @Test
+    public void testSortNeighboursNoGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_no_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Node currentNode = wrapper.getState().getCurrentNode();
+        KnapsackDFSDetourEscapeStrategy strategy = new KnapsackDFSDetourEscapeStrategy();
+        List<Edge> sortedNeighbours = strategy.sortNeighbours(wrapper, currentNode);
+        assertEquals(2, sortedNeighbours.size());
+        assertEquals(4L, sortedNeighbours.get(0).getDest().getId());
+        assertEquals(2L, sortedNeighbours.get(1).getDest().getId());
+    }
+
+    /**
+     * Verifies the correctness of the sorting of neighbour edges based on gold and
+     * then based on distance from exit node if they hold the same amount of gold.
+     * 
+     * This is a test for the case where there is gold in the neighbouring nodes.
+     */
+    @Test
+    public void testSortNeighboursGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        Node currentNode = wrapper.getState().getCurrentNode();
+        KnapsackDFSDetourEscapeStrategy strategy = new KnapsackDFSDetourEscapeStrategy();
+        List<Edge> sortedNeighbours = strategy.sortNeighbours(wrapper, currentNode);
+        assertEquals(2, sortedNeighbours.size());
+        assertEquals(2L, sortedNeighbours.get(0).getDest().getId());
+        assertEquals(4L, sortedNeighbours.get(1).getDest().getId());
+    }
+
+    /**
+     * Verifies the correctness of the selection of the best path based on gold collected and total cost.
+     * 
+     * This is a test for the case where there is gold in the neighbouring nodes.
+     * The best path is selected based on the lowest total cost.
+     */
+    @Test
+    public void testSelectBestPathNoGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_no_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+
+        List<EscapePath> paths = new ArrayList<>();
+        List<Node> path1Nodes = new ArrayList<>();
+        List<Node> path2Nodes = new ArrayList<>();
+
+        EscapeGraph graph = new EscapeGraph(state);
+        for (Node node : graph.getWeighted().keySet()) {
+            if (node.getId() == 1L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 2L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 3L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 4L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 5L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 6L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 7L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            }
+        }
+
+        paths.add(new EscapePath(state, path1Nodes));
+        paths.add(new EscapePath(state, path2Nodes));
+
+        DFSPruningEscapeStrategy strategy = new DFSPruningEscapeStrategy();
+        EscapePath bestPath = strategy.selectBestPath(paths, null);
+        assertEquals(5, bestPath.getPath().size());
+        assertEquals(1L, bestPath.getPath().get(0).getId());
+        assertEquals(4L, bestPath.getPath().get(1).getId());
+        assertEquals(5L, bestPath.getPath().get(2).getId());
+        assertEquals(6L, bestPath.getPath().get(3).getId());
+        assertEquals(7L, bestPath.getPath().get(4).getId());
+    }
+
+    /**
+     * Verifies the correctness of the selection of the best path based on gold collected and total cost.
+     * 
+     * This is a test for the case where there is gold in the neighbouring nodes.
+     * The best path is selected based on the highest total gold collected.
+     */
+    @Test
+    public void testSelectBestPathGold() { 
+        Path exploreCavernPath = Path.of(
+            "src/test/resources/dummy_explore.txt"
+        );
+        Path escapeCavernPath = Path.of(
+            "src/test/resources/two_path_escape_gold.txt"
+        );
+        MockGameState state = new MockGameState(
+            exploreCavernPath,
+            escapeCavernPath,
+            false
+        );
+        state.setExploreSucceeded(true);
+        state.setEscapeStage();
+
+        List<EscapePath> paths = new ArrayList<>();
+        List<Node> path1Nodes = new ArrayList<>();
+        List<Node> path2Nodes = new ArrayList<>();
+
+        EscapeGraph graph = new EscapeGraph(state);
+        for (Node node : graph.getWeighted().keySet()) {
+            if (node.getId() == 1L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 2L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 3L) {
+                path1Nodes.add(node);
+            } else if (node.getId() == 4L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 5L) {
+                path2Nodes.add(node);
+            } else if (node.getId() == 6L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            } else if (node.getId() == 7L) {
+                path1Nodes.add(node);
+                path2Nodes.add(node);
+            }
+        }
+
+        paths.add(new EscapePath(state, path1Nodes));
+        paths.add(new EscapePath(state, path2Nodes));
+
+        DFSPruningEscapeStrategy strategy = new DFSPruningEscapeStrategy();
+        EscapePath bestPath = strategy.selectBestPath(paths, null);
+        assertEquals(5, bestPath.getPath().size());
+        assertEquals(1L, bestPath.getPath().get(0).getId());
+        assertEquals(2L, bestPath.getPath().get(1).getId());
+        assertEquals(3L, bestPath.getPath().get(2).getId());
+        assertEquals(6L, bestPath.getPath().get(3).getId());
+        assertEquals(7L, bestPath.getPath().get(4).getId());
     }
 
 }
