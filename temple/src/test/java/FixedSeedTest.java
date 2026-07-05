@@ -141,7 +141,7 @@ public class FixedSeedTest {
      */
     private String extractMetric(String outputText, String keyword) {
         // Regex: case-insensitive keyword, followed by anything, followed by a number (decimals allowed)
-        Pattern pattern = Pattern.compile("(?i)" + keyword + ".*?([0-9]+(?:\\.[0-9]+)?)");
+        Pattern pattern = Pattern.compile("(?i)" + keyword + ".*?([0-9]+(?:[.,][0-9]+)?)");
         Matcher matcher = pattern.matcher(outputText);
         if (matcher.find()) {
             return matcher.group(1);
