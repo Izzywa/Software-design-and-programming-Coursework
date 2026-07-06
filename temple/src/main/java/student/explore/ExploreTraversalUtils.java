@@ -11,7 +11,17 @@ import java.util.Set;
 
 import game.ExplorationState;
 
+/**
+ * Utility methods for moving through the discovered exploration graph.
+ *
+ * <p>The helpers in this class treat the explored portion of the cavern as an
+ * undirected graph so strategies can record edges once and later reuse them to
+ * navigate between already seen nodes.
+ */
 final class ExploreTraversalUtils {
+    /**
+     * Prevent instantiation of this utility class.
+     */
     private ExploreTraversalUtils() {
     }
 

@@ -27,6 +27,9 @@ import student.sort.RandomSort;
 
 /** Tests for {@link ExploreStrategyFactory}. */
 public class ExploreStrategyFactoryTest {
+    /**
+     * Verifies that the explorer accepts and stores a replacement exploration strategy.
+     */
     @Test
     public void testExploreStrategySetter() {
         Explorer explorer = new Explorer();
@@ -48,6 +51,9 @@ public class ExploreStrategyFactoryTest {
                 "The setter should update the exploration strategy to the new value.");
     }
 
+    /**
+     * Verifies the explorer's default exploration strategy.
+     */
     @Test
     public void testExploreStrategyDefault() {
         Explorer explorer = new Explorer();
@@ -56,6 +62,9 @@ public class ExploreStrategyFactoryTest {
                 "The default exploration strategy should be an instance of DynamicAStarExploreStrategy.");
     }
 
+    /**
+     * Verifies that the factory creates the heuristic DFS strategy.
+     */
     @Test
     public void testHeuristicDFSExploreStrategyFactory() {
         assertTrue(
@@ -64,6 +73,9 @@ public class ExploreStrategyFactoryTest {
                 "The factory should return an instance of HeuristicDFSExploreStrategy for the HeuristicDFS strategy.");
     }
 
+    /**
+     * Verifies that the factory creates the naive DFS strategy.
+     */
     @Test
     public void testNaiveDFSExploreStrategyFactory() {
         assertTrue(
@@ -72,6 +84,9 @@ public class ExploreStrategyFactoryTest {
                 "The factory should return an instance of NaiveDFSExploreStrategy for the NaiveDFS strategy.");
     }
 
+    /**
+     * Verifies that the factory creates the A* exploration strategy.
+     */
     @Test
     public void testAStarExploreStrategyFactory() {
         assertTrue(
@@ -81,6 +96,9 @@ public class ExploreStrategyFactoryTest {
 
     }
 
+    /**
+     * Verifies that the random-sort heuristic DFS option uses a random sorting strategy.
+     */
     @Test
     public void testDfsRandomSortExploreStrategyFactory() {
         ExploreStrategy strategy = ExploreStrategyFactory
@@ -95,67 +113,85 @@ public class ExploreStrategyFactoryTest {
                 "The factory should return an instance of HeuristicDFSWithRandomSort with a RandomSort sorting strategy.");
     }
 
-  @Test
-  public void testBeamSearchExploreStrategyFactory() {
-    assertTrue(
-        ExploreStrategyFactory.getExploreStrategy(
-            ExploreStrategyFactory.Strategy.BeamSearch) instanceof BeamSearchExploreStrategy,
-        "The factory should return an instance of BeamSearchExploreStrategy for the BeamSearch strategy.");
-  }
+    /**
+     * Verifies that the factory creates the beam search strategy.
+     */
+    @Test
+    public void testBeamSearchExploreStrategyFactory() {
+        assertTrue(
+                ExploreStrategyFactory.getExploreStrategy(
+                        ExploreStrategyFactory.Strategy.BeamSearch) instanceof BeamSearchExploreStrategy,
+                "The factory should return an instance of BeamSearchExploreStrategy for the BeamSearch strategy.");
+    }
 
-  @Test
-  public void testBFSExploreStrategyFactory() {
-    assertTrue(
-        ExploreStrategyFactory.getExploreStrategy(
-            ExploreStrategyFactory.Strategy.BFS) instanceof BreadthFirstExploreStrategy,
-        "The factory should return an instance of BreadthFirstExploreStrategy for the BFS strategy.");
-  }
+    /**
+     * Verifies that the factory creates the breadth-first exploration strategy.
+     */
+    @Test
+    public void testBFSExploreStrategyFactory() {
+        assertTrue(
+                ExploreStrategyFactory.getExploreStrategy(
+                        ExploreStrategyFactory.Strategy.BFS) instanceof BreadthFirstExploreStrategy,
+                "The factory should return an instance of BreadthFirstExploreStrategy for the BFS strategy.");
+    }
 
-  @Test
-  public void testDynamicAStarExploreStrategyFactory() {
-    assertTrue(
-        ExploreStrategyFactory.getExploreStrategy(
-            ExploreStrategyFactory.Strategy.DynamicAStar) instanceof DynamicAStarExploreStrategy,
-        "The factory should return an instance of DynamicAStarExploreStrategy for the DynamicAStar strategy.");
-  }
+    /**
+     * Verifies that the factory creates the dynamic A* exploration strategy.
+     */
+    @Test
+    public void testDynamicAStarExploreStrategyFactory() {
+        assertTrue(
+                ExploreStrategyFactory.getExploreStrategy(
+                        ExploreStrategyFactory.Strategy.DynamicAStar) instanceof DynamicAStarExploreStrategy,
+                "The factory should return an instance of DynamicAStarExploreStrategy for the DynamicAStar strategy.");
+    }
 
-  @Test
-  public void testHillClimbingExploreStrategyFactory() {
-    assertTrue(
-        ExploreStrategyFactory.getExploreStrategy(
-            ExploreStrategyFactory.Strategy.HillClimbing) instanceof HillClimbingExploreStrategy,
-        "The factory should return an instance of HillClimbingExploreStrategy for the HillClimbing strategy.");
-  }
+    /**
+     * Verifies that the factory creates the hill-climbing exploration strategy.
+     */
+    @Test
+    public void testHillClimbingExploreStrategyFactory() {
+        assertTrue(
+                ExploreStrategyFactory.getExploreStrategy(
+                        ExploreStrategyFactory.Strategy.HillClimbing) instanceof HillClimbingExploreStrategy,
+                "The factory should return an instance of HillClimbingExploreStrategy for the HillClimbing strategy.");
+    }
 
-  @Test
+    /**
+     * Verifies that the factory creates the random-walk exploration strategy.
+     */
+    @Test
     public void testRandomWalkExploreStrategyFactory() {
-    assertTrue(
-        ExploreStrategyFactory.getExploreStrategy(
-            ExploreStrategyFactory.Strategy.RandomWalk) instanceof RandomWalkExploreStrategy,
-        "The factory should return an instance of RandomWalkExploreStrategy for the RandomWalk strategy.");
-  }
+        assertTrue(
+                ExploreStrategyFactory.getExploreStrategy(
+                        ExploreStrategyFactory.Strategy.RandomWalk) instanceof RandomWalkExploreStrategy,
+                "The factory should return an instance of RandomWalkExploreStrategy for the RandomWalk strategy.");
+    }
 
-  @RepeatedTest(10)
-  public void testAllStrategiesSucceedInReachingOrb() {
-    long seed = new Random().nextLong();
-    int milseconds = 10000;
+    /**
+     * Verifies that every registered strategy can reach the orb within the timeout.
+     */
+    @RepeatedTest(10)
+    public void testAllStrategiesSucceedInReachingOrb() {
+        long seed = new Random().nextLong();
+        int milseconds = 10000;
 
         List<Strategy> strategies = new ArrayList<>(Arrays.asList(ExploreStrategyFactory.Strategy.values()));
 
         for (Strategy strategy : strategies) {
             MockGameState mockState = new MockGameState(seed, false);
 
-      assertTimeoutPreemptively(Duration.ofMillis(milseconds), () -> {
-      mockState.explorer.setExploreStrategy(
-              ExploreStrategyFactory.getExploreStrategy(strategy)
-      );
+            assertTimeoutPreemptively(Duration.ofMillis(milseconds), () -> {
+                mockState.explorer.setExploreStrategy(
+                        ExploreStrategyFactory.getExploreStrategy(strategy)
+                );
 
-      mockState.explore();
-      },
-          "The " + strategy.getName()
-              + " strategy should reach the orb within "
-              + (milseconds / 1000)
-              + " seconds.");
+                mockState.explore();
+            },
+                    "The " + strategy.getName()
+                            + " strategy should reach the orb within "
+                            + (milseconds / 1000)
+                            + " seconds.");
 
             assertTrue(mockState.getExploreSucceeded(),
                     "The " + strategy.getName() + " strategy should reach the orb.");
