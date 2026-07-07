@@ -14,8 +14,13 @@ import game.Edge;
  * Wrapper class for EscapeState related objects to provide more logical encapsulation
  */
 public class EscapeStateWrapper {
+    /** The current EscapeState object. */
     private final EscapeState state;
+
+    /** The current EscapeGraph object that belongs to the EscapeState. */
     private final EscapeGraph graph;
+
+    /** A lookup table containing nodes and their distances to the exit node. */
     private Map<Node, Integer> minDistanceToExit;
 
     /**
@@ -59,6 +64,13 @@ public class EscapeStateWrapper {
      * Dijktra's algorithm with priority queue implementation to create lookup table 
      * with shortest distances from each node to the exit node
      * This algorithm traverses the graph backwards from end node towards the start node
+     * 1. Initialize a priority queue and a map to store shortest distances
+     * 2. Add the exit node to the priority queue with distance 0
+     * 3. While the priority queue is not empty, pop the node with the smallest distance
+     * 4. For each neighbor of the current node, calculate the distance to the exit node
+     * 5. If the calculated distance is smaller than the current stored distance, 
+     * update the map and add the neighbor to the priority queue
+     * 6. Return the map containing nodes and their shortest distances to the exit node
      * 
      * @param graph graph for current escape state
      * @return a map that contains nodes and their shortest distances to the exit node
@@ -97,8 +109,11 @@ public class EscapeStateWrapper {
      * that prioritizes nodes by distances
      */
     private static class NodeDistancePair {
+        /** The node in the graph. */
         Node node;
+        /** The distance from the node to the exit node. */
         int distance;
+
         /** 
          * Constructor
          * @param node current node
