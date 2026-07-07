@@ -3,6 +3,7 @@ package student.escape;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +53,21 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
         this.memoMap = new HashMap<>();
     }
 
+    /** 
+     * Abstract method to be implemented by subclasses to perform a knapsack-style DFS search.
+     * 
+     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
+     * @param bState the current BranchState object that contains the current node, cost, gold collected, 
+     * and remaining total graph gold
+     * @param visited the set of nodes that have been visited in the current path
+     * @param currentPath the list of nodes that form the current path from start to the current node
+     */
+    public abstract void knapsackDFS(
+        EscapeStateWrapper wrapper, 
+        BranchState bState, 
+        Set<Node> visited, 
+        List<Node> currentPath);
+
     /**
      * Returns the best path found during the search.
      *
@@ -88,30 +104,6 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
         this.bestGold = bestGold;
     }
 
-    /** 
-     * Abstract method to be implemented by subclasses to perform a knapsack-style DFS search.
-     * 
-     * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
-     * @param bState the current BranchState object that contains the current node, cost, gold collected, 
-     * and remaining total graph gold
-     * @param visited the set of nodes that have been visited in the current path
-     * @param currentPath the list of nodes that form the current path from start to the current node
-     */
-    public abstract void knapsackDFS(
-        EscapeStateWrapper wrapper, 
-        BranchState bState, 
-        Set<Node> visited, 
-        List<Node> currentPath);
-
-    
-    /** 
-     * Abstract method to be implemented by subclasses to find the best escape path using a knapsack-style DFS search.
-     * 
-     * @param state the current escape state
-     * @return the best optimized escape path
-     */
-    public abstract EscapePath findOptimizedGoldEscapePath(EscapeState state);
-
     /**
      * Finds the shortest escape path using Dijkstra's algorithm as a fallback.
      *
@@ -124,7 +116,51 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
     }
 
     /**
-     * Abstract method of EscapeStrategy interface to be implemented by subclasses 
+     * Method to find the best path from start to end in a weighted graph 
+     * that satisfies the remaining time constraint and maximizes gold collected.
+     * 1. Initializes the EscapeStateWrapper and checks for graph validity
+     * 2. Checks if the total graph gold is zero, and if so, returns the shortest path
+     * 3. Initializes the search with the start node and total graph gold
+     * 4. Creates the initial BranchState with the start node, cost, gold collected, and remaining total graph gold
+     * 5. Calls the knapsackDFS method to perform the knapsack-style depth-first search
+     * 
+     * @param state the current escape state
+     * @return the best possible path from start to end or the shortest path if no valid paths are found
+     */
+    public EscapePath findOptimizedGoldEscapePath(EscapeState state) {
+        EscapeStateWrapper wrapper = new EscapeStateWrapper(state);
+        int totalGraphGold = wrapper.getGraph().getTotalGold();
+
+        if (totalGraphGold == 0) {
+            return findShortestEscapePath(state);
+        }
+
+        try {
+            wrapper.getGraph().checkGraphValidity();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        Set<Node> visited = new HashSet<>();
+        List<Node> currentPath = new ArrayList<>();
+        int startGold = wrapper.getGraph().getGoldMap().getOrDefault(wrapper.getGraph().getStartNode(), 0);
+        visited.add(wrapper.getGraph().getStartNode());
+        currentPath.add(wrapper.getGraph().getStartNode());
+
+        BranchState initialState = new BranchState(
+            wrapper.getGraph().getStartNode(),
+            0,
+            startGold,
+            totalGraphGold - startGold
+        );
+
+        knapsackDFS(wrapper, initialState, visited, currentPath);
+
+        return new EscapePath(state, getBestPath());
+    }
+
+    /**
+     * Implements the findEscapePath method of EscapeStrategy interface
      * This implementation returns the best optimized escape path or a fallback path.
      * 
      * 1. Starts a separate thread to find the optimized path that maximizes gold collection 
