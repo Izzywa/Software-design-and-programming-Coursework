@@ -50,7 +50,10 @@ import game.Edge;
  * 
  */
 public class DijkstraEscapeStrategy implements EscapeStrategy {
+    /** Maps each node to its parent node in the shortest path tree. */
     private Map<Node, Node> parentMap;
+
+    /** Maps each node to its distance from the start node. */
     private Map<Node, Integer> distanceMap;
 
     /**
@@ -64,6 +67,10 @@ public class DijkstraEscapeStrategy implements EscapeStrategy {
     /**
      * Implements EscapeStrategy interface to find the escape path using Dijkstra's algorithm.
      * Finds the shortest path from the start node to the end node.
+     * 1. Check the validity of the graph before performing Dijkstra's algorithm
+     * 2. Perform Dijkstra's algorithm to find the shortest path from start to end
+     * 3. If the distance to the end node is still infinity, return an empty path
+     * 4. Reconstruct the path from end to start using the parent map and return it
      * 
      * @param state the current escape state
      * @return the shortest path from start to end, or an empty list if no path exists
@@ -71,25 +78,22 @@ public class DijkstraEscapeStrategy implements EscapeStrategy {
     @Override
     public EscapePath findEscapePath(EscapeState state) {
         EscapeGraph graph = new EscapeGraph(state);
-        // Check if graph is empty or null
+
         try {
             graph.checkGraphValidity();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
-        // Perform Dijkstra's algorithm to find the path from start to end
         dijkstra(graph);
 
-        // If the distance to the end node is still infinity, there is no path
         if (distanceMap.get(graph.getExitNode()) == Integer.MAX_VALUE) {
-            return new EscapePath(state, Collections.emptyList()); // No path found
+            return new EscapePath(state, Collections.emptyList());
         }
 
-        // Reconstruct the path from end to start using the parent map
         List<Node> path = new LinkedList<>();
         for (Node node = graph.getExitNode(); node != null; node = parentMap.get(node)) {
-            path.addFirst(node); // Add to the front of the list
+            path.addFirst(node);
         }
 
         return new EscapePath(state, path);
@@ -98,31 +102,35 @@ public class DijkstraEscapeStrategy implements EscapeStrategy {
     /**
      * Performs Dijkstra's algorithm to find the shortest path from start to end
      * Updates the distance map and parent map accordingly during the search process
+     * 1. Initialize distances to infinity and parents to null, except for the start node
+     * 2. Use a priority queue to explore nodes with the smallest distance first
+     * 3. While the priority queue is not empty, extract the node with the smallest distance
+     * 4. For each neighbor of the current node, calculate the distance 
+     * and update if it's shorter than the previously recorded distance
+     * 5. Continue until the end node is reached
      * 
      * @param graph graph for current escape state
      */
     public void dijkstra(EscapeGraph graph) {
-        // Initialize distances to infinity and parents to null, except for the start node
+        
         for (Node node : graph.getWeighted().keySet()) {
             distanceMap.put(node, Integer.MAX_VALUE);
             parentMap.put(node, null);
         }
         distanceMap.put(graph.getStartNode(), 0);
 
-        // Priority queue to select the node with the smallest distance
         PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> 
         Integer.compare(distanceMap.get(a), distanceMap.get(b)));
         pq.add(graph.getStartNode());
 
-        // Dijkstra's algorithm main loop
+        
         while (!pq.isEmpty()) {
             Node current = pq.poll();
 
             if (current.equals(graph.getExitNode())) {
-                break; // Found the shortest path to the end node
+                break;
             }
 
-            // Traverse neighbors of the current node, updating distances and parents as needed
             for (Edge edge : graph.getWeighted().getOrDefault(current, Collections.emptyList())) {
                 Node neighbour = edge.getDest();
                 int newDist = distanceMap.get(current) + edge.length();
@@ -130,7 +138,7 @@ public class DijkstraEscapeStrategy implements EscapeStrategy {
                 if (newDist < distanceMap.get(neighbour)) {
                     distanceMap.put(neighbour, newDist);
                     parentMap.put(neighbour, current);
-                    pq.add(neighbour); // Add the neighbor to the priority queue
+                    pq.add(neighbour);
                 }
             }
         }
