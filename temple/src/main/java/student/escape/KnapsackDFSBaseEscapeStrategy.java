@@ -15,17 +15,39 @@ import game.Edge;
 import game.EscapeState;
 import game.Node;
 
+/**
+ * Abstract base class for escape strategies that use a knapsack-style depth-first search (DFS) 
+ * to find the best escape path that maximizes gold collection while respecting the remaining time constraint.
+ * 
+ * <p>This class provides common functionality for subclasses, including:
+ * 1. Tracking the best path and gold collected during the search
+ * 2. Memoization to avoid redundant calculations and prune inferior branches
+ * 3. A method to sort neighbor edges based on gold amount and distance from exit node
+ * 4. A method to find the shortest escape path using Dijkstra's algorithm as a fallback
+ * 
+ * <p>Subclasses must implement the {@code knapsackDFS} and {@code findOptimizedGoldEscapePath} methods to define
+ * the specific search behavior and optimization criteria.
+ */
 public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
+    /** List to hold the best path found during the search. */
     private List<Node> bestPath;
+
+    /** Integer to hold the best gold collected during the search. */
     private int bestGold;
+
+    /** Memoization map to store the best gold collected for each node and remaining time. */
     private Map<Node, Map<Integer, Integer>> memoMap;
 
     /**
      * No-args constructor for the KnapsackDFSBaseEscapeStrategy class.
+     * 
+     * Initializes the best path as null, best gold as -1, and the memoization map as an empty HashMap.
+     * The best gold is initialized to -1 to ensure that 
+     * any valid path with non-negative gold will be considered better than the initial value.
+     * 
      */
     public KnapsackDFSBaseEscapeStrategy() {
-        this.bestPath = null; // Initialize best path as null
-        // Initialize best gold to -1 to ensure any valid path with non-negative gold will be considered better
+        this.bestPath = null;
         this.bestGold = -1;
         this.memoMap = new HashMap<>();
     }
@@ -104,28 +126,32 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
     /**
      * Abstract method of EscapeStrategy interface to be implemented by subclasses 
      * This implementation returns the best optimized escape path or a fallback path.
+     * 
+     * 1. Starts a separate thread to find the optimized path that maximizes gold collection 
+     * while respecting the remaining time constraint.
+     * 2. If the optimization search takes longer than a specified timeout, 
+     * it is cancelled and a fallback path is returned.
+     * 3. Log the error and fall back safely if something goes wrong structurally
      *
      * @param state the current escape state
      */
     @Override
     public EscapePath findEscapePath(EscapeState state) {
-        final long SEARCH_TIMEOUT_MS = 10000L; // Timeout in milliseconds
+        /** Timeout in milliseconds */
+        final long SEARCH_TIMEOUT_MS = 10000L;
         EscapePath fallbackPath = findShortestEscapePath(state);
 
-        // Start the optimization search in a separate thread
         CompletableFuture<EscapePath> optimizationTask = CompletableFuture.supplyAsync(() -> {
             return findOptimizedGoldEscapePath(state);
         });
 
-        // Wait for the optimization task to complete or timeout
         try {
             return optimizationTask.get(SEARCH_TIMEOUT_MS, TimeUnit.MILLISECONDS);
         } catch (TimeoutException e) {
-            optimizationTask.cancel(true); // Cancel the optimization task if it times out
+            optimizationTask.cancel(true);
             System.out.println("Optimization search timed out. Returning fallback path.");
             return fallbackPath;
         } catch (InterruptedException | ExecutionException e) {
-            // Log the error and fall back safely if something goes wrong structurally
             System.err.println("Optimization failed due to an error: " + e.getMessage());
             return fallbackPath;
         }
@@ -160,8 +186,20 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
     /**
      * Checks the memoization table to see if the current search path is strictly 
      * worse regarding the remaining time and gold collected than a sub-problem path we have already evaluated.
-     * If yes, we decide to prune the branch.
-     * If no, then we record our new values of time left and collected
+     * 
+     * 1. Creates a new HashMap for the current node in the memoization map if it doesn't exist already
+     * 2. Checks previous visits in the memoization map for the current node
+     * 3. If we previously had more (or equal) time left, AND collected more (or equal) gold,
+     * then our current branch is inferior in terms of cost and gold collected, and we prune the branch
+     * 4. Clean up outdated entries that are explicitly worse than our new tracking entry
+     *   4.1. Remove any entries where the memoized time left is less than or equal to the current time left 
+     *   AND the memoized gold is less than or equal to the current gold
+     *   4.2. This ensures that we only keep entries that are potentially useful for future comparisons, 
+     *   and we don't waste memory on entries that are strictly worse than our current state
+     *   4.3. This cleanup step is important for maintaining the efficiency of the memoization map, 
+     *   especially in large graphs with many nodes and paths
+     * 5. Otherwise, records our new time left and current gold amount for this branch
+     * 6. Returns false indicating the branch should be kept for further exploration
      * 
      * @param node the current node being explored
      * @param timeLeft time left to escape from current node
@@ -169,25 +207,21 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
      * @return boolean value if branch should be pruned early or not
      */
     public boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {
-        // Creates new HashMap for node key if it doesn't exist already
+       
         Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, k-> new HashMap<>());
 
-        //Check previous visits in the memoization map
+        
         for (Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
             int memoizedTimeLeft = entry.getKey();
             int memoizedGold = entry.getValue();
 
-            // If we previously had MORE (or equal) time left, AND collected MORE (or equal) gold,
-            // then our current branch is inferior in terms of cost and gold collected
             if (memoizedTimeLeft >= timeLeft && memoizedGold >= currentGold) {
                 return true;
             }
         }
 
-        // Clean up outdated entries that are explicitly worse than our new tracking entry
         timeToGoldMap.entrySet().removeIf(entry -> entry.getKey() <= timeLeft && entry.getValue() <= currentGold);
 
-        // Otherwise, record our new time left and current gold amount for this branch
         timeToGoldMap.put(timeLeft, currentGold);
         return false;
     }
