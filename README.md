@@ -30,14 +30,14 @@ BUILD SUCCESSFUL in 5s
 9 actionable tasks: 9 executed
 ```
 
-# Tests
+## Tests
 The test classes are located in `temple/src/test/java/` and are configured to run with JUnit 5. You can run all tests using Gradle with the following command:
 
 ```bash
 ./gradlew test
 ```
 
-# Generating JavaDoc
+## Generating JavaDoc
 Run the following command in terminal
 ```bash
 ./gradlew javadoc
@@ -45,7 +45,7 @@ Run the following command in terminal
 
 You can view the documentation in the following file `temple/build/docs/javadoc/index.html`
 
-# Strategies considered
+## Strategies considered
 Currently, the plot for the different strategies performance need to be generated manually. Run the following command in the terminal
 
 ```bash
@@ -86,9 +86,9 @@ The implementation utilises a recursive `depthFirstSearch` method and maintains 
 
 The main limitation of using **NaiveDFS** is that the explorer simply moves to the first unvisited tile on the list of connecting neighbours. It does not consider any strategy to locate the Orb faster, which wastes a significant number of steps in the vast majority of runs, even though a perfect path by pure chance remains logically possible.
 
-To improve NaiveDFS to be more efficient so as to maximise the exploration multiplier, the NaiveDFS was modified to **HeuristicDFS**. Instead of simply moving to the first unvisited tile on the list of connecting neighbours, the algorithm evaluates and sorts all undiscovered neighbours based on their distance to the Orb. By consistently selecting the neighbour having the shortest distance to the Orb, the standard DFS is transformed into a heuristic-driven, greedy search with a view to minimise the remaining path to the target. However, selecting the neighbour having the shortest distance to the target in HeuristicDFS may occasionally increase the total number of steps to the target as compared to the NaiveDFS due to unforeseen obstacles etc.
+To improve **NaiveDFS** to be more efficient so as to maximise the exploration multiplier, the **NaiveDFS** was modified to **HeuristicDFS**. Instead of simply moving to the first unvisited tile on the list of connecting neighbours, the algorithm evaluates and sorts all undiscovered neighbours based on their distance to the Orb. By consistently selecting the neighbour having the shortest distance to the Orb, the standard DFS is transformed into a heuristic-driven, greedy search with a view to minimise the remaining path to the target. However, selecting the neighbour having the shortest distance to the target in **HeuristicDFS** may occasionally increase the total number of steps to the target as compared to the NaiveDFS due to unforeseen obstacles etc.
 
-HeuristicDFS above is version 1.0 for the exploration phase. To explore for any potential improvement from HeuristicDFS, different pathfinding algorithms have been experimented which are as follows:
+**HeuristicDFS** above is version 1.0 for the exploration phase. To explore for any potential improvement from **HeuristicDFS**, different pathfinding algorithms have been experimented which are as follows:
 
 **(a) RandomWalk.** Instead of simply moving to the first unvisited tile on the list of connecting neighbours under the NaiveDFS, this strategy shuffles the list of connecting neighbours and moves to the first unvisited tile after the shuffle. As expected, it also wastes a significant number of steps in the vast majority of runs, even though a perfect path by pure chance remains logically possible.
 
