@@ -20,7 +20,7 @@ import game.EscapeState;
  *      3. Memoization-based pruning of inferior branches
  */
 public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrategy {
-    private final double SPARE_TIME_MULTIPLIER = 0.5;
+    private final double SPARE_TIME_MULTIPLIER = 1.2;
 
     /**
      * No-args constructor for the KnapsackDFSDetourEscapeStrategy class.
