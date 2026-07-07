@@ -69,7 +69,7 @@ public class KnapsackDFSSimpleEscapeStrategy extends KnapsackDFSBaseEscapeStrate
      * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
      * @param bState the current BranchState object that contains the current node, cost, gold collected, 
      * and remaining total graph gold
-     * @param visited the set of nodes that have been visited in the current path
+     * @param visited the set of nodes that have been visited in the current path to prevent cycles
      * @param currentPath the list of nodes that form the current path from start to the current node
      */
     @Override

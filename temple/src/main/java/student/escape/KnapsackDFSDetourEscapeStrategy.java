@@ -84,13 +84,13 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
      * @param wrapper the EscapeStateWrapper object that contains the current escape state and graph
      * @param bState the current BranchState object that contains the current node, cost, gold collected, 
      * and remaining total graph gold
-     * @param pathVisited the set of nodes that have been visited in the current path
+     * @param visited the set of nodes that have been visited in the current path to track gold collection
      * @param currentPath the list of nodes that form the current path from start to the current node
      */
     public void knapsackDFS(
         EscapeStateWrapper wrapper, 
         BranchState bState, 
-        Set<Node> pathVisited, 
+        Set<Node> visited, 
         List<Node> currentPath) {
 
         if (Thread.currentThread().isInterrupted()) {
@@ -128,7 +128,7 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
             int neighbourExitTime = wrapper.getMinDistanceToExit().getOrDefault(neighbour, Integer.MAX_VALUE);
 
             if (newCost + neighbourExitTime < wrapper.getState().getTimeRemaining()) {
-                boolean alreadyVisited = pathVisited.contains(neighbour);
+                boolean alreadyVisited = visited.contains(neighbour);
                 int goldOnNode = alreadyVisited ? 0 : wrapper.getGraph().getGoldMap().getOrDefault(neighbour, 0);
 
                 if (goldOnNode == 0 && neighbourExitTime > minTimeToExit) {
@@ -137,14 +137,14 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
                     }
                 }
 
-                boolean inserted = pathVisited.add(neighbour);
+                boolean inserted = visited.add(neighbour);
                 currentPath.add(neighbour);
                 BranchState nextState = bState.moveTo(neighbour, edge.length(), inserted ? goldOnNode : 0);
 
-                knapsackDFS(wrapper, nextState, pathVisited, currentPath);
+                knapsackDFS(wrapper, nextState, visited, currentPath);
 
                 if (inserted) {
-                    pathVisited.remove(neighbour);
+                    visited.remove(neighbour);
                 }
                 currentPath.remove(currentPath.size() - 1);    
             }
