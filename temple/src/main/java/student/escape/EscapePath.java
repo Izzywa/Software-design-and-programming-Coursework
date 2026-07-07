@@ -12,9 +12,19 @@ import java.util.List;
  * while the total gold is calculated as the sum of the original gold amounts on the tiles of the nodes along the path.
  */
 public class EscapePath {
+    /** The current EscapeState state. */
     private final EscapeState state;
+
+    /** The list of nodes representing the path. */
     private final List<Node> path;
+
+    /** The total cost of the path, calculated as the sum of the lengths of the edges along the path. */
     private final int totalCost;
+
+    /** 
+     * The total amount of gold found along the path, 
+     * calculated as the sum of the original gold amounts on the tiles of the nodes along the path. 
+     */
     private final int totalGold;
 
     /**
@@ -108,14 +118,15 @@ public class EscapePath {
 
     /**
      * Traverses the path and collects gold along the way.
+     * 1. Pick up gold on the starting node if it exists
+     * 2. Follow the path to the exit, picking up gold along the way
+     * 3. If time runs out before reaching the exit, throw a RuntimeException
      */
     public void traverseAndCollect() {    
-    // Pick up gold on the starting node if it exists
         if (path.get(0).getTile().getGold() > 0) {
                 state.pickUpGold();
         }
-
-        // Follow the path to the exit, picking up gold along the way
+        
         for (int i = 1; i < path.size(); i++) {
             state.moveTo(path.get(i));
             if (state.getCurrentNode().getTile().getGold() > 0) {
