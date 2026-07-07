@@ -13,18 +13,41 @@ public class ExploreStrategyFactory {
      */
     @Getter
     public enum Strategy {
+        /** Heuristic depth-first search with ascending distance ordering. */
         HeuristicDFS("HeuristicDFS"),
+
+        /** Plain depth-first search using the game-provided neighbor order. */
         NaiveDFS("NaiveDFS"),
+
+        /** A* search using distance from the start plus orb distance as priority. */
         AStar("AStar"),
+
+        /** Heuristic depth-first search with randomized neighbor ordering. */
         HeuristicDFSWithRandomSort("HeuristicDFSWithRandomSort"),
+
+        /** Beam search that keeps only the best-scoring discovered candidates. */
         BeamSearch("BeamSearch"),
+
+        /** Breadth-first search over the discovered graph. */
         BFS("BFS"),
+
+        /** A* variant that recomputes path cost from the current location. */
         DynamicAStar("DynamicAStar"),
+
+        /** Greedy hill-climbing with backtracking when progress stalls. */
         HillClimbing("HillClimbing"),
+
+        /** Random exploration with backtracking over previously visited nodes. */
         RandomWalk("RandomWalk");
 
+        /** Display name used by tests and selection code. */
         private final String name;
 
+        /**
+         * Create a strategy enum entry with its display name.
+         *
+         * @param name the display name associated with the strategy
+         */
         Strategy(String name) {
             this.name = name;
         }

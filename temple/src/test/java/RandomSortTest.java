@@ -9,13 +9,29 @@ import student.sort.RandomSort;
  * Test class for {@link RandomSort} to confirm that while it sorts in ascending order, it also shuffles identical values.
  */
 public class RandomSortTest {
+    /**
+     * Comparable test value used to check ordering independently from tie-breaking.
+     *
+     * @param value the numeric sort key
+     * @param letter the label used to detect shuffled ties
+     */
     private record RandomPair (int value, String letter) implements Comparable<RandomPair> {
+        /**
+         * Compare pairs by value only so equal values may be shuffled freely.
+         *
+         * @param other the pair to compare against
+         * @return a negative number, zero, or a positive number as this pair is
+         *         less than, equal to, or greater than the other pair
+         */
         @Override
         public int compareTo(RandomPair other) {
             return Integer.compare(value, other.value);
         }
     }
 
+    /**
+     * Verifies that random sort still preserves ascending order by value.
+     */
     @Test
     public void testRandomSortStillSortAscending() {
         RandomSort randomSort = new RandomSort();
@@ -35,6 +51,9 @@ public class RandomSortTest {
         }
     }
 
+    /**
+     * Verifies that repeated sorts can produce different orders for equal values.
+     */
     @Test
     public void testRandomSortShufflesIdenticalValues() {
         RandomSort randomSort = new RandomSort();

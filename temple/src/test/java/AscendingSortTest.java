@@ -5,7 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import student.sort.AscendingSort;
 
+/**
+ * Tests for {@link AscendingSort}.
+ */
 public class AscendingSortTest {
+    /**
+     * Verifies that the ascending sorter returns values in ascending order.
+     */
     @Test
     public void testAscendingSort() {
         AscendingSort ascendingSort = new AscendingSort();

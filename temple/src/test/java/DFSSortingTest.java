@@ -9,6 +9,9 @@ import student.sort.RandomSort;
  * Test the SortingStrategy in HeuristicDFSExploreStrategy.
  */
 public class DFSSortingTest {
+    /**
+     * Confirms that heuristic DFS defaults to ascending neighbor ordering.
+     */
     @Test
     public void testDefaultSortingStrategy() {
         HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy();
@@ -17,6 +20,9 @@ public class DFSSortingTest {
                 "Default sorting strategy should be AscendingSort");
     }
 
+    /**
+     * Confirms that the custom sorting strategy constructor preserves a random sorter.
+     */
     @Test
     public void testRandomSortStrategyConstructor() {
         HeuristicDFSExploreStrategy strategy = new HeuristicDFSExploreStrategy(new RandomSort());
