@@ -15,7 +15,7 @@ import student.escape.EscapePath;
 import student.escape.EscapeStrategy;
 
 /**
- * Class that implements the Depth-first search algorithm to find all paths from start to end in an unweighted graph
+ * Class that implements the Depth-first search algorithm to find all paths from start to end in a weighted graph
  *  then filters them based on the remaining time, then selects the best path based on gold collected.
  * Time complexity: O(V^E) in the worst case, where V is the number of vertices and E is the number of edges. 
  * This will occur when the graph is a complete graph and all paths are explored. 
@@ -32,11 +32,20 @@ import student.escape.EscapeStrategy;
  * </pre>
  */
 public class DFSNaiveEscapeStrategy implements EscapeStrategy {
+    /** List to hold all paths found during the DFS exploration. */
     private List<EscapePath> allPaths;
+
+    /** Set to track visited nodes to avoid cycles during DFS. */
     private Set<Node> visited;
+
+    /** List to hold the current path being explored during DFS. */
     private List<Node> currentPath;
+
+    /** Counter to track the number of paths explored */
     private int pathCount;
-    private final int MAX_PATHS = 1000; // Limit the number of paths to explore to prevent combinatorial explosion
+
+    /** Maximum number of paths to explore to prevent combinatorial explosion. */
+    private final int MAX_PATHS = 1000;
 
     /**
      * No-args constructor for the DFSNaiveEscapeStrategy class.
@@ -50,28 +59,32 @@ public class DFSNaiveEscapeStrategy implements EscapeStrategy {
 
     /**
      * Recursively searches the graph for all possible paths from the current node to the end node.
+     * 1. Mark the current node as visited and add it to the current path
+     * 2. If the current node is the end node, add the current path to the list of all paths
+     * 3. If the current node is not the end node, explore its unvisited neighbors recursively
+     * 4. Backtrack by removing the current node from the visited set and the current path
+     * 5. Stop exploring if the maximum number of paths has been reached
+     * 
      * @param state the current escape state
      * @param graph graph for current escape state
      * @param currentNode the current node being explored
      */
     public void depthFirstSearch(EscapeState state, EscapeGraph graph, Node currentNode) {
-        // Mark the current node as visited and add it to the current path
+        
         visited.add(currentNode);
         currentPath.add(currentNode);
 
-        // If the current node is the end node, add the current path to the list of all paths
         if (currentNode.equals(graph.getExitNode())) {
             pathCount++;
             allPaths.add(new EscapePath(state, new ArrayList<>(currentPath)));
         } else if (pathCount < MAX_PATHS) {
              for (Node neighbor : graph.getUnweighted().getOrDefault(currentNode, Collections.emptyList())) {
-                if (!visited.contains(neighbor)) { // Explore the neighbor node if it has not been visited
-                    depthFirstSearch(state, graph, neighbor); // Recursively explore the neighbor node
+                if (!visited.contains(neighbor)) {
+                    depthFirstSearch(state, graph, neighbor);
                 }
             }
         }
 
-        // Backtrack: remove the current node from the visited set and the current path
         visited.remove(currentNode);
         currentPath.remove(currentPath.size() - 1);
     }
@@ -104,14 +117,16 @@ public class DFSNaiveEscapeStrategy implements EscapeStrategy {
                     } else {
                         return Integer.compare(p2.getTotalCost(), p1.getTotalCost());
                     }
-                }).orElse(shortestPath); // Return the shortest path if no valid paths found
+                }).orElse(shortestPath);
     }
 
     /**
      * Implements EscapeStrategy interface to find the escape path using the DFS algorithm. 
-     * Finds all possible paths from the start node to the end node. 
-     * Then filters the paths based on the remaining time and selects the best path 
+     * 1. Check if the graph is valid and not empty
+     * 2. Finds all possible paths from the start node to the end node. 
+     * 3. Then filters the paths based on the remaining time and selects the best path 
      * based on the total amount of gold collected, and in case of a tie, selects the one with the lowest total cost.
+     * 4. If no valid paths are found, returns the shortest path as a backup.
      * 
      * @param state the current escape state
      * @return the best possible path from start to end or the shortest path if no valid paths are found
@@ -122,7 +137,6 @@ public class DFSNaiveEscapeStrategy implements EscapeStrategy {
         EscapeStrategy dijkstraStrategy = new DijkstraEscapeStrategy();
         EscapePath shortestPath = dijkstraStrategy.findEscapePath(state);
 
-        // Check if graph is empty or null
         try {
             graph.checkGraphValidity();
         } catch (IllegalArgumentException e) {

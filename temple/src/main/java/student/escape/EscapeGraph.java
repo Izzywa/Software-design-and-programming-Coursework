@@ -18,15 +18,28 @@ import java.util.List;
  * -inverted weighted
  * -gold map
  * The weighted and inverted graphs are used for optimal pathfinding, 
- * while the unweighted graph is used for basic connectivity checks.
+ * while the unweighted graph is used for basic connectivity checks and early experiments.
  */
 public class EscapeGraph {
+    /** The starting node for the current escape state. */
     private final Node startNode;
+
+    /** The exit node for the current escape state. */
     private final Node exitNode;
+
+    /** The weighted representation of the graph, mapping nodes to their incident edges with weights. */
     private Map<Node, Collection<Edge>> weighted;
+
+    /** The unweighted representation of the graph, mapping nodes to their neighboring nodes. */
     private Map<Node, Collection<Node>> unweighted;
+
+    /** The inverted weighted representation of the graph, mapping nodes to their incident edges with weights. */
     private Map<Node, Collection<Edge>> invertedWeighted;
+
+    /** A lookup table containing nodes and their gold values. */
     private Map<Node, Integer> goldMap;
+
+    /** The total amount of gold on the graph. */
     private final int totalGraphGold;
     
     /**
@@ -60,7 +73,6 @@ public class EscapeGraph {
      * Ensures that the graph is not null or empty, and that the start and end nodes exist in the graph
      */
     public void checkGraphValidity() throws IllegalArgumentException {
-        // Check if the graph is null or empty
         if (weighted == null || weighted.isEmpty()) {
             throw new IllegalArgumentException("Weighted graph cannot be null or empty");
         }
@@ -74,8 +86,6 @@ public class EscapeGraph {
             throw new IllegalArgumentException("Inverted weighted graph cannot be null or empty");
         }
         
-
-        // Check if start and end nodes are in the graph
         if (!weighted.containsKey(startNode) || !weighted.containsKey(exitNode)) {
             throw new IllegalArgumentException("Start or exit node does not exist in weighted graph");
         }
@@ -93,6 +103,11 @@ public class EscapeGraph {
     /**
      * Creates an inverted version of a weighte dgraph.
      * This is required for algorithms which traverse directed graphs backwards from end node to start node.
+     * 1. Initialize an empty map to hold the inverted graph
+     * 2. For each node in the original graph, initialize an empty list of edges
+     * 3. For each edge in the original graph, create a new edge with the source and destination nodes swapped, 
+     * then add it to the inverted graph
+     * 4. Return the inverted graph
      * 
      * @param weightedGraph a weighted representation of a graph
      * @return a map of nodes to their incident edges with weights
@@ -100,18 +115,15 @@ public class EscapeGraph {
     public static Map<Node, Collection<Edge>> createInvertedGraph(Map<Node, Collection<Edge>> weightedGraph) {
         Map<Node, Collection<Edge>> inverted = new HashMap<>();
 
-        // Initialize empty lists for every node present in the original graph
         for (Node src : weightedGraph.keySet()) {
             inverted.putIfAbsent(src, new ArrayList<>());
         }
 
-        // Populate with reversed edges
         for (Map.Entry<Node, Collection<Edge>> entry : weightedGraph.entrySet()) {
             Node source = entry.getKey();
             for (Edge edge : entry.getValue()) {
                 Node destination = edge.getDest();
-                int weight = edge.length();
-                // Create a reversed edge: destination -> source with same weight 
+                int weight = edge.length(); 
                 Edge reversedEdge = new Edge(destination, source, weight);
                 inverted.get(destination).add(reversedEdge);
             }

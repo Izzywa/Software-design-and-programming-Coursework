@@ -8,9 +8,16 @@ import game.Node;
  * and the total gold remaining on the graph.
  */
 public class BranchState {
+    /** The current node being explored in this branch. */
     private final Node currentNode;
+
+    /** The cost to reach the current node. */
     private final int currentCost;
+
+    /** The total gold found along this branch. */
     private final int currentGold;
+
+    /** The total gold remaining on the graph. */
     private final int totalGraphGold;
         
     /**

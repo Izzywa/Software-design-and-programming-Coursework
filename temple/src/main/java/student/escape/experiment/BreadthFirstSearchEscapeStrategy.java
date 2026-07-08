@@ -38,9 +38,16 @@ import student.escape.EscapeStrategy;
  * </pre>
  */
 public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
+    /** Queue to hold nodes to be explored in BFS order. */
     private Queue<Node> queue;
+
+    /** Map to track the parent of each node for path reconstruction. */
     private Map<Node, Node> parentMap;
+
+    /** Set to track visited nodes to avoid cycles. */
     private Set<Node> visited;
+
+    /** Flag to indicate if a path to the exit has been found. */
     private boolean foundPath;
     
     /**
@@ -56,6 +63,11 @@ public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
     /**
      * Implements EscapeStrategy interface to find the escape path using breadth-first search.
      * Finds the shortest path from the start node to the end node.
+     * 1. Check if the graph is valid and not empty
+     * 2. Perform BFS to find the path from start to end
+     * 3. If no path is found, return an empty EscapePath object
+     * 4. If a path is found, reconstruct the path using the parent map
+     * 5. Return the EscapePath object containing the path from start to end
      * 
      * @param state the current escape state
      * @return the shortest path from start to end, or an empty list if no path exists
@@ -63,25 +75,22 @@ public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
     @Override
     public EscapePath findEscapePath(EscapeState state) {
         EscapeGraph graph = new EscapeGraph(state);
-        // Check if graph is empty or null
+
         try {
             graph.checkGraphValidity();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
-        // Perform BFS to find the path from start to end
         breadthFirstSearch(graph);
 
-        // If we did not find the end node, return an empty path
         if (!foundPath) {
-            return new EscapePath(state, Collections.emptyList()); // No path found
+            return new EscapePath(state, Collections.emptyList());
         }
 
-        // Reconstruct the path from end to start using the parent map
         List<Node> path = new LinkedList<>();
         for (Node node = graph.getExitNode(); node != null; node = parentMap.get(node)) {
-            path.addFirst(node); // Add to the front of the list
+            path.addFirst(node);
         }
 
         return new EscapePath(state, path);
@@ -90,23 +99,24 @@ public class BreadthFirstSearchEscapeStrategy implements EscapeStrategy {
     /**
      * Performs breadth-first search algorithm to find the path from start to end
      * Updates the queue, visited set, and parent map accordingly during the search process
+     * 1. Start BFS from the start node
+     * 2. Explore neighbors in a breadth-first manner until the queue is empty or we find the target node
+     * 3. Traverse neighbors of the current node, adding unvisited ones to the queue
+     * 4. Track visited nodes and store the parent of each visited node for path reconstruction
      * 
      * @param graph graph for current escape state
      */
     public void breadthFirstSearch(EscapeGraph graph) {
-        // Start BFS from the start node
         queue.add(graph.getStartNode());
         visited.add(graph.getStartNode());
-        // Perform BFS until the queue is empty or we find the target node
+   
         while (!queue.isEmpty()) {
             Node current = queue.poll();
-            // If we have reached the end node, stop the search
             if (current.equals(graph.getExitNode())) {
                 foundPath = true;
                 break;
             }
 
-            // Traverse neighbors of the current node, adding unvisited ones to the queue
             for (Node neighbour : graph.getUnweighted().getOrDefault(current, Collections.emptyList())) {
                 if (!visited.contains(neighbour)) {
                     visited.add(neighbour);
