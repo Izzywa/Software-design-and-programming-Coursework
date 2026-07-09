@@ -194,9 +194,9 @@ The primary objective of the Escape Phase is to escape within the available time
 
 We conducted continuous testing on a fixed set of seeds to provide feedback about the performance and computational time implications of the changes introduced during the development. However, after finishing the algorithms, we ran a separate benchmarking test to select the best-performing algorithm. The benchmarking test picks the same set of random seeds and tests all algorithms on those maps.
 
-![](docs/images/escape_strategy_comparison1.png)
-![](docs/images/escape_strategy_comparison2.png)
-![](docs/images/escape_strategy_comparison3.png)
+![](docs/images/escape_strategy_comparison_1.png)
+![](docs/images/escape_strategy_comparison_2.png)
+![](docs/images/escape_strategy_comparison_3.png)
 
 The results are clear in terms of gold collected, with **KnapsackDetour** as the winner. However, there was a single map where it took more than 10 seconds to compute. This test was conducted on a notebook with the following system configuration:
 
@@ -253,8 +253,8 @@ T = 10000 ms × (3099 MHz / 3401 MHz) ≈ 9112 ms
 
 Afterwards, we tested the spare time multiplier constant with values between 1.0 and 2.0 to see how it affects run time and gold collected on the league table seeds to find the optimal value for our target system.
 
-![](docs/image/run_time_vs_spare_time_multiplier.png)
-![](docs/image/gold_collected_vs_spare_time_multiplier.png)
+![](docs/images/run_time_vs_spare_time_multiplier.png)
+![](docs/images/gold_collected_vs_spare_time_multiplier.png)
 
 We can see that the amount of gold collected doesn't change significantly between 1.0 and 1.2, but it starts to drop on several maps if we increase the value of the spare time multiplier. On the other hand, the run time exceeds the projected maximum run time (red dashed line) for certain seeds in the range of 1.0 and 1.15. Based on these benchmarking tests, we decided to set the `SPARE_TIME_MULTIPLIER` constant to **1.2** to maximize gold collected while still complying with the maximum run time constraint on our target platform, Codio.
 
@@ -384,6 +384,10 @@ Implementation in Java:
   * **Memoization & Pruning:** The best methodology seems to be using a recursive approach such as DFS and then limiting the design space by applying branch and bound techniques where pruning is done based on distance, gold collected. Memoization is helpful for using the previously calculated results to prune further branches that are not useful for finding the final optimal solution. Greedy algorithms can also help improve local choices during the discovery of branches (same approach we used in the explore phase to find the local best choices based on the distance to orb) to improve memoization by finding the most promising paths first.
   
   * [What is Memoization? A Complete Tutorial - GeeksforGeeks](https://www.geeksforgeeks.org/dsa/what-is-memoization-a-complete-tutorial/)
+
+  * **Time-out mechanism:** In Java applications, methods — especially those interacting with external systems (e.g., APIs, databases) or performing complex computations — can occasionally hang or take longer than expected. This can lead to degraded performance, unresponsive services, or even cascading failures. To mitigate this, setting a maximum execution time limit on critical methods is essential. When the threshold is exceeded, the method should terminate gracefully and return a predefined fallback response (e.g., "Operation timed out"). We used the java.util.concurrent.CompletableFuture module to achieve this behaviour (also described in Horstmann, C. S. (2022) *Core Java for the Impatient* (3rd ed.). Addison-Wesley Professional, Chapter 10. Concurrent Programming)
+  
+  * [How to Set a Running Time Limit on a Java Method and Return a Specific String When Threshold Exceeded — javaspring.net](https://www.javaspring.net/blog/set-running-time-limit-on-a-method-in-java/#why-limit-method-execution-time/)
 
 ### 7.2 Academic References
 

@@ -26,7 +26,7 @@ import game.Node;
  * 3. A method to sort neighbor edges based on gold amount and distance from exit node
  * 4. A method to find the shortest escape path using Dijkstra's algorithm as a fallback
  * 
- * <p>Subclasses must implement the {@code knapsackDFS} and {@code findOptimizedGoldEscapePath} methods to define
+ * <p>Subclasses must implement the {@code knapsackDFS} method to define
  * the specific search behavior and optimization criteria.
  */
 public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
@@ -242,11 +242,9 @@ public abstract class KnapsackDFSBaseEscapeStrategy implements EscapeStrategy {
      * @param currentGold gold collected along path
      * @return boolean value if branch should be pruned early or not
      */
-    public boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {
-       
+    public boolean shouldPruneBranch(Node node, int timeLeft, int currentGold) {       
         Map<Integer, Integer> timeToGoldMap = memoMap.computeIfAbsent(node, k-> new HashMap<>());
 
-        
         for (Map.Entry<Integer, Integer> entry : timeToGoldMap.entrySet()) {
             int memoizedTimeLeft = entry.getKey();
             int memoizedGold = entry.getValue();
