@@ -321,9 +321,9 @@ For the development of the algorithms for the Exploration phase and Escape phase
   * [Breadth-First Search Algorithm in Java | Baeldung](https://www.baeldung.com/java-breadth-first-search)
   * [Breadth-First Search (BFS) in Java: A Comprehensive Guide — javaspring.net](https://www.javaspring.net/blog/bfs-in-java/)
 
-* **Dijkstra's Algorithm:** It is a well-known graph search algorithm, is commonly used for solving mazes. It explores the maze by calculating the shortest path from the start to all other cells. Dijkstra's algorithm guarantees finding the shortest path, but it may be computationally expensive for larger mazes due to its time complexity.
+* **Dijkstra's Algorithm:** It is a well-known graph search algorithm, commonly used for solving mazes. It explores the maze by calculating the shortest path from the start to all other cells. Dijkstra's algorithm guarantees finding the shortest path, but it may be computationally expensive for larger mazes due to its time complexity.
 
-There are several ways to implement it. We can use priority queue (heap) which already has the code required in the project or there’s a greedy implementation, as well.
+  There are several ways to implement it. We can use a priority queue (heap), which already has the code required in the project, or there's a greedy implementation as well.
 
   Implementation in Java:
   * [Dijkstra's Algorithm in Java: A Comprehensive Guide — javaspring.net](https://www.javaspring.net/blog/dijkstras-algorithm-java/)
