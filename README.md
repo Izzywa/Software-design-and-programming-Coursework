@@ -367,25 +367,25 @@ There are several ways to implement it. We can use priority queue (heap) which a
   * [Backtracking Algorithm | Baeldung on Computer Science](https://www.baeldung.com/cs/backtracking-algorithms)
   * [Mastering Backtracking in Java — javaspring.net](https://www.javaspring.net/blog/backtracking-java/)
   
-  * **Backpack /Knapsack Problem:** It is a mathematical problem where the optimal combination of two contradictory variables is searched. For example, a knapsack has a certain capacity and we try to maximize the value of the items stored in it, where items have a certain cost to fill up the capacity. In our case, the capacity is the time to escape and the paths taken have a certain cost (weight) to fit into this capacity while maximizing the gold collected along the way. 
+* **Backpack /Knapsack Problem:** It is a mathematical problem where the optimal combination of two contradictory variables is searched. For example, a knapsack has a certain capacity and we try to maximize the value of the items stored in it, where items have a certain cost to fill up the capacity. In our case, the capacity is the time to escape and the paths taken have a certain cost (weight) to fit into this capacity while maximizing the gold collected along the way. 
 
   * [Solution: 0/1 Knapsack](https://www.designgurus.io/course-play/grokking-dynamic-programming/doc/solution-01-knapsack)
   * [Backpack Problem | Brilliant Math & Science Wiki](https://brilliant.org/wiki/backpack-problem/)
   * [Knapsack Problem Implementation in Java | Baeldung](https://www.baeldung.com/java-knapsack)
   * [SHORTESTPATH.pdf](https://www.math.cmu.edu/users/af1p/Texfiles/SHORTESTPATH.pdf)
 
-* Possible solutions for Knapsack-style problems:
+* **Possible solutions for Knapsack-style problems:**
 
   * [CS 473: Algorithms](https://courses.grainger.illinois.edu/cs473/fa2010/Lectures/lecture10.pdf)
   * [Understanding the Knapsack Problem: A Guide for Beginners | by preksha yadav | Medium](https://medium.com/@prekshayadav0819/understanding-the-knapsack-problem-a-guide-for-beginners-d0146a59e9)
   * [Pruning Decision Trees - GeeksforGeeks](https://www.geeksforgeeks.org/machine-learning/pruning-decision-trees/#google_vignette)
   * [Backtracking Unveiled: Mastering Depth-First Search and Pruning Techniques - DEV Community](https://dev.to/frorning/backtracking-unveiled-mastering-depth-first-search-and-pruning-techniques-251c)
   
-  * **Memoization & Pruning:** The best methodology seems to be using a recursive approach such as DFS and then limiting the design space by applying branch and bound techniques where pruning is done based on distance, gold collected. Memoization is helpful for using the previously calculated results to prune further branches that are not useful for finding the final optimal solution. Greedy algorithms can also help improve local choices during the discovery of branches (same approach we used in the explore phase to find the local best choices based on the distance to orb) to improve memoization by finding the most promising paths first.
+* **Memoization & Pruning:** The best methodology seems to be using a recursive approach such as DFS and then limiting the design space by applying branch and bound techniques where pruning is done based on distance, gold collected. Memoization is helpful for using the previously calculated results to prune further branches that are not useful for finding the final optimal solution. Greedy algorithms can also help improve local choices during the discovery of branches (same approach we used in the explore phase to find the local best choices based on the distance to orb) to improve memoization by finding the most promising paths first.
   
   * [What is Memoization? A Complete Tutorial - GeeksforGeeks](https://www.geeksforgeeks.org/dsa/what-is-memoization-a-complete-tutorial/)
 
-  * **Time-out mechanism:** In Java applications, methods — especially those interacting with external systems (e.g., APIs, databases) or performing complex computations — can occasionally hang or take longer than expected. This can lead to degraded performance, unresponsive services, or even cascading failures. To mitigate this, setting a maximum execution time limit on critical methods is essential. When the threshold is exceeded, the method should terminate gracefully and return a predefined fallback response (e.g., "Operation timed out"). We used the java.util.concurrent.CompletableFuture module to achieve this behaviour (also described in Horstmann, C. S. (2022) *Core Java for the Impatient* (3rd ed.). Addison-Wesley Professional, Chapter 10. Concurrent Programming)
+* **Time-out mechanism:** In Java applications, methods — especially those interacting with external systems (e.g., APIs, databases) or performing complex computations — can occasionally hang or take longer than expected. This can lead to degraded performance, unresponsive services, or even cascading failures. To mitigate this, setting a maximum execution time limit on critical methods is essential. When the threshold is exceeded, the method should terminate gracefully and return a predefined fallback response (e.g., "Operation timed out"). We used the java.util.concurrent.CompletableFuture module to achieve this behaviour (also described in Horstmann, C. S. (2022) *Core Java for the Impatient* (3rd ed.). Addison-Wesley Professional, Chapter 10. Concurrent Programming)
   
   * [How to Set a Running Time Limit on a Java Method and Return a Specific String When Threshold Exceeded — javaspring.net](https://www.javaspring.net/blog/set-running-time-limit-on-a-method-in-java/#why-limit-method-execution-time/)
 
