@@ -1,6 +1,6 @@
 # Software Design and Programming Coursework
 
-## [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/Home)
+## GitHub Wiki: [Wiki](https://github.com/Izzywa/Software-design-and-programming-Coursework/wiki/Home)
 
 ## Project Management: [Trello Board](https://trello.com/b/X4Rizeyx/software-design-project)
 
