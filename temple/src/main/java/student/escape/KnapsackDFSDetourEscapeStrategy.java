@@ -36,9 +36,17 @@ import game.Node;
 public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrategy {
     /** 
      * Multiplier to determine the amount of spare time needed 
-     * to explore zero-gold nodes that take us further from the exit. 
+     * to explore zero-gold nodes that take us further from the exit.
+     * 
+     * Development system: The multiplier was set to 1.2 
+     * and all league table seeds ran successfully within the time limit.
+     * Production system (Codio): The multiplier was increased to 2.0 
+     * and all league table seeds but one ran successfully within the time limit.
+     * A value of 2.7 is required to run all league table seeds successfully 
+     * within the time limit on the production system. However, this value is too high 
+     * and results in suboptimal paths for some seeds.
      */
-    private final double SPARE_TIME_MULTIPLIER = 1.2;
+    private final double SPARE_TIME_MULTIPLIER = 2.0;
 
     /**
      * No-args constructor for the KnapsackDFSDetourEscapeStrategy class.
