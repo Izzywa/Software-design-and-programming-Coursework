@@ -87,6 +87,7 @@ public class KnapsackDFSDetourEscapeStrategy extends KnapsackDFSBaseEscapeStrate
      * @param visited the set of nodes that have been visited in the current path to track gold collection
      * @param currentPath the list of nodes that form the current path from start to the current node
      */
+    @Override
     public void knapsackDFS(
         EscapeStateWrapper wrapper, 
         BranchState bState, 
