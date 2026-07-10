@@ -347,7 +347,7 @@ In order to finish all league table seeds within the time limit, we have to incr
 | -5845531988250598653 | 43564 | 38991 | 1.00 | 1.07 | 43564 | 41807 |
 | -1906048792819286095 | 43164 | 36761 | 1.00 | 1.13 | 43164 | 41539 |
 
-We also discovered a strange phenomenom on Codio that we didn't experience on the development system. The bonus multiplier also slightly shifts occasionally when the `SPARE_TIME_MULTIPLIER` is modified, which is a weird behaviour as they are not coupled in any ways. Unfortunately, we don't have an explanation for this.
+We chose 2.0 for the `SPARE_TIME_MULTIPLIER` on Codio as a good compromise between overall score and run time. We also discovered a strange phenomenom on Codio that we didn't experience on the development system. The bonus multiplier also slightly shifts occasionally when the `SPARE_TIME_MULTIPLIER` is modified, which is a weird behaviour as they are not coupled in any ways. Unfortunately, we don't have an explanation for this.
 
 ## 6. Development Workflow 
 
