@@ -297,7 +297,7 @@ After the fine-tuning step described above, we can compare the results from the 
 | -5845531988250598653 | 43564 | 54271 | 1.00 | 1.22 | 43564 | 66331 |
 | -1906048792819286095 | 43164 | 44174 | 1.00 | 1.19 | 43164 | 52567 |
 
-We pulled the finished code to Codio to simulate deployment and to be able to run our tests including the performance tests such as the league table seed test on the production system (Codio). However, we found out that our estimates regarding the run time on Codio were wrong and the spare time multiplier must be increased to prevent frequent time-out for larger maps. Our assumption didn't take the different CPU cache sizes and RAM access speeds into account which have a big impact on performance.  During testing, we found that a `SPARE_TIME_MULTIPLIER` of 2.0 for the Escape phase prevents time-out for all maps but one (8781946738346443336) while still providing good scores.
+We pulled the finished code to Codio to simulate deployment to a production environment and to be able to run our tests including the performance tests such as the league table seed test on the production system (Codio). However, we found that our initial estimates regarding the performance impact of the Codio platform may have not been adequate and sufficient as the different CPU cache sizes and RAM access speeds also influence performance in addition to the CPU clock speed. Therefore, we concluded that the `SPARE_TIME_MULTIPLIER` should be be increased to prevent frequent time-outs for larger maps. During testing on Codio, we found that a `SPARE_TIME_MULTIPLIER` of 2.0 prevents time-out for all league table maps but one (8781946738346443336) while still providing good scores.
 
 | Seed | Gold (league) | Gold (ours) | Mult. (league) | Mult. (ours) | Score (league) | Score (ours) |
 |:---|---:|---:|---:|---:|---:|---:|
@@ -357,7 +357,7 @@ In order to finish all league table seeds within the time limit, we have to incr
 
 We chose 2.0 for the `SPARE_TIME_MULTIPLIER` on Codio as a good compromise between overall score and run time. 
 
-We also discovered a strange phenomenom on Codio that we didn't experience on the development system, i.e. the bonus multiplier in the Explore phase also slightly shifts occasionally when we repeated the tests. After following different test runs with top, htop and and checking the CPU properties with lscpu, our assumption is that Codio allocates hardware dynamically in the background as the CPU clock speeds and L3 cache sizes were different in each check. The different hardware architectures can have different instruction sets and thus can have an impact on the calculation of the heuristic functions for algorithms such as the **Dynamic A\***.
+We also discovered a strange phenomenom on Codio that we didn't experience on the development system, i.e. the bonus multiplier in the Explore phase also slightly shifts occasionally when we repeated the tests. After following the execution of different test runs with tools such as top and htop and also continuously checking the CPU properties with lscpu, our assumption is that Codio allocates hardware dynamically in the background as the CPU clock speeds and L3 cache sizes were different in each check. The different hardware architectures can have different instruction sets and thus can have an impact on the calculation of the heuristic functions for algorithms such as the **Dynamic A\***.
 
 ## 6. Development Workflow 
 
